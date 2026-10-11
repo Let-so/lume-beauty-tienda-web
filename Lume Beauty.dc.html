@@ -156,10 +156,17 @@ class Component extends DCLogic {
     fetch('data/catalog.json').then(r => r.json()).then(data => this.setState({ data })).catch(err => console.error('No se pudo cargar data/catalog.json', err));
   }
   componentWillUnmount() { window.removeEventListener('resize', this._r); window.removeEventListener('keydown', this._k); }
-  componentDidUpdate(pp, ps) {
+  componentDidUpdate() {
     const s = this.state;
-    if (ps.cart !== s.cart || ps.favs !== s.favs) { try { localStorage.setItem('lume_store_v1', JSON.stringify({ cart: s.cart, favs: s.favs })); } catch (e) {} }
-    if (ps.cartOpen !== s.cartOpen) document.body.style.overflow = s.cartOpen ? 'hidden' : '';
+    if (this._lastCart !== s.cart || this._lastFavs !== s.favs) {
+      localStorage.setItem('lume_store_v1', JSON.stringify({ cart: s.cart, favs: s.favs }));
+      this._lastCart = s.cart;
+      this._lastFavs = s.favs;
+    }
+    if (this._lastCartOpen !== s.cartOpen) {
+      document.body.style.overflow = s.cartOpen ? 'hidden' : '';
+      this._lastCartOpen = s.cartOpen;
+    }
   }
   go(view, extra) { this.setState(Object.assign({ view, menuOpen: false, searchOpen: false, cartOpen: false }, extra || {})); try { window.scrollTo(0, 0); } catch (e) {} }
   norm(v) { return (v || '').toString().toLowerCase().normalize('NFD').replace(/[\u0300-\u036f]/g, ''); }
