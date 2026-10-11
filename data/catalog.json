@@ -13,19 +13,19 @@
   "homeBanners": [
     {
       "label": "Skincare coreano",
-      "image": "assets/categorias/skincare-coreano.webp",
+      "image": "assets/categorias/skincare-coreano-icono.webp",
       "view": "catalog",
       "cat": "skincare-coreano"
     },
     {
       "label": "Perfumes & body mist",
-      "image": "assets/categorias/perfumes-body-mist.webp",
+      "image": "assets/categorias/perfumes-body-mist-icono.webp",
       "view": "catalog",
       "cat": "perfumes-body-mist"
     },
     {
       "label": "Marcas",
-      "image": "assets/categorias/marcas.webp",
+      "image": "assets/categorias/marcas-icono.webp",
       "view": "brands"
     }
   ],
@@ -58,7 +58,8 @@
       "image": "assets/productos/medicube-deep-vita-c-capsule-cream.webp",
       "imagePadding": "7%",
       "price": 55000,
-      "featured": true
+      "featured": true,
+      "tag": "NUEVO"
     },
     {
       "id": "medicube-pdrn-pink-collagen",
@@ -74,7 +75,8 @@
       "image": "assets/productos/medicube-pdrn-pink-collagen-capsule-cream.webp",
       "imagePadding": "8%",
       "price": 58000,
-      "featured": true
+      "featured": true,
+      "tag": "NUEVO"
     },
     {
       "id": "numbuzin-no9-nad-retinol-eye-cream",
@@ -90,7 +92,8 @@
       "image": "assets/productos/numbuzin-no9-nad-retinol-volumetox-eye-cream.webp",
       "imagePadding": "5%",
       "price": 60000,
-      "featured": true
+      "featured": true,
+      "tag": "NUEVO"
     },
     {
       "id": "vs-pure-seduction",
@@ -162,30 +165,25 @@
     "url": "https://www.instagram.com/lumebeautyok_ar/"
   },
   "announcements": [
-    "TRABAJAMOS SOLAMENTE CON PRODUCTOS ORIGINALES",
-    "SKINCARE COREANO Y BODY MIST SELECCIONADOS",
-    "CONSULTAS POR INSTAGRAM @LUMEBEAUTYOK_AR"
+    "ENVÍOS A TODO EL PAÍS",
+    "PRODUCTOS ORIGINALES",
+    "ASESORÍA PERSONALIZADA"
   ],
   "benefits": [
+    {
+      "icon": "truck",
+      "title": "Envíos a todo el país",
+      "text": "Coordinamos el envío al confirmar la compra."
+    },
     {
       "icon": "shield",
       "title": "Productos originales",
       "text": "Trabajamos solamente con productos originales."
     },
     {
-      "icon": "tag",
-      "title": "Información clara",
-      "text": "Marca, contenido y precio a la vista en cada producto."
-    },
-    {
-      "icon": "chat",
-      "title": "Consultas por Instagram",
-      "text": "Escribinos por mensaje directo antes de comprar."
-    },
-    {
-      "icon": "leaf",
-      "title": "Selección acotada",
-      "text": "Pocas marcas, elegidas una por una."
+      "icon": "care",
+      "title": "Asesoría personalizada",
+      "text": "Te ayudamos a elegir por Instagram."
     }
   ],
   "collections": [
@@ -324,5 +322,13 @@
     {
       "url": "https://www.instagram.com/p/DeK5JnpPtfU/"
     }
-  ]
+  ],
+  "routine": {
+    "title": "Rutina LUMÉ",
+    "text": "Para una piel más luminosa",
+    "ctaLabel": "VER SKINCARE",
+    "image": "assets/editorial/rutina-lume.webp",
+    "alt": "Textura cremosa en tonos rosados",
+    "cat": "skincare-coreano"
+  }
 }

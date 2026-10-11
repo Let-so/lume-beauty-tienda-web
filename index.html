@@ -34,8 +34,9 @@ input::placeholder{color:#6f5650;letter-spacing:0.12em}
 
     <sc-if value="{{ isHome }}" hint-placeholder-val="{{ true }}">
       <dc-import name="HeroBanner" hero="{{ hero }}" hint-size="100%,415px"></dc-import>
-      <dc-import name="CategoryBanners" c="{{ categories }}" hint-size="100%,100px"></dc-import>
       <dc-import name="Benefits" bn="{{ benefits }}" hint-size="100%,110px"></dc-import>
+      <dc-import name="CategoryBanners" c="{{ categories }}" hint-size="100%,170px"></dc-import>
+      <dc-import name="RoutineBanner" ru="{{ routine }}" hint-size="100%,240px"></dc-import>
       <dc-import name="FeaturedProducts" fp="{{ featured }}" hint-size="100%,440px"></dc-import>
       <dc-import name="CollectionStrip" co="{{ collections }}" hint-size="100%,420px"></dc-import>
       <dc-import name="EditorialBlock" ed="{{ editorial }}" hint-size="100%,340px"></dc-import>
@@ -319,7 +320,7 @@ class Component extends DCLogic {
     const s = this.state, isFav = !!s.favs[p.id], n = s.cart[p.id] || 0;
     const stop = e => { if (e && e.stopPropagation) e.stopPropagation(); };
     return Object.assign({}, p, {
-      isFav, hasSubtitle: !!p.subtitle,
+      isFav, hasSubtitle: !!p.subtitle, hasTag: !!p.tag, tag: p.tag || '',
       heartFill: isFav ? '#b38d83' : 'none', heartStroke: isFav ? '#b38d83' : '#3f2a26',
       favLabel: isFav ? 'Quitar de favoritos' : 'Agregar a favoritos',
       openLabel: 'Ver ' + p.brandLabel + ' ' + p.name,
@@ -356,7 +357,7 @@ class Component extends DCLogic {
     const favItems = favIds.filter(id => byId[id]).map(id => this.decorate(byId[id]));
 
     const anns = d.announcements || [];
-    const announce = { text: anns.length ? anns[s.announceIndex % anns.length] : '' };
+    const announce = { text: !anns.length ? '' : w >= 760 ? anns.join('  |  ') : anns[s.announceIndex % anns.length] };
 
     const header = Object.assign({}, nav, {
       isDesktop: w >= 1024, isCompact: w < 1024, query: s.query, cartCount,
@@ -375,16 +376,24 @@ class Component extends DCLogic {
     const hero = { wide: w >= 900, compact: w < 900, explore: nav.goShop };
 
     const categories = {
-      gridStyle: { display: 'grid', gridTemplateColumns: w < 640 ? '1fr' : 'repeat(3,minmax(0,1fr))', gap: '3px', paddingTop: '3px', background: '#f3eae4' },
-      itemStyle: { position: 'relative', display: 'block', width: '100%', padding: 0, border: 0, overflow: 'hidden', cursor: 'pointer', aspectRatio: w < 640 ? '3.6 / 1' : w < 1024 ? '2.67 / 1' : '4.4 / 1', background: '#e9dcd3' },
-      items: d.homeBanners.map(b => ({ image: b.image, ariaLabel: b.label, open: b.view === 'brands' ? nav.goBrands : go('catalog', { cat: b.cat, brand: null, coll: null, query: '' }) }))
+      items: d.homeBanners.map(b => ({
+        image: b.image, label: b.label, ariaLabel: 'Ver ' + b.label,
+        open: b.view === 'brands' ? nav.goBrands : go('catalog', { cat: b.cat, brand: null, coll: null, query: '' })
+      }))
     };
+
+    const ruDef = d.routine || {};
+    const routine = Object.assign({ title: '', text: '', ctaLabel: 'VER PRODUCTOS', image: '', alt: '' }, ruDef, {
+      open: ruDef.cat ? go('catalog', { cat: ruDef.cat, brand: null, coll: null, query: '' }) : nav.goShop
+    });
 
     const ICONS = {
       shield: ['M12 3.2 5 6.1v5.5c0 4.1 2.9 7.5 7 8.4 4.1-.9 7-4.3 7-8.4V6.1L12 3.2z', 'M9.1 12.1l2 2 4-4.1'],
       tag: ['M12 4.2a7.8 7.8 0 1 0 0 15.6 7.8 7.8 0 0 0 0-15.6z', 'M12 11.4v4.6'],
       chat: ['M20 14.8a2.6 2.6 0 0 1-2.6 2.6H8.7l-4.1 3V6.6A2.6 2.6 0 0 1 7.2 4h10.2A2.6 2.6 0 0 1 20 6.6z', 'M8.6 10.7h6.8'],
-      leaf: ['M5.2 19.2C5.2 11.8 10.4 6.6 19.4 5.6c.7 8.8-4.4 13.6-11 13.6H5.2z', 'M5.4 19.4c2.8-3 5.8-5.2 9-6.4']
+      leaf: ['M5.2 19.2C5.2 11.8 10.4 6.6 19.4 5.6c.7 8.8-4.4 13.6-11 13.6H5.2z', 'M5.4 19.4c2.8-3 5.8-5.2 9-6.4'],
+      truck: ['M2.6 6.9h10.2v8.9H2.6z M12.8 9.9h3.3l2.7 3v2.9h-6z', 'M7.1 18.3a1.55 1.55 0 1 0 0-3.1 1.55 1.55 0 0 0 0 3.1z M16.2 18.3a1.55 1.55 0 1 0 0-3.1 1.55 1.55 0 0 0 0 3.1z'],
+      care: ['M12 20.4c-3.6-2.2-6-4.9-6-7.6a3.25 3.25 0 0 1 6-1.85 3.25 3.25 0 0 1 6 1.85c0 2.7-2.4 5.4-6 7.6z', 'M8.4 8.1a2.15 2.15 0 1 0 0-4.3 2.15 2.15 0 0 0 0 4.3z M15.6 8.1a2.15 2.15 0 1 0 0-4.3 2.15 2.15 0 0 0 0 4.3z']
     };
     const benefits = { items: (d.benefits || []).map(b => { const ps = ICONS[b.icon] || ['', '']; return { title: b.title, text: b.text, p1: ps[0] || '', p2: ps[1] || '' }; }) };
 
@@ -558,7 +567,7 @@ class Component extends DCLogic {
       isHome: s.view === 'home', isCatalog: s.view === 'catalog', isProduct: s.view === 'product' && !!pd,
       isBrands: s.view === 'brands', isTips: s.view === 'tips', isFavs: s.view === 'favs', isHelp: s.view === 'help',
       hasAnnounce: anns.length > 0, announce, openInstagram,
-      header, hero, categories, benefits, featured, collections, editorial, guarantee, brandStrip,
+      header, hero, categories, benefits, routine, featured, collections, editorial, guarantee, brandStrip,
       instagram, tips, help, catalog, pd, brands, favs, cart, toast, footer
     }, nav);
   }
