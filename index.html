@@ -3,7 +3,7 @@
 <head>
 <meta charset="utf-8">
 <meta name="viewport" content="width=device-width, initial-scale=1">
-<script>window.__DC_BUILD="7009bbb349"</script>
+<script>window.__DC_BUILD="be254fd030"</script>
 <script src="./support.js"></script>
 </head>
 <body>
@@ -15,7 +15,11 @@
 <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin="anonymous">
 <link href="https://fonts.googleapis.com/css2?family=Cormorant+Garamond:ital,wght@0,400;0,500;0,600;1,400;1,500&amp;family=Jost:wght@300;400;500&amp;display=swap" rel="stylesheet">
 <style>
-html,body{margin:0;padding:0;background:#f3eae4;color:#3f2a26;font-family:'Jost',sans-serif;-webkit-font-smoothing:antialiased;overflow-x:hidden}
+html,body{margin:0;padding:0;background:#f3eae4;color:#3f2a26;font-family:'Jost',sans-serif;-webkit-font-smoothing:antialiased}
+/* clip evita la barra horizontal sin convertir al body en contenedor de scroll,
+   que es lo que dejaba sin efecto a window.scrollTo al cambiar de pantalla */
+html,body{overflow-x:clip}
+@supports not (overflow-x:clip){html,body{overflow-x:hidden}}
 *{box-sizing:border-box}
 a{color:#7a5248;text-decoration:none}
 a:hover{color:#4a231f}
@@ -290,7 +294,15 @@ class Component extends DCLogic {
     }
   }
 
-  go(view, extra) { this.setState(Object.assign({ view, menuOpen: false, searchOpen: false, cartOpen: false }, extra || {})); try { window.scrollTo(0, 0); } catch (e) {} }
+  go(view, extra) { this.setState(Object.assign({ view, menuOpen: false, searchOpen: false, cartOpen: false }, extra || {})); this.alInicio(); }
+  alInicio() {
+    try {
+      window.scrollTo(0, 0);
+      if (document.scrollingElement) document.scrollingElement.scrollTop = 0;
+      document.documentElement.scrollTop = 0;
+      document.body.scrollTop = 0;
+    } catch (e) {}
+  }
   norm(v) { return (v || '').toString().toLowerCase().normalize('NFD').replace(/[̀-ͯ]/g, ''); }
   money(v, cur) { return new Intl.NumberFormat('es-AR', { style: 'currency', currency: cur || 'ARS', maximumFractionDigits: 0 }).format(v); }
 
