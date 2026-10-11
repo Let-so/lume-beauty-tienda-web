@@ -220,10 +220,11 @@
   ],
   "editorial": {
     "title": "Tu ritual, a tu manera.",
-    "text": "Cremas de rostro, contorno de ojos y brumas corporales. Una selección corta para que elijas con calma lo que va con tu rutina.",
-    "image": "assets/editorial/ritual.webp",
-    "alt": "Composición de productos de skincare y fragancias sobre fondo rosado",
-    "ctaLabel": "VER TODOS LOS PRODUCTOS"
+    "text": "Las cuatro brumas de Victoria’s Secret que tenemos hoy, en 250 ml. Elegí la que va con vos.",
+    "image": "assets/editorial/body-mist-lume.webp",
+    "alt": "Las brumas Pure Seduction, Velvet Petals, Coconut Passion y Bare Vanilla de Victoria’s Secret",
+    "ctaLabel": "VER BODY MIST",
+    "collection": "body-mist"
   },
   "guarantee": {
     "title": "Elegimos cada producto con cuidado.",
@@ -310,22 +311,18 @@
     }
   ],
   "reviews": [],
-  "instagramGallery": [
+  "instagramPosts": [
     {
-      "image": "assets/editorial/textura-crema.webp",
-      "alt": "Textura cremosa de skincare"
+      "url": "https://www.instagram.com/p/DeVZwwUlMNG/"
     },
     {
-      "image": "assets/editorial/flor.webp",
-      "alt": "Flor rosada con gotas de agua"
+      "url": "https://www.instagram.com/p/DeVPUn0Pjem/"
     },
     {
-      "image": "assets/editorial/gel-serum.webp",
-      "alt": "Textura de gel serum"
+      "url": "https://www.instagram.com/p/DeRr1pkkdi5/"
     },
     {
-      "image": "assets/editorial/serum-rosado.webp",
-      "alt": "Textura de serum en tonos rosados"
+      "url": "https://www.instagram.com/p/DeK5JnpPtfU/"
     }
   ]
 }

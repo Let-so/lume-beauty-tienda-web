@@ -411,7 +411,10 @@ class Component extends DCLogic {
       })
     };
 
-    const editorial = Object.assign({ title: '', text: '', image: '', alt: '', ctaLabel: 'VER PRODUCTOS' }, d.editorial || {}, { open: nav.goShop });
+    const edDef = d.editorial || {};
+    const editorial = Object.assign({ title: '', text: '', image: '', alt: '', ctaLabel: 'VER PRODUCTOS' }, edDef, {
+      open: edDef.collection ? go('catalog', { coll: edDef.collection, cat: 'all', brand: null, query: '' }) : nav.goShop
+    });
     const guarantee = Object.assign({ title: '', text: '', claim: '' }, d.guarantee || {});
 
     const brandCount = b => { const n = products.filter(p => p.brand === b.id).length; return n + (n === 1 ? ' PRODUCTO' : ' PRODUCTOS'); };
@@ -420,11 +423,24 @@ class Component extends DCLogic {
       items: d.brands.map(b => ({ name: b.name, countLabel: brandCount(b), ariaLabel: 'Ver productos de ' + b.name, open: go('catalog', { cat: 'all', brand: b.id, coll: null, query: '' }) }))
     };
 
+    const igPosts = (d.instagramPosts || []).filter(x => x && x.url);
+    const igPad = w < 640 ? 18 : Math.min(38, Math.max(18, w * 0.025));
+    const igInner = Math.max(260, Math.min(w - 2 * igPad, 1180));
+    const igCols = igInner < 700 ? 1 : igInner < 1100 ? 2 : 3;
+    const igColW = Math.floor((igInner - 9 * (igCols - 1)) / igCols);
+    const igH = Math.max(420, igColW + 118);
     const instagram = {
       handle: ig.handle, title: 'Descubrí Lumé en Instagram.',
       text: 'Conocé nuestras novedades, descubrí productos y seguí el universo Lumé.',
       ctaLabel: 'SEGUINOS EN INSTAGRAM', open: openInstagram,
-      gallery: (d.instagramGallery || []).map(g => ({ image: g.image, alt: g.alt }))
+      hasPosts: igPosts.length > 0,
+      posts: igPosts.map(x => ({
+        embed: x.url.replace(/\/+$/, '') + '/embed/',
+        title: 'Publicación de ' + (ig.handle || 'Lumé Beauty') + ' en Instagram'
+      })),
+      gridStyle: { maxWidth: '1180px', margin: 'clamp(26px,3vw,40px) auto 0', display: 'grid', gridTemplateColumns: 'repeat(' + igCols + ',minmax(0,1fr))', gap: '9px' },
+      cellStyle: { position: 'relative', height: igH + 'px', borderRadius: '4px', overflow: 'hidden', background: '#f3eae4', border: '1px solid #e3d4ca' },
+      frameStyle: { display: 'block', width: '100%', height: '100%', border: 0 }
     };
 
     const tips = {
