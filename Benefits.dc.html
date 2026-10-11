@@ -8,12 +8,12 @@
 <body>
 <x-dc>
 <section data-screen-label="Beneficios" aria-label="Por qué comprar en Lumé" style="background:#efe3db;border-top:1px solid #e3d4ca;border-bottom:1px solid #e3d4ca;padding:clamp(18px,2.2vw,26px) clamp(14px,2.5vw,38px);font-family:'Jost',sans-serif;color:#3f2a26">
-  <div style="display:grid;grid-template-columns:repeat(auto-fit,minmax(min(100%,152px),1fr));gap:clamp(14px,2vw,26px);max-width:1180px;margin:0 auto">
+  <div style="{{ bn.gridStyle }}">
     <sc-for list="{{ bn.items }}" as="b" hint-placeholder-count="4">
       <div style="display:flex;flex-direction:column;align-items:center;text-align:center;gap:7px;min-width:0">
         <svg width="23" height="23" viewBox="0 0 24 24" fill="none" stroke="#a87a6e" stroke-width="1.15" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="{{ b.p1 }}"></path><path d="{{ b.p2 }}"></path></svg>
-        <span style="font-size:10.5px;letter-spacing:0.14em;text-transform:uppercase;color:#4a231f;line-height:1.3">{{ b.title }}</span>
-        <span style="font-size:11px;line-height:1.45;color:#7a5a52;max-width:26ch">{{ b.text }}</span>
+        <span style="font-size:clamp(9px,2.3vw,10.5px);letter-spacing:0.12em;text-transform:uppercase;color:#4a231f;line-height:1.3">{{ b.title }}</span>
+        <sc-if value="{{ bn.showText }}"><span style="font-size:11px;line-height:1.45;color:#7a5a52;max-width:26ch">{{ b.text }}</span></sc-if>
       </div>
     </sc-for>
   </div>

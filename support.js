@@ -1646,7 +1646,8 @@
       const url = COMPONENT_DIR + "/" + encodeURIComponent(name) + ".dc.html";
       const res = window.__resources;
       const pre = res ? res[url] : void 0;
-      const target = typeof pre === "string" && pre ? pre : url;
+      const ver = window.__DC_BUILD ? (url.indexOf("?") < 0 ? "?v=" : "&v=") + window.__DC_BUILD : "";
+      const target = typeof pre === "string" && pre ? pre : url + ver;
       const blob = bundledBlob(target);
       (blob ? blob.text() : fetch(target).then((res2) => {
         if (!res2.ok) {

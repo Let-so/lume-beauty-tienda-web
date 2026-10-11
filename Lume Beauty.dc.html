@@ -3,6 +3,7 @@
 <head>
 <meta charset="utf-8">
 <meta name="viewport" content="width=device-width, initial-scale=1">
+<script>window.__DC_BUILD="7009bbb349"</script>
 <script src="./support.js"></script>
 </head>
 <body>
@@ -264,7 +265,7 @@ class Component extends DCLogic {
     window.addEventListener('resize', this._r);
     window.addEventListener('keydown', this._k);
     try { const s = JSON.parse(localStorage.getItem('lume_store_v1') || '{}'); this.setState({ cart: s.cart || {}, favs: s.favs || {} }); } catch (e) {}
-    fetch('data/catalog.json').then(r => r.json()).then(data => {
+    fetch('data/catalog.json?v=' + (window.__DC_BUILD || '')).then(r => r.json()).then(data => {
       this.setState({ data });
       const n = (data.announcements || []).length;
       if (n > 1 && !this._ann) this._ann = setInterval(() => this.setState(x => ({ announceIndex: x.announceIndex + 1 })), 4600);
@@ -395,7 +396,11 @@ class Component extends DCLogic {
       truck: ['M2.6 6.9h10.2v8.9H2.6z M12.8 9.9h3.3l2.7 3v2.9h-6z', 'M7.1 18.3a1.55 1.55 0 1 0 0-3.1 1.55 1.55 0 0 0 0 3.1z M16.2 18.3a1.55 1.55 0 1 0 0-3.1 1.55 1.55 0 0 0 0 3.1z'],
       care: ['M12 20.4c-3.6-2.2-6-4.9-6-7.6a3.25 3.25 0 0 1 6-1.85 3.25 3.25 0 0 1 6 1.85c0 2.7-2.4 5.4-6 7.6z', 'M8.4 8.1a2.15 2.15 0 1 0 0-4.3 2.15 2.15 0 0 0 0 4.3z M15.6 8.1a2.15 2.15 0 1 0 0-4.3 2.15 2.15 0 0 0 0 4.3z']
     };
-    const benefits = { items: (d.benefits || []).map(b => { const ps = ICONS[b.icon] || ['', '']; return { title: b.title, text: b.text, p1: ps[0] || '', p2: ps[1] || '' }; }) };
+    const benItems = (d.benefits || []).map(b => { const ps = ICONS[b.icon] || ['', '']; return { title: b.title, text: b.text, p1: ps[0] || '', p2: ps[1] || '' }; });
+    const benefits = {
+      items: benItems, showText: w >= 768,
+      gridStyle: { display: 'grid', gridTemplateColumns: 'repeat(' + Math.max(1, benItems.length) + ',minmax(0,1fr))', gap: w < 480 ? '10px' : 'clamp(14px,2vw,26px)', maxWidth: '1180px', margin: '0 auto' }
+    };
 
     const featProducts = products.filter(p => p.featured).map(p => this.decorate(p));
     const featured = {
