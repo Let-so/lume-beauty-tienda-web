@@ -25,6 +25,7 @@
         <button onClick="{{ h.onSearch }}" aria-label="Buscar" style="background:none;border:0;padding:4px;display:flex;color:#3f2a26" style-hover="color:#a87a6e"><svg width="19" height="19" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.3"><circle cx="10.5" cy="10.5" r="6.5"></circle><path d="M15.5 15.5L20.5 20.5"></path></svg></button>
         <input value="{{ h.query }}" onChange="{{ h.onQuery }}" onKeyDown="{{ h.onKey }}" placeholder="BUSCAR..." aria-label="Buscar productos" style="width:clamp(120px,12vw,186px);border:0;border-bottom:1px solid #b9a097;background:transparent;padding:6px 0;font-size:10px;letter-spacing:0.12em;color:#3f2a26;outline:none">
       </div>
+      <button onClick="{{ h.goFavs }}" aria-label="Ver favoritos" style="background:none;border:0;padding:4px;display:flex;align-items:center;gap:6px;color:#3f2a26" style-hover="color:#a87a6e"><svg width="21" height="21" viewBox="0 0 24 24" fill="{{ h.favFill }}" stroke="currentColor" stroke-width="1.3"><path d="M12 20.3s-7.6-4.6-7.6-10.3A4.2 4.2 0 0 1 12 7.5a4.2 4.2 0 0 1 7.6 2.5c0 5.7-7.6 10.3-7.6 10.3z"></path></svg><span style="font-size:10.5px">{{ h.favCount }}</span></button>
       <button onClick="{{ h.openCart }}" aria-label="Abrir carrito" style="background:none;border:0;padding:4px;display:flex;align-items:center;gap:6px;color:#3f2a26" style-hover="color:#a87a6e"><svg width="22" height="22" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.2"><path d="M4.5 8h15l-1.1 13H5.6L4.5 8z"></path><path d="M8.8 8V6.2a3.2 3.2 0 0 1 6.4 0V8"></path></svg><span style="font-size:10.5px">{{ h.cartCount }}</span></button>
     </div>
   </div>
@@ -42,8 +43,8 @@
       <span style="font-size:8.5px;letter-spacing:0.6em;padding-left:0.6em;margin-top:5px;color:#ad8679">BEAUTY</span>
     </button>
     <div style="display:flex;justify-content:flex-end">
-      <button onClick="{{ h.toggleSearch }}" aria-label="Buscar" style="background:none;border:0;width:44px;height:44px;display:flex;align-items:center;justify-content:center;color:#3f2a26"><svg width="19" height="19" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.3"><circle cx="10.5" cy="10.5" r="6.5"></circle><path d="M15.5 15.5L20.5 20.5"></path></svg></button>
-      <button onClick="{{ h.openCart }}" aria-label="Abrir carrito" style="background:none;border:0;height:44px;padding:0 8px;display:flex;align-items:center;gap:4px;color:#3f2a26"><svg width="21" height="21" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.2"><path d="M4.5 8h15l-1.1 13H5.6L4.5 8z"></path><path d="M8.8 8V6.2a3.2 3.2 0 0 1 6.4 0V8"></path></svg><span style="font-size:10.5px">{{ h.cartCount }}</span></button>
+      <button onClick="{{ h.toggleSearch }}" aria-label="Buscar" style="background:none;border:0;width:40px;height:44px;display:flex;align-items:center;justify-content:center;color:#3f2a26"><svg width="19" height="19" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.3"><circle cx="10.5" cy="10.5" r="6.5"></circle><path d="M15.5 15.5L20.5 20.5"></path></svg></button>
+      <button onClick="{{ h.goFavs }}" aria-label="Ver favoritos" style="background:none;border:0;height:44px;padding:0 6px;display:flex;align-items:center;gap:3px;color:#3f2a26"><svg width="20" height="20" viewBox="0 0 24 24" fill="{{ h.favFill }}" stroke="currentColor" stroke-width="1.3"><path d="M12 20.3s-7.6-4.6-7.6-10.3A4.2 4.2 0 0 1 12 7.5a4.2 4.2 0 0 1 7.6 2.5c0 5.7-7.6 10.3-7.6 10.3z"></path></svg><span style="font-size:10.5px">{{ h.favCount }}</span></button><button onClick="{{ h.openCart }}" aria-label="Abrir carrito" style="background:none;border:0;height:44px;padding:0 6px;display:flex;align-items:center;gap:4px;color:#3f2a26"><svg width="21" height="21" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.2"><path d="M4.5 8h15l-1.1 13H5.6L4.5 8z"></path><path d="M8.8 8V6.2a3.2 3.2 0 0 1 6.4 0V8"></path></svg><span style="font-size:10.5px">{{ h.cartCount }}</span></button>
     </div>
   </div>
   <sc-if value="{{ h.searchOpen }}">
@@ -58,6 +59,7 @@
       <button onClick="{{ h.goPerfumes }}" style="background:none;border:0;border-bottom:1px solid #e6d8cf;text-align:left;padding:17px 0;font-size:12px;letter-spacing:0.2em;color:#3f2a26">PERFUMES</button>
       <button onClick="{{ h.goBrands }}" style="background:none;border:0;border-bottom:1px solid #e6d8cf;text-align:left;padding:17px 0;font-size:12px;letter-spacing:0.2em;color:#3f2a26">MARCAS</button>
       <button onClick="{{ h.goTips }}" style="background:none;border:0;border-bottom:1px solid #e6d8cf;text-align:left;padding:17px 0;font-size:12px;letter-spacing:0.2em;color:#3f2a26">CONSEJOS</button>
+      <button onClick="{{ h.goFavs }}" style="background:none;border:0;border-bottom:1px solid #e6d8cf;text-align:left;padding:17px 0;display:flex;align-items:center;gap:10px;font-size:12px;letter-spacing:0.2em;color:#3f2a26">FAVORITOS<span style="font-size:10px;color:#8a6d65">{{ h.favCount }}</span></button>
     </nav>
   </sc-if>
 </sc-if>

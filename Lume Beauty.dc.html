@@ -73,6 +73,35 @@ input::placeholder{color:#6f5650;letter-spacing:0.12em}
       </section>
     </sc-if>
 
+    <sc-if value="{{ isFavs }}">
+      <section data-screen-label="Favoritos" style="padding:clamp(28px,4vw,56px) clamp(18px,2.5vw,38px) clamp(48px,6vw,88px)">
+        <nav aria-label="Ruta" style="display:flex;gap:8px;font-size:10px;letter-spacing:0.16em;color:#8a6d65">
+          <button onClick="{{ goHome }}" style="background:none;border:0;padding:0;font-size:10px;letter-spacing:0.16em;color:#8a6d65" style-hover="color:#4a231f">INICIO</button><span>/</span><span>FAVORITOS</span>
+        </nav>
+        <h1 style="margin:14px 0 0;font-family:'Cormorant Garamond',serif;font-weight:500;font-size:clamp(38px,4vw,58px);line-height:1;color:#4a231f">Favoritos</h1>
+        <p style="margin:16px 0 0;max-width:52ch;font-size:13px;line-height:1.5;color:#6f5650">Lo que marques con el corazón queda guardado en este navegador: vas a volver a encontrarlo acá aunque cierres la página.</p>
+        <div style="display:flex;flex-wrap:wrap;align-items:center;gap:8px 20px;margin:22px 0 18px">
+          <p style="margin:0;font-size:10.5px;letter-spacing:0.16em;color:#8a6d65">{{ favs.countLabel }}</p>
+          <sc-if value="{{ favs.hasItems }}">
+            <button onClick="{{ favs.clear }}" style="background:none;border:0;padding:0;font-size:10px;letter-spacing:0.14em;color:#8a6d65;text-decoration:underline;text-underline-offset:3px" style-hover="color:#4a231f">VACIAR FAVORITOS</button>
+          </sc-if>
+        </div>
+        <sc-if value="{{ favs.isEmpty }}">
+          <div style="padding:26px 0 10px;display:flex;flex-direction:column;align-items:flex-start;gap:16px">
+            <svg width="34" height="34" viewBox="0 0 24 24" fill="none" stroke="#c4a79c" stroke-width="1.1" aria-hidden="true"><path d="M12 20.3s-7.6-4.6-7.6-10.3A4.2 4.2 0 0 1 12 7.5a4.2 4.2 0 0 1 7.6 2.5c0 5.7-7.6 10.3-7.6 10.3z"></path></svg>
+            <p style="margin:0;max-width:22ch;font-family:'Cormorant Garamond',serif;font-size:28px;line-height:1.12;color:#4a231f">Todavía no guardaste ningún favorito.</p>
+            <p style="margin:0;max-width:46ch;font-size:13px;color:#6f5650">Tocá el corazón de cualquier producto para guardarlo acá.</p>
+            <button onClick="{{ goShop }}" style="height:42px;padding:0 26px;border:0;border-radius:999px;background:#b38d83;color:#fdf8f5;font-size:10px;letter-spacing:0.24em" style-hover="background:#a07a70">EXPLORAR PRODUCTOS&nbsp;&nbsp;→</button>
+          </div>
+        </sc-if>
+        <div style="display:grid;grid-template-columns:repeat(auto-fill,minmax(min(100%,160px),1fr));gap:30px 13px">
+          <sc-for list="{{ favs.items }}" as="p" hint-placeholder-count="0">
+            <dc-import name="ProductCard" product="{{ p }}" hint-size="100%,330px"></dc-import>
+          </sc-for>
+        </div>
+      </section>
+    </sc-if>
+
     <sc-if value="{{ isProduct }}">
       <section data-screen-label="Ficha de producto" style="padding:clamp(24px,3.5vw,48px) clamp(18px,2.5vw,38px) clamp(48px,6vw,88px)">
         <nav aria-label="Ruta" style="display:flex;flex-wrap:wrap;gap:8px;font-size:10px;letter-spacing:0.16em;color:#8a6d65">
@@ -159,13 +188,13 @@ class Component extends DCLogic {
   componentDidUpdate() {
     const s = this.state;
     if (this._lastCart !== s.cart || this._lastFavs !== s.favs) {
-      localStorage.setItem('lume_store_v1', JSON.stringify({ cart: s.cart, favs: s.favs }));
       this._lastCart = s.cart;
       this._lastFavs = s.favs;
+      try { localStorage.setItem('lume_store_v1', JSON.stringify({ cart: s.cart, favs: s.favs })); } catch (e) {}
     }
     if (this._lastCartOpen !== s.cartOpen) {
-      document.body.style.overflow = s.cartOpen ? 'hidden' : '';
       this._lastCartOpen = s.cartOpen;
+      document.body.style.overflow = s.cartOpen ? 'hidden' : '';
     }
   }
   go(view, extra) { this.setState(Object.assign({ view, menuOpen: false, searchOpen: false, cartOpen: false }, extra || {})); try { window.scrollTo(0, 0); } catch (e) {} }
@@ -203,12 +232,16 @@ class Component extends DCLogic {
       goHome: go('home'),
       goShop: go('catalog', { cat: 'all', brand: null, query: '' }),
       goPerfumes: go('catalog', { cat: 'perfumes-body-mist', brand: null, query: '' }),
-      goBrands: go('brands'), goTips: go('tips')
+      goBrands: go('brands'), goTips: go('tips'), goFavs: go('favs')
     };
     const cartCount = Object.keys(s.cart).filter(id => byId[id] || !s.data).reduce((a, id) => a + s.cart[id], 0);
+    const favIds = Object.keys(s.favs);
+    const favCount = favIds.filter(id => byId[id] || !s.data).length;
+    const favItems = favIds.filter(id => byId[id]).map(id => this.decorate(byId[id]));
 
     const header = Object.assign({}, nav, {
       isDesktop: w >= 1024, isCompact: w < 1024, query: s.query, cartCount,
+      favCount, favFill: favCount ? '#b38d83' : 'none',
       menuOpen: s.menuOpen, menuClosed: !s.menuOpen, searchOpen: s.searchOpen,
       onQuery: e => { const v = e.target.value; const x = { query: v }; if (v.trim() && this.state.view !== 'catalog') Object.assign(x, { view: 'catalog', cat: 'all', brand: null, menuOpen: false }); this.setState(x); },
       onKey: e => { if (e.key === 'Enter') this.go('catalog', { searchOpen: false }); },
@@ -218,7 +251,7 @@ class Component extends DCLogic {
       toggleSearch: () => this.setState(x => ({ searchOpen: !x.searchOpen, menuOpen: false }))
     });
 
-    const hero = { wide: w >= 900, stacked: w < 900, explore: nav.goShop };
+    const hero = { wide: w >= 900, compact: w < 900, explore: nav.goShop };
 
     const categories = {
       gridStyle: { display: 'grid', gridTemplateColumns: w < 640 ? '1fr' : 'repeat(3,minmax(0,1fr))', gap: '3px', paddingTop: '3px', background: '#f3eae4' },
@@ -276,6 +309,12 @@ class Component extends DCLogic {
     });
     const allPriced = items.length > 0 && Object.keys(s.cart).filter(id => byId[id]).every(id => byId[id].price != null);
     const sum = allPriced ? Object.keys(s.cart).filter(id => byId[id]).reduce((a, id) => a + byId[id].price * s.cart[id], 0) : 0;
+    const favs = {
+      items: favItems, hasItems: favItems.length > 0, isEmpty: !!s.data && favItems.length === 0,
+      countLabel: s.data ? favItems.length + (favItems.length === 1 ? ' PRODUCTO GUARDADO' : ' PRODUCTOS GUARDADOS') : 'CARGANDO…',
+      clear: () => this.setState({ favs: {} })
+    };
+
     const cart = {
       open: s.cartOpen, close: () => this.setState({ cartOpen: false }), goShop: nav.goShop,
       items, count: cartCount, isEmpty: items.length === 0, hasItems: items.length > 0,
@@ -296,8 +335,8 @@ class Component extends DCLogic {
 
     return Object.assign({
       isHome: s.view === 'home', isCatalog: s.view === 'catalog', isProduct: s.view === 'product' && !!pd,
-      isBrands: s.view === 'brands', isTips: s.view === 'tips',
-      header, hero, categories, featured, catalog, pd, brands, cart, footer: nav
+      isBrands: s.view === 'brands', isTips: s.view === 'tips', isFavs: s.view === 'favs',
+      header, hero, categories, featured, catalog, pd, brands, favs, cart, footer: nav
     }, nav);
   }
 }
