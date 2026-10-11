@@ -7,12 +7,44 @@
 </head>
 <body>
 <x-dc>
-<footer style="border-top:1px solid #e3d4ca;background:#f3eae4;padding:34px clamp(18px,2.5vw,38px) 30px;display:flex;flex-wrap:wrap;gap:24px 48px;align-items:center;justify-content:space-between;font-family:'Jost',sans-serif;color:#3f2a26">
-  <button onClick="{{ f.goHome }}" aria-label="LUMÉ Beauty — inicio" style="background:none;border:0;padding:0;display:flex;flex-direction:column;align-items:center;color:#a87a6e">
-    <span style="font-family:'Cormorant Garamond',serif;font-weight:500;font-size:30px;line-height:0.86;letter-spacing:0.02em">LUMÉ</span>
-    <span style="font-size:7.5px;letter-spacing:0.6em;padding-left:0.6em;margin-top:5px;color:#ad8679">BEAUTY</span>
-  </button>
-  <span style="font-size:10px;letter-spacing:0.16em;color:#8a6d65">© 2026 LUMÉ BEAUTY</span>
+<footer style="border-top:1px solid #e3d4ca;background:#f3eae4;padding:clamp(36px,4.5vw,64px) clamp(18px,2.5vw,38px) 26px;font-family:'Jost',sans-serif;color:#3f2a26">
+  <div style="max-width:1180px;margin:0 auto;display:grid;grid-template-columns:repeat(auto-fit,minmax(min(100%,186px),1fr));gap:clamp(28px,3vw,48px)">
+
+    <div style="display:flex;flex-direction:column;align-items:flex-start;gap:12px">
+      <button onClick="{{ f.goHome }}" aria-label="LUMÉ Beauty — inicio" style="background:none;border:0;padding:0;display:flex;flex-direction:column;align-items:center;color:#a87a6e">
+        <span style="position:relative;font-family:'Cormorant Garamond',serif;font-weight:500;font-size:34px;line-height:0.86;letter-spacing:0.02em">LUMÉ<svg width="9" height="9" viewBox="0 0 24 24" aria-hidden="true" style="position:absolute;top:-6px;right:-11px"><path d="M12 0C12.8 8.2 15.8 11.2 24 12C15.8 12.8 12.8 15.8 12 24C11.2 15.8 8.2 12.8 0 12C8.2 11.2 11.2 8.2 12 0Z" fill="currentColor"></path></svg></span>
+        <span style="font-size:7.5px;letter-spacing:0.6em;padding-left:0.6em;margin-top:5px;color:#ad8679">BEAUTY</span>
+      </button>
+      <p style="margin:0;max-width:24ch;font-family:'Cormorant Garamond',serif;font-size:17px;line-height:1.35;color:#6f5650">Skincare que ilumina tu piel.</p>
+    </div>
+
+    <nav aria-label="Tienda" style="display:flex;flex-direction:column;align-items:flex-start;gap:10px">
+      <span style="font-size:10px;letter-spacing:0.22em;color:#8a6d65">TIENDA</span>
+      <sc-for list="{{ f.shop }}" as="it" hint-placeholder-count="4">
+        <button onClick="{{ it.open }}" style="background:none;border:0;padding:3px 0;text-align:left;font-size:12px;letter-spacing:0.04em;color:#3f2a26" style-hover="color:#a87a6e">{{ it.label }}</button>
+      </sc-for>
+    </nav>
+
+    <nav aria-label="Ayuda" style="display:flex;flex-direction:column;align-items:flex-start;gap:10px">
+      <span style="font-size:10px;letter-spacing:0.22em;color:#8a6d65">AYUDA</span>
+      <sc-for list="{{ f.help }}" as="it" hint-placeholder-count="5">
+        <button onClick="{{ it.open }}" style="background:none;border:0;padding:3px 0;text-align:left;font-size:12px;letter-spacing:0.04em;color:#3f2a26" style-hover="color:#a87a6e">{{ it.label }}</button>
+      </sc-for>
+    </nav>
+
+    <div style="display:flex;flex-direction:column;align-items:flex-start;gap:10px">
+      <span style="font-size:10px;letter-spacing:0.22em;color:#8a6d65">INSTAGRAM</span>
+      <button onClick="{{ f.openInstagram }}" aria-label="Abrir el Instagram de Lumé Beauty en una pestaña nueva" style="background:none;border:0;padding:3px 0;display:flex;align-items:center;gap:9px;font-size:12px;letter-spacing:0.04em;color:#3f2a26" style-hover="color:#a87a6e">
+        <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.35" aria-hidden="true"><rect x="3.5" y="3.5" width="17" height="17" rx="5"></rect><circle cx="12" cy="12" r="4"></circle><circle cx="17.2" cy="6.8" r="1.1" fill="currentColor" stroke="none"></circle></svg>{{ f.instagramHandle }}
+      </button>
+      <p style="margin:0;max-width:26ch;font-size:11.5px;line-height:1.5;color:#6f5650">Es nuestro único canal de contacto: escribinos por mensaje directo.</p>
+    </div>
+
+  </div>
+  <div style="max-width:1180px;margin:clamp(26px,3vw,42px) auto 0;padding-top:18px;border-top:1px solid #e6d8cf;display:flex;flex-wrap:wrap;gap:8px 20px;justify-content:space-between;align-items:center">
+    <span style="font-size:10px;letter-spacing:0.16em;color:#8a6d65">{{ f.copyright }}</span>
+    <span style="font-size:9.5px;letter-spacing:0.04em;color:#ab938a">Precios en pesos argentinos.</span>
+  </div>
 </footer>
 </x-dc>
 </body>

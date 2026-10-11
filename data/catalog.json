@@ -13,19 +13,19 @@
   "homeBanners": [
     {
       "label": "Skincare coreano",
-      "image": "assets/categorias/skincare-coreano.png",
+      "image": "assets/categorias/skincare-coreano.webp",
       "view": "catalog",
       "cat": "skincare-coreano"
     },
     {
       "label": "Perfumes & body mist",
-      "image": "assets/categorias/perfumes-body-mist.png",
+      "image": "assets/categorias/perfumes-body-mist.webp",
       "view": "catalog",
       "cat": "perfumes-body-mist"
     },
     {
       "label": "Marcas",
-      "image": "assets/categorias/marcas.png",
+      "image": "assets/categorias/marcas.webp",
       "view": "brands"
     }
   ],
@@ -103,7 +103,7 @@
       "categories": [
         "perfumes-body-mist"
       ],
-      "image": "assets/productos/vs-pure-seduction-body-mist.png",
+      "image": "assets/productos/vs-pure-seduction-body-mist.webp",
       "imagePadding": "9% 0",
       "price": 40000,
       "featured": true
@@ -119,7 +119,7 @@
       "categories": [
         "perfumes-body-mist"
       ],
-      "image": "assets/productos/vs-velvet-petals-body-mist.png",
+      "image": "assets/productos/vs-velvet-petals-body-mist.webp",
       "imagePadding": "9% 0",
       "price": 40000,
       "featured": true
@@ -135,7 +135,7 @@
       "categories": [
         "perfumes-body-mist"
       ],
-      "image": "assets/productos/vs-coconut-passion-body-mist.png",
+      "image": "assets/productos/vs-coconut-passion-body-mist.webp",
       "imagePadding": "9% 0",
       "price": 40000,
       "featured": true
@@ -151,10 +151,181 @@
       "categories": [
         "perfumes-body-mist"
       ],
-      "image": "assets/productos/vs-bare-vanilla-body-mist.png",
+      "image": "assets/productos/vs-bare-vanilla-body-mist.webp",
       "imagePadding": "9% 0",
       "price": 40000,
       "featured": true
+    }
+  ],
+  "instagram": {
+    "handle": "@lumebeautyok_ar",
+    "url": "https://www.instagram.com/lumebeautyok_ar/"
+  },
+  "announcements": [
+    "TRABAJAMOS SOLAMENTE CON PRODUCTOS ORIGINALES",
+    "SKINCARE COREANO Y BODY MIST SELECCIONADOS",
+    "CONSULTAS POR INSTAGRAM @LUMEBEAUTYOK_AR"
+  ],
+  "benefits": [
+    {
+      "icon": "shield",
+      "title": "Productos originales",
+      "text": "Trabajamos solamente con productos originales."
+    },
+    {
+      "icon": "tag",
+      "title": "Información clara",
+      "text": "Marca, contenido y precio a la vista en cada producto."
+    },
+    {
+      "icon": "chat",
+      "title": "Consultas por Instagram",
+      "text": "Escribinos por mensaje directo antes de comprar."
+    },
+    {
+      "icon": "leaf",
+      "title": "Selección acotada",
+      "text": "Pocas marcas, elegidas una por una."
+    }
+  ],
+  "collections": [
+    {
+      "id": "cremas-faciales",
+      "label": "Cremas faciales",
+      "note": "Cremas de rostro en formato cápsula, de 55 g.",
+      "products": [
+        "medicube-deep-vita-c",
+        "medicube-pdrn-pink-collagen"
+      ]
+    },
+    {
+      "id": "contorno-de-ojos",
+      "label": "Contorno de ojos",
+      "note": "Formato específico para la zona del contorno.",
+      "products": [
+        "numbuzin-no9-nad-retinol-eye-cream"
+      ]
+    },
+    {
+      "id": "body-mist",
+      "label": "Body mist",
+      "note": "Brumas corporales de 250 ml.",
+      "products": [
+        "vs-pure-seduction",
+        "vs-velvet-petals",
+        "vs-coconut-passion",
+        "vs-bare-vanilla"
+      ]
+    }
+  ],
+  "editorial": {
+    "title": "Tu ritual, a tu manera.",
+    "text": "Cremas de rostro, contorno de ojos y brumas corporales. Una selección corta para que elijas con calma lo que va con tu rutina.",
+    "image": "assets/editorial/ritual.webp",
+    "alt": "Composición de productos de skincare y fragancias sobre fondo rosado",
+    "ctaLabel": "VER TODOS LOS PRODUCTOS"
+  },
+  "guarantee": {
+    "title": "Elegimos cada producto con cuidado.",
+    "text": "En Lumé reunimos una selección de skincare y beauty para que puedas descubrir tus próximos favoritos con información clara sobre cada producto.",
+    "claim": "Trabajamos solamente con productos originales."
+  },
+  "tips": [
+    {
+      "id": "sumar-crema-facial",
+      "title": "Cómo sumar una crema facial a tu rutina",
+      "lead": "Un producto nuevo por vez.",
+      "body": [
+        "Las cremas de rostro se aplican sobre la piel limpia, al final de la rutina, con la cantidad que indique el envase.",
+        "Si estás incorporando varios productos, conviene sumar uno por vez y dejar pasar unos días: así es más fácil notar cómo responde tu piel a cada uno."
+      ],
+      "linkLabel": "VER CREMAS FACIALES",
+      "collection": "cremas-faciales"
+    },
+    {
+      "id": "elegir-contorno-de-ojos",
+      "title": "Qué mirar al elegir un contorno de ojos",
+      "lead": "Formatos chicos que rinden mucho.",
+      "body": [
+        "El contorno es un producto pensado para una zona puntual del rostro, por eso suele venir en envases más chicos que una crema facial.",
+        "El No.9 NAD+ Retinol Volumetox de Numbuzin viene en 10 ml: se usa muy poca cantidad por aplicación, así que un envase chico dura bastante."
+      ],
+      "linkLabel": "VER CONTORNO DE OJOS",
+      "collection": "contorno-de-ojos"
+    },
+    {
+      "id": "elegir-body-mist",
+      "title": "Cómo elegir un body mist",
+      "lead": "Más suave que un perfume.",
+      "body": [
+        "Las brumas corporales tienen una concentración menor que un perfume: se aplican sobre la piel o la ropa y acompañan el día sin imponerse.",
+        "Los nombres dan una pista de por dónde va cada una: Bare Vanilla parte de la vainilla y Coconut Passion del coco. Las cuatro vienen en 250 ml."
+      ],
+      "linkLabel": "VER BODY MIST",
+      "collection": "body-mist"
+    }
+  ],
+  "tipsNote": "Información general sobre los productos del catalogo. No reemplaza la indicación de un profesional ni las instrucciones del envase.",
+  "help": [
+    {
+      "id": "envios",
+      "title": "Envíos",
+      "body": [
+        "Todavia no tenemos publicadas las zonas ni los costos de envío.",
+        "Coordinamos cada envío al confirmar la compra. Si querés consultarlo antes, escribinos por Instagram."
+      ]
+    },
+    {
+      "id": "medios-de-pago",
+      "title": "Medios de pago",
+      "body": [
+        "Coordinamos el medio de pago al confirmar la compra.",
+        "No ofrecemos cuotas ni financiación."
+      ]
+    },
+    {
+      "id": "cambios",
+      "title": "Cambios y devoluciones",
+      "body": [
+        "Todavia no tenemos una política de cambios y devoluciones publicada.",
+        "Si tenés dudas sobre un producto, escribinos por Instagram antes de comprar."
+      ]
+    },
+    {
+      "id": "preguntas",
+      "title": "Preguntas frecuentes",
+      "body": [
+        "Los productos son originales: trabajamos solamente con productos originales.",
+        "Hoy el catálogo es Medicube, Numbuzin y Victoria’s Secret.",
+        "Para comprar, armás el carrito y lo confirmás con nosotras para coordinar el pago y el envío."
+      ]
+    },
+    {
+      "id": "contacto",
+      "title": "Contacto",
+      "body": [
+        "Nuestro canal es Instagram: @lumebeautyok_ar.",
+        "Escribinos por mensaje directo y seguimos la consulta por ahí."
+      ]
+    }
+  ],
+  "reviews": [],
+  "instagramGallery": [
+    {
+      "image": "assets/editorial/textura-crema.webp",
+      "alt": "Textura cremosa de skincare"
+    },
+    {
+      "image": "assets/editorial/flor.webp",
+      "alt": "Flor rosada con gotas de agua"
+    },
+    {
+      "image": "assets/editorial/gel-serum.webp",
+      "alt": "Textura de gel serum"
+    },
+    {
+      "image": "assets/editorial/serum-rosado.webp",
+      "alt": "Textura de serum en tonos rosados"
     }
   ]
 }

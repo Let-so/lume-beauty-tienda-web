@@ -7,20 +7,34 @@
 </head>
 <body>
 <x-dc>
-<section data-screen-label="Productos destacados" style="padding:34px 0 46px;background:#f3eae4;font-family:'Jost',sans-serif;color:#3f2a26">
-  <div style="display:flex;justify-content:space-between;align-items:baseline;gap:16px;padding:0 clamp(18px,2.5vw,38px) 14px">
+<section data-screen-label="Productos destacados" style="padding:clamp(34px,4vw,56px) 0 clamp(40px,5vw,64px);background:#f3eae4;font-family:'Jost',sans-serif;color:#3f2a26">
+  <div style="display:flex;justify-content:space-between;align-items:baseline;gap:16px;padding:0 clamp(18px,2.5vw,38px) 6px">
     <h2 style="margin:0;font-weight:400;font-size:12.5px;letter-spacing:0.2em">PRODUCTOS DESTACADOS</h2>
     <button onClick="{{ fp.viewAll }}" style="background:none;border:0;padding:4px 0;font-size:10px;letter-spacing:0.16em;color:#3f2a26;white-space:nowrap" style-hover="color:#a87a6e">VER TODO&nbsp;&nbsp;→</button>
   </div>
-  <div style="overflow-x:auto;scroll-snap-type:x mandatory;scrollbar-width:none;padding:0 clamp(18px,2.5vw,38px) 4px;scroll-padding:0 clamp(18px,2.5vw,38px)">
-    <div style="display:grid;grid-template-columns:repeat(7,minmax(168px,1fr));gap:13px">
-      <sc-for list="{{ fp.products }}" as="p" hint-placeholder-count="7">
-        <div style="scroll-snap-align:start;min-width:0">
-          <dc-import name="ProductCard" product="{{ p }}" hint-size="100%,330px"></dc-import>
-        </div>
-      </sc-for>
+
+  <sc-if value="{{ fp.scroll }}">
+    <p style="margin:0 0 12px;padding:0 clamp(18px,2.5vw,38px);font-size:9.5px;letter-spacing:0.14em;color:#ab938a">DESLIZÁ PARA VER LOS {{ fp.count }}&nbsp;&nbsp;→</p>
+    <div style="overflow-x:auto;scroll-snap-type:x mandatory;scrollbar-width:none;-webkit-overflow-scrolling:touch;padding:0 clamp(18px,2.5vw,38px) 6px;scroll-padding:0 clamp(18px,2.5vw,38px)">
+      <div style="{{ fp.railStyle }}">
+        <sc-for list="{{ fp.products }}" as="p" hint-placeholder-count="7">
+          <div style="scroll-snap-align:start;min-width:0">
+            <dc-import name="ProductCard" product="{{ p }}" hint-size="100%,370px"></dc-import>
+          </div>
+        </sc-for>
+      </div>
     </div>
-  </div>
+  </sc-if>
+
+  <sc-if value="{{ fp.wrap }}" hint-placeholder-val="{{ true }}">
+    <div style="padding:12px clamp(18px,2.5vw,38px) 0">
+      <div style="display:grid;grid-template-columns:repeat(auto-fill,minmax(min(100%,182px),1fr));gap:30px 13px">
+        <sc-for list="{{ fp.products }}" as="p" hint-placeholder-count="7">
+          <dc-import name="ProductCard" product="{{ p }}" hint-size="100%,370px"></dc-import>
+        </sc-for>
+      </div>
+    </div>
+  </sc-if>
 </section>
 </x-dc>
 </body>
