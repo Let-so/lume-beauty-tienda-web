@@ -1,0 +1,14 @@
+# OS / editor
+.thumbnail
+Thumbs.db
+desktop.ini
+.DS_Store
+.vscode/
+.idea/
+
+# Dependencias
+node_modules/
+
+# Logs y temporales
+*.log
+*.tmp

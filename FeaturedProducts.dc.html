@@ -1,0 +1,27 @@
+<!DOCTYPE html>
+<html>
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<script src="./support.js"></script>
+</head>
+<body>
+<x-dc>
+<section data-screen-label="Productos destacados" style="padding:34px 0 46px;background:#f3eae4;font-family:'Jost',sans-serif;color:#3f2a26">
+  <div style="display:flex;justify-content:space-between;align-items:baseline;gap:16px;padding:0 clamp(18px,2.5vw,38px) 14px">
+    <h2 style="margin:0;font-weight:400;font-size:12.5px;letter-spacing:0.2em">PRODUCTOS DESTACADOS</h2>
+    <button onClick="{{ fp.viewAll }}" style="background:none;border:0;padding:4px 0;font-size:10px;letter-spacing:0.16em;color:#3f2a26;white-space:nowrap" style-hover="color:#a87a6e">VER TODO&nbsp;&nbsp;→</button>
+  </div>
+  <div style="overflow-x:auto;scroll-snap-type:x mandatory;scrollbar-width:none;padding:0 clamp(18px,2.5vw,38px) 4px;scroll-padding:0 clamp(18px,2.5vw,38px)">
+    <div style="display:grid;grid-template-columns:repeat(7,minmax(168px,1fr));gap:13px">
+      <sc-for list="{{ fp.products }}" as="p" hint-placeholder-count="7">
+        <div style="scroll-snap-align:start;min-width:0">
+          <dc-import name="ProductCard" product="{{ p }}" hint-size="100%,330px"></dc-import>
+        </div>
+      </sc-for>
+    </div>
+  </div>
+</section>
+</x-dc>
+</body>
+</html>

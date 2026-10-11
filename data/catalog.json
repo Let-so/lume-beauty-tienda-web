@@ -1,0 +1,160 @@
+{
+  "currency": "ARS",
+  "categories": [
+    {
+      "id": "skincare-coreano",
+      "label": "Skincare coreano"
+    },
+    {
+      "id": "perfumes-body-mist",
+      "label": "Perfumes & body mist"
+    }
+  ],
+  "homeBanners": [
+    {
+      "label": "Skincare coreano",
+      "image": "assets/categorias/skincare-coreano.png",
+      "view": "catalog",
+      "cat": "skincare-coreano"
+    },
+    {
+      "label": "Perfumes & body mist",
+      "image": "assets/categorias/perfumes-body-mist.png",
+      "view": "catalog",
+      "cat": "perfumes-body-mist"
+    },
+    {
+      "label": "Marcas",
+      "image": "assets/categorias/marcas.png",
+      "view": "brands"
+    }
+  ],
+  "brands": [
+    {
+      "id": "medicube",
+      "name": "Medicube"
+    },
+    {
+      "id": "numbuzin",
+      "name": "Numbuzin"
+    },
+    {
+      "id": "victorias-secret",
+      "name": "Victoria's Secret"
+    }
+  ],
+  "products": [
+    {
+      "id": "medicube-deep-vita-c",
+      "brand": "medicube",
+      "brandLabel": "Medicube",
+      "name": "Deep Vita C Capsule Cream",
+      "title": "Deep Vita C Capsule Cream",
+      "subtitle": "",
+      "size": "55 g",
+      "categories": [
+        "skincare-coreano"
+      ],
+      "image": "assets/productos/medicube-deep-vita-c-capsule-cream.webp",
+      "imagePadding": "7%",
+      "price": 55000,
+      "featured": true
+    },
+    {
+      "id": "medicube-pdrn-pink-collagen",
+      "brand": "medicube",
+      "brandLabel": "Medicube",
+      "name": "PDRN Pink Collagen Capsule Cream",
+      "title": "PDRN Pink Collagen Capsule Cream",
+      "subtitle": "",
+      "size": "55 g",
+      "categories": [
+        "skincare-coreano"
+      ],
+      "image": "assets/productos/medicube-pdrn-pink-collagen-capsule-cream.webp",
+      "imagePadding": "8%",
+      "price": 58000,
+      "featured": true
+    },
+    {
+      "id": "numbuzin-no9-nad-retinol-eye-cream",
+      "brand": "numbuzin",
+      "brandLabel": "Numbuzin",
+      "name": "No.9 NAD+ Retinol Volumetox Eye Cream",
+      "title": "No.9 NAD+ Retinol Volumetox",
+      "subtitle": "Eye Cream",
+      "size": "10 ml",
+      "categories": [
+        "skincare-coreano"
+      ],
+      "image": "assets/productos/numbuzin-no9-nad-retinol-volumetox-eye-cream.webp",
+      "imagePadding": "5%",
+      "price": 60000,
+      "featured": true
+    },
+    {
+      "id": "vs-pure-seduction",
+      "brand": "victorias-secret",
+      "brandLabel": "Victoria's Secret",
+      "name": "Pure Seduction Body Mist",
+      "title": "Pure Seduction",
+      "subtitle": "Body Mist",
+      "size": "250 ml",
+      "categories": [
+        "perfumes-body-mist"
+      ],
+      "image": "assets/productos/vs-pure-seduction-body-mist.png",
+      "imagePadding": "9% 0",
+      "price": 40000,
+      "featured": true
+    },
+    {
+      "id": "vs-velvet-petals",
+      "brand": "victorias-secret",
+      "brandLabel": "Victoria's Secret",
+      "name": "Velvet Petals Body Mist",
+      "title": "Velvet Petals",
+      "subtitle": "Body Mist",
+      "size": "250 ml",
+      "categories": [
+        "perfumes-body-mist"
+      ],
+      "image": "assets/productos/vs-velvet-petals-body-mist.png",
+      "imagePadding": "9% 0",
+      "price": 40000,
+      "featured": true
+    },
+    {
+      "id": "vs-coconut-passion",
+      "brand": "victorias-secret",
+      "brandLabel": "Victoria's Secret",
+      "name": "Coconut Passion Body Mist",
+      "title": "Coconut Passion",
+      "subtitle": "Body Mist",
+      "size": "250 ml",
+      "categories": [
+        "perfumes-body-mist"
+      ],
+      "image": "assets/productos/vs-coconut-passion-body-mist.png",
+      "imagePadding": "9% 0",
+      "price": 40000,
+      "featured": true
+    },
+    {
+      "id": "vs-bare-vanilla",
+      "brand": "victorias-secret",
+      "brandLabel": "Victoria's Secret",
+      "name": "Bare Vanilla Body Mist",
+      "title": "Bare Vanilla",
+      "subtitle": "Body Mist",
+      "size": "250 ml",
+      "categories": [
+        "perfumes-body-mist"
+      ],
+      "image": "assets/productos/vs-bare-vanilla-body-mist.png",
+      "imagePadding": "9% 0",
+      "price": 40000,
+      "featured": true
+    }
+  ]
+}

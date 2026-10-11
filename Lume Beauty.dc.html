@@ -1,0 +1,299 @@
+<!DOCTYPE html>
+<html>
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<script src="./support.js"></script>
+</head>
+<body>
+<x-dc>
+<helmet>
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>LUMÉ BEAUTY</title>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin="anonymous">
+<link href="https://fonts.googleapis.com/css2?family=Cormorant+Garamond:ital,wght@0,400;0,500;0,600;1,400;1,500&amp;family=Jost:wght@300;400;500&amp;display=swap" rel="stylesheet">
+<style>
+html,body{margin:0;padding:0;background:#f3eae4;color:#3f2a26;font-family:'Jost',sans-serif;-webkit-font-smoothing:antialiased;overflow-x:hidden}
+*{box-sizing:border-box}
+a{color:#7a5248;text-decoration:none}
+a:hover{color:#4a231f}
+button{font-family:inherit;cursor:pointer}
+input{font-family:inherit}
+input::placeholder{color:#6f5650;letter-spacing:0.12em}
+:focus-visible{outline:1px solid #a87a6e;outline-offset:3px}
+::selection{background:#e2c9bd}
+</style>
+</helmet>
+<div style="min-height:100vh;background:#f3eae4;display:flex;flex-direction:column">
+  <dc-import name="Header" h="{{ header }}" hint-size="100%,96px"></dc-import>
+  <main style="flex:1">
+    <sc-if value="{{ isHome }}" hint-placeholder-val="{{ true }}">
+      <dc-import name="HeroBanner" hero="{{ hero }}" hint-size="100%,415px"></dc-import>
+      <dc-import name="CategoryBanners" c="{{ categories }}" hint-size="100%,100px"></dc-import>
+      <dc-import name="FeaturedProducts" fp="{{ featured }}" hint-size="100%,420px"></dc-import>
+      <section data-screen-label="Originales" style="padding:clamp(48px,6vw,88px) clamp(18px,2.5vw,38px);border-top:1px solid #e3d4ca;display:flex;flex-direction:column;align-items:center;text-align:center;gap:18px">
+        <span style="font-size:11px;letter-spacing:0.3em;color:#8a6d65">GARANTÍA LUMÉ</span>
+        <h2 style="margin:0;max-width:16ch;font-family:'Cormorant Garamond',serif;font-weight:500;font-size:clamp(40px,5.4vw,84px);line-height:0.98;letter-spacing:-0.01em;color:#4a231f;text-wrap:balance">Trabajamos solamente con productos <em style="font-style:italic">originales.</em></h2>
+      </section>
+    </sc-if>
+
+    <sc-if value="{{ isCatalog }}">
+      <section data-screen-label="Catálogo" style="padding:clamp(28px,4vw,56px) clamp(18px,2.5vw,38px) clamp(48px,6vw,88px)">
+        <nav aria-label="Ruta" style="display:flex;gap:8px;font-size:10px;letter-spacing:0.16em;color:#8a6d65">
+          <button onClick="{{ goHome }}" style="background:none;border:0;padding:0;font-size:10px;letter-spacing:0.16em;color:#8a6d65" style-hover="color:#4a231f">INICIO</button><span>/</span><span>SHOP</span>
+        </nav>
+        <h1 style="margin:14px 0 0;font-family:'Cormorant Garamond',serif;font-weight:500;font-size:clamp(38px,4vw,58px);line-height:1;color:#4a231f">{{ catalog.title }}</h1>
+        <sc-if value="{{ catalog.hasQuery }}">
+          <div style="margin-top:12px;display:flex;flex-wrap:wrap;align-items:baseline;gap:6px 14px;font-size:13px;color:#6f5650">
+            <span>Resultados para “{{ catalog.query }}”</span>
+            <button onClick="{{ catalog.clearQuery }}" style="background:none;border:0;padding:0;font-size:10px;letter-spacing:0.14em;color:#8a6d65;text-decoration:underline;text-underline-offset:3px" style-hover="color:#4a231f">LIMPIAR BÚSQUEDA</button>
+          </div>
+        </sc-if>
+        <div style="display:flex;flex-wrap:wrap;gap:8px;margin-top:24px">
+          <sc-for list="{{ catalog.filters }}" as="f" hint-placeholder-count="5">
+            <button onClick="{{ f.select }}" aria-pressed="{{ f.active }}" style="{{ f.style }}">{{ f.label }}</button>
+          </sc-for>
+          <sc-if value="{{ catalog.hasBrand }}">
+            <button onClick="{{ catalog.clearBrand }}" aria-label="Quitar filtro de marca" style="height:34px;padding:0 16px;border-radius:999px;border:1px solid #b38d83;background:#ecdcd3;color:#4a3530;font-size:10px;letter-spacing:0.14em">{{ catalog.brandChip }}&nbsp;&nbsp;×</button>
+          </sc-if>
+        </div>
+        <p style="margin:22px 0 18px;font-size:10.5px;letter-spacing:0.16em;color:#8a6d65">{{ catalog.countLabel }}</p>
+        <sc-if value="{{ catalog.empty }}">
+          <div style="padding:40px 0;display:flex;flex-direction:column;align-items:flex-start;gap:16px">
+            <p style="margin:0;font-family:'Cormorant Garamond',serif;font-size:28px;color:#4a231f">No encontramos productos con esos criterios.</p>
+            <button onClick="{{ catalog.reset }}" style="height:42px;padding:0 26px;border:0;border-radius:999px;background:#b38d83;color:#fdf8f5;font-size:10px;letter-spacing:0.24em" style-hover="background:#a07a70">VER TODOS LOS PRODUCTOS</button>
+          </div>
+        </sc-if>
+        <div style="display:grid;grid-template-columns:repeat(auto-fill,minmax(min(100%,160px),1fr));gap:30px 13px">
+          <sc-for list="{{ catalog.results }}" as="p" hint-placeholder-count="0">
+            <dc-import name="ProductCard" product="{{ p }}" hint-size="100%,330px"></dc-import>
+          </sc-for>
+        </div>
+      </section>
+    </sc-if>
+
+    <sc-if value="{{ isProduct }}">
+      <section data-screen-label="Ficha de producto" style="padding:clamp(24px,3.5vw,48px) clamp(18px,2.5vw,38px) clamp(48px,6vw,88px)">
+        <nav aria-label="Ruta" style="display:flex;flex-wrap:wrap;gap:8px;font-size:10px;letter-spacing:0.16em;color:#8a6d65">
+          <button onClick="{{ goHome }}" style="background:none;border:0;padding:0;font-size:10px;letter-spacing:0.16em;color:#8a6d65" style-hover="color:#4a231f">INICIO</button><span>/</span>
+          <button onClick="{{ pd.goCat }}" style="background:none;border:0;padding:0;font-size:10px;letter-spacing:0.16em;color:#8a6d65;text-transform:uppercase" style-hover="color:#4a231f">{{ pd.crumbCat }}</button><span>/</span>
+          <span style="text-transform:uppercase">{{ pd.title }}</span>
+        </nav>
+        <div style="display:grid;grid-template-columns:repeat(auto-fit,minmax(min(100%,340px),1fr));gap:clamp(28px,5vw,80px);margin-top:24px;align-items:start">
+          <div style="position:relative;aspect-ratio:1 / 1;background:#ece1d9;border-radius:4px;overflow:hidden">
+            <img src="{{ pd.image }}" alt="{{ pd.alt }}" style="position:absolute;inset:0;width:100%;height:100%;object-fit:contain;padding:{{ pd.imagePadding }};mix-blend-mode:multiply">
+          </div>
+          <div style="max-width:520px;padding-top:clamp(0px,2vw,32px)">
+            <span style="font-size:11px;letter-spacing:0.2em;text-transform:uppercase">{{ pd.brandLabel }}</span>
+            <h1 style="margin:12px 0 0;font-family:'Cormorant Garamond',serif;font-weight:500;font-size:clamp(36px,3.6vw,54px);line-height:1.02;color:#4a231f;text-wrap:balance">{{ pd.name }}</h1>
+            <p style="margin:12px 0 0;font-size:14px;color:#6f5650">{{ pd.size }}</p>
+            <p style="margin:22px 0 0;font-family:'Cormorant Garamond',serif;font-size:32px;line-height:1;color:#4a231f">{{ pd.priceLabel }}</p>
+            <div style="display:flex;flex-wrap:wrap;gap:8px;margin-top:22px">
+              <sc-for list="{{ pd.catLinks }}" as="cl" hint-placeholder-count="2">
+                <button onClick="{{ cl.open }}" style="height:30px;padding:0 14px;border-radius:999px;border:1px solid #cdb8ac;background:transparent;color:#4a3530;font-size:9.5px;letter-spacing:0.14em;text-transform:uppercase" style-hover="background:#ece0d8">{{ cl.label }}</button>
+              </sc-for>
+            </div>
+            <div style="display:flex;gap:12px;align-items:center;margin-top:30px;flex-wrap:wrap">
+              <div style="display:flex;align-items:center;border:1px solid #cdb8ac;border-radius:999px;height:46px">
+                <button onClick="{{ pd.dec }}" aria-label="Restar" style="width:44px;height:100%;border:0;background:none;font-size:16px;color:#3f2a26">−</button>
+                <span style="min-width:22px;text-align:center;font-size:13px">{{ pd.qty }}</span>
+                <button onClick="{{ pd.inc }}" aria-label="Sumar" style="width:44px;height:100%;border:0;background:none;font-size:16px;color:#3f2a26">+</button>
+              </div>
+              <button onClick="{{ pd.addMany }}" style="flex:1;min-width:210px;height:46px;border:0;border-radius:999px;background:#b38d83;color:#fdf8f5;font-size:10.5px;letter-spacing:0.24em;transition:background .25s" style-hover="background:#a07a70">AGREGAR AL CARRITO</button>
+            </div>
+            <button onClick="{{ pd.toggleFav }}" aria-pressed="{{ pd.isFav }}" style="margin-top:14px;height:46px;width:100%;display:flex;align-items:center;justify-content:center;gap:10px;border:1px solid #cdb8ac;border-radius:999px;background:transparent;color:#4a3530;font-size:10.5px;letter-spacing:0.2em" style-hover="background:#ece0d8">
+              <svg width="16" height="16" viewBox="0 0 24 24" fill="{{ pd.heartFill }}" stroke="{{ pd.heartStroke }}" stroke-width="1.4"><path d="M12 20.3s-7.6-4.6-7.6-10.3A4.2 4.2 0 0 1 12 7.5a4.2 4.2 0 0 1 7.6 2.5c0 5.7-7.6 10.3-7.6 10.3z"></path></svg>{{ pd.favText }}
+            </button>
+            <button onClick="{{ goShop }}" style="margin-top:28px;background:none;border:0;padding:0;font-size:10px;letter-spacing:0.16em;color:#8a6d65" style-hover="color:#4a231f">←&nbsp;&nbsp;VOLVER AL CATÁLOGO</button>
+          </div>
+        </div>
+      </section>
+    </sc-if>
+
+    <sc-if value="{{ isBrands }}">
+      <section data-screen-label="Marcas" style="padding:clamp(28px,4vw,56px) clamp(18px,2.5vw,38px) clamp(48px,6vw,88px)">
+        <h1 style="margin:0;font-family:'Cormorant Garamond',serif;font-weight:500;font-size:clamp(38px,4vw,58px);line-height:1;color:#4a231f">Marcas</h1>
+        <div style="display:grid;grid-template-columns:repeat(auto-fit,minmax(min(100%,300px),1fr));gap:13px;margin-top:30px">
+          <sc-for list="{{ brands }}" as="b" hint-placeholder-count="3">
+            <button onClick="{{ b.open }}" style="text-align:left;border:0;border-radius:4px;background:#ece1d9;padding:28px 26px 24px;display:flex;flex-direction:column;gap:18px;color:#3f2a26;transition:background .3s" style-hover="background:#e6d7cd">
+              <span style="font-family:'Cormorant Garamond',serif;font-weight:500;font-size:36px;line-height:1;color:#4a231f">{{ b.name }}</span>
+              <div style="display:flex;gap:6px;height:110px">
+                <sc-for list="{{ b.thumbs }}" as="t" hint-placeholder-count="3">
+                  <div style="flex:1;min-width:0;position:relative;background:#f3eae4;border-radius:3px;overflow:hidden"><img src="{{ t.image }}" alt="" style="position:absolute;inset:0;width:100%;height:100%;object-fit:contain;padding:8%;mix-blend-mode:multiply"></div>
+                </sc-for>
+              </div>
+              <span style="display:flex;justify-content:space-between;font-size:10px;letter-spacing:0.16em"><span>{{ b.countLabel }}</span><span>VER PRODUCTOS&nbsp;&nbsp;→</span></span>
+            </button>
+          </sc-for>
+        </div>
+      </section>
+    </sc-if>
+
+    <sc-if value="{{ isTips }}">
+      <section data-screen-label="Consejos" style="padding:clamp(28px,4vw,56px) clamp(18px,2.5vw,38px) clamp(64px,8vw,120px)">
+        <h1 style="margin:0;font-family:'Cormorant Garamond',serif;font-weight:500;font-size:clamp(38px,4vw,58px);line-height:1;color:#4a231f">Consejos</h1>
+        <p style="margin:16px 0 26px;font-size:14px;color:#6f5650">Esta sección está en preparación.</p>
+        <button onClick="{{ goShop }}" style="height:42px;padding:0 26px;border:0;border-radius:999px;background:#b38d83;color:#fdf8f5;font-size:10px;letter-spacing:0.24em" style-hover="background:#a07a70">EXPLORAR PRODUCTOS&nbsp;&nbsp;→</button>
+      </section>
+    </sc-if>
+
+  </main>
+  <dc-import name="Footer" f="{{ footer }}" hint-size="100%,110px"></dc-import>
+  <dc-import name="CartDrawer" cart="{{ cart }}" hint-size="0px,0px"></dc-import>
+</div>
+</x-dc>
+<script type="text/x-dc" data-dc-script>
+class Component extends DCLogic {
+  state = { data: null, view: 'home', cat: 'all', brand: null, productId: null, query: '', cart: {}, favs: {}, cartOpen: false, menuOpen: false, searchOpen: false, qty: 1, w: typeof window !== 'undefined' ? window.innerWidth : 1440 };
+
+  componentDidMount() {
+    this._r = () => this.setState({ w: window.innerWidth });
+    this._k = e => { if (e.key === 'Escape') this.setState({ cartOpen: false, menuOpen: false }); };
+    window.addEventListener('resize', this._r);
+    window.addEventListener('keydown', this._k);
+    try { const s = JSON.parse(localStorage.getItem('lume_store_v1') || '{}'); this.setState({ cart: s.cart || {}, favs: s.favs || {} }); } catch (e) {}
+    fetch('data/catalog.json').then(r => r.json()).then(data => this.setState({ data })).catch(err => console.error('No se pudo cargar data/catalog.json', err));
+  }
+  componentWillUnmount() { window.removeEventListener('resize', this._r); window.removeEventListener('keydown', this._k); }
+  componentDidUpdate(pp, ps) {
+    const s = this.state;
+    if (ps.cart !== s.cart || ps.favs !== s.favs) { try { localStorage.setItem('lume_store_v1', JSON.stringify({ cart: s.cart, favs: s.favs })); } catch (e) {} }
+    if (ps.cartOpen !== s.cartOpen) document.body.style.overflow = s.cartOpen ? 'hidden' : '';
+  }
+  go(view, extra) { this.setState(Object.assign({ view, menuOpen: false, searchOpen: false, cartOpen: false }, extra || {})); try { window.scrollTo(0, 0); } catch (e) {} }
+  norm(v) { return (v || '').toString().toLowerCase().normalize('NFD').replace(/[\u0300-\u036f]/g, ''); }
+  addToCart(id, n) { this.setState(s => ({ cart: Object.assign({}, s.cart, { [id]: (s.cart[id] || 0) + (n || 1) }) })); }
+  setQty(id, q) { this.setState(s => { const c = Object.assign({}, s.cart); if (q <= 0) delete c[id]; else c[id] = q; return { cart: c }; }); }
+  toggleFav(id) { this.setState(s => { const f = Object.assign({}, s.favs); if (f[id]) delete f[id]; else f[id] = true; return { favs: f }; }); }
+  money(v, cur) { return new Intl.NumberFormat('es-AR', { style: 'currency', currency: cur || 'ARS', maximumFractionDigits: 0 }).format(v); }
+
+  decorate(p) {
+    const s = this.state, isFav = !!s.favs[p.id], n = s.cart[p.id] || 0;
+    const stop = e => { if (e && e.stopPropagation) e.stopPropagation(); };
+    return Object.assign({}, p, {
+      isFav, hasSubtitle: !!p.subtitle,
+      heartFill: isFav ? '#b38d83' : 'none', heartStroke: isFav ? '#b38d83' : '#3f2a26',
+      favLabel: isFav ? 'Quitar de favoritos' : 'Agregar a favoritos',
+      openLabel: 'Ver ' + p.brandLabel + ' ' + p.name,
+      alt: p.brandLabel + ' ' + p.name + ', ' + p.size,
+      addLabel: n ? 'EN EL CARRITO · ' + n : 'AGREGAR AL CARRITO',
+      hasPrice: p.price != null, priceLabel: p.price != null ? this.money(p.price, (this.state.data || {}).currency) : '',
+      open: () => this.go('product', { productId: p.id, qty: 1 }),
+      toggleFav: e => { stop(e); this.toggleFav(p.id); },
+      add: e => { stop(e); this.addToCart(p.id, 1); }
+    });
+  }
+
+  renderVals() {
+    const s = this.state, w = s.w;
+    const d = s.data || { products: [], categories: [], brands: [], homeBanners: [], currency: 'ARS' };
+    const products = d.products, byId = {};
+    products.forEach(p => { byId[p.id] = p; });
+    const catLabel = id => { const c = d.categories.find(x => x.id === id); return c ? c.label : id; };
+    const go = (v, x) => () => this.go(v, x);
+    const nav = {
+      goHome: go('home'),
+      goShop: go('catalog', { cat: 'all', brand: null, query: '' }),
+      goPerfumes: go('catalog', { cat: 'perfumes-body-mist', brand: null, query: '' }),
+      goBrands: go('brands'), goTips: go('tips')
+    };
+    const cartCount = Object.keys(s.cart).filter(id => byId[id] || !s.data).reduce((a, id) => a + s.cart[id], 0);
+
+    const header = Object.assign({}, nav, {
+      isDesktop: w >= 1024, isCompact: w < 1024, query: s.query, cartCount,
+      menuOpen: s.menuOpen, menuClosed: !s.menuOpen, searchOpen: s.searchOpen,
+      onQuery: e => { const v = e.target.value; const x = { query: v }; if (v.trim() && this.state.view !== 'catalog') Object.assign(x, { view: 'catalog', cat: 'all', brand: null, menuOpen: false }); this.setState(x); },
+      onKey: e => { if (e.key === 'Enter') this.go('catalog', { searchOpen: false }); },
+      onSearch: () => this.go('catalog'),
+      openCart: () => this.setState({ cartOpen: true, menuOpen: false }),
+      toggleMenu: () => this.setState(x => ({ menuOpen: !x.menuOpen, searchOpen: false })),
+      toggleSearch: () => this.setState(x => ({ searchOpen: !x.searchOpen, menuOpen: false }))
+    });
+
+    const hero = { wide: w >= 900, stacked: w < 900, explore: nav.goShop };
+
+    const categories = {
+      gridStyle: { display: 'grid', gridTemplateColumns: w < 640 ? '1fr' : 'repeat(3,minmax(0,1fr))', gap: '3px', paddingTop: '3px', background: '#f3eae4' },
+      itemStyle: { position: 'relative', display: 'block', width: '100%', padding: 0, border: 0, overflow: 'hidden', cursor: 'pointer', aspectRatio: w < 640 ? '3.1 / 1' : w < 1024 ? '2.67 / 1' : '4.4 / 1', background: '#e9dcd3' },
+      items: d.homeBanners.map(b => ({ image: b.image, ariaLabel: b.label, open: b.view === 'brands' ? nav.goBrands : go('catalog', { cat: b.cat, brand: null, query: '' }) }))
+    };
+
+    const featured = { products: products.filter(p => p.featured).map(p => this.decorate(p)), viewAll: nav.goShop };
+
+    let list = products;
+    if (s.cat !== 'all') list = list.filter(p => p.categories.indexOf(s.cat) >= 0);
+    if (s.brand) list = list.filter(p => p.brand === s.brand);
+    const q = this.norm(s.query.trim());
+    if (q) list = list.filter(p => this.norm([p.brandLabel, p.name, p.subtitle, p.size].concat(p.categories.map(catLabel)).join(' ')).indexOf(q) >= 0);
+    const brandObj = d.brands.find(b => b.id === s.brand);
+    const filterDefs = [{ id: 'all', label: 'Todos' }].concat(d.categories);
+    const catalog = {
+      title: brandObj ? brandObj.name : s.cat === 'all' ? 'Todos los productos' : catLabel(s.cat),
+      hasQuery: !!q, query: s.query.trim(),
+      clearQuery: () => this.setState({ query: '' }),
+      hasBrand: !!brandObj, brandChip: brandObj ? brandObj.name.toUpperCase() : '',
+      clearBrand: () => this.setState({ brand: null }),
+      reset: () => this.setState({ cat: 'all', brand: null, query: '' }),
+      filters: filterDefs.map(f => { const active = s.cat === f.id; return { label: f.label.toUpperCase(), active, select: () => this.setState({ cat: f.id }), style: { height: '34px', padding: '0 16px', borderRadius: '999px', border: '1px solid ' + (active ? '#b38d83' : '#cdb8ac'), background: active ? '#b38d83' : 'transparent', color: active ? '#fdf8f5' : '#4a3530', fontSize: '10px', letterSpacing: '0.14em', transition: 'background .2s' } }; }),
+      countLabel: s.data ? list.length + (list.length === 1 ? ' PRODUCTO' : ' PRODUCTOS') : 'CARGANDO…',
+      empty: !!s.data && list.length === 0,
+      results: list.map(p => this.decorate(p))
+    };
+
+    let pd = null;
+    const pp = byId[s.productId];
+    if (pp) {
+      const dp = this.decorate(pp);
+      const mainCat = pp.categories.find(c => c !== 'skincare') || pp.categories[0];
+      pd = Object.assign(dp, {
+        crumbCat: catLabel(mainCat), goCat: go('catalog', { cat: mainCat, brand: null, query: '' }),
+        priceLabel: pp.price != null ? this.money(pp.price, d.currency) : 'PRECIO A CONFIGURAR',
+        catLinks: pp.categories.filter(c => c !== 'skincare').map(c => ({ label: catLabel(c), open: go('catalog', { cat: c, brand: null, query: '' }) })),
+        qty: s.qty,
+        inc: () => this.setState(x => ({ qty: x.qty + 1 })),
+        dec: () => this.setState(x => ({ qty: Math.max(1, x.qty - 1) })),
+        addMany: () => { this.addToCart(pp.id, this.state.qty); this.setState({ cartOpen: true, qty: 1 }); },
+        favText: dp.isFav ? 'EN FAVORITOS' : 'AGREGAR A FAVORITOS'
+      });
+    }
+
+    const brands = d.brands.map(b => { const ps = products.filter(p => p.brand === b.id); return { name: b.name, countLabel: ps.length + (ps.length === 1 ? ' PRODUCTO' : ' PRODUCTOS'), thumbs: ps.slice(0, 4).map(p => ({ image: p.image })), open: go('catalog', { cat: 'all', brand: b.id, query: '' }) }; });
+
+    const items = Object.keys(s.cart).filter(id => byId[id]).map(id => {
+      const p = byId[id], qn = s.cart[id];
+      return { image: p.image, brandLabel: p.brandLabel, title: p.name, size: p.size, qty: qn,
+        priceLabel: p.price != null ? this.money(p.price * qn, d.currency) : 'Precio a configurar',
+        inc: () => this.setQty(id, qn + 1), dec: () => this.setQty(id, qn - 1), remove: () => this.setQty(id, 0),
+        open: () => this.go('product', { productId: id, qty: 1 }) };
+    });
+    const allPriced = items.length > 0 && Object.keys(s.cart).filter(id => byId[id]).every(id => byId[id].price != null);
+    const sum = allPriced ? Object.keys(s.cart).filter(id => byId[id]).reduce((a, id) => a + byId[id].price * s.cart[id], 0) : 0;
+    const cart = {
+      open: s.cartOpen, close: () => this.setState({ cartOpen: false }), goShop: nav.goShop,
+      items, count: cartCount, isEmpty: items.length === 0, hasItems: items.length > 0,
+      subtotalLabel: allPriced ? this.money(sum, d.currency) : '—',
+      hasSubtotalNote: !allPriced, subtotalNote: 'El subtotal se mostrará cuando los precios estén configurados.',
+      buy: () => {
+        const message = [
+          'Hola, quiero consultar y confirmar esta compra:',
+          '',
+          ...items.map(it => '- ' + it.title + ' (' + it.size + ') x ' + it.qty + ' — ' + it.priceLabel),
+          '',
+          'Subtotal: ' + (allPriced ? this.money(sum, d.currency) : 'a confirmar'),
+          '¿Podemos coordinar la compra?'
+        ].join('\n');
+        window.open('https://wa.me/5493704814077?text=' + encodeURIComponent(message), '_blank', 'noopener,noreferrer');
+      }
+    };
+
+    return Object.assign({
+      isHome: s.view === 'home', isCatalog: s.view === 'catalog', isProduct: s.view === 'product' && !!pd,
+      isBrands: s.view === 'brands', isTips: s.view === 'tips',
+      header, hero, categories, featured, catalog, pd, brands, cart, footer: nav
+    }, nav);
+  }
+}
+</script>
+</body>
+</html>
