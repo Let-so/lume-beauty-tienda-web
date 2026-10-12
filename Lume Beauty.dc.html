@@ -3,7 +3,7 @@
 <head>
 <meta charset="utf-8">
 <meta name="viewport" content="width=device-width, initial-scale=1">
-<script>window.__DC_BUILD="be254fd030"</script>
+<script>window.__DC_BUILD="a6ce984d6d"</script>
 <script src="./support.js"></script>
 </head>
 <body>
@@ -44,7 +44,6 @@ input::placeholder{color:#6f5650;letter-spacing:0.12em}
       <dc-import name="RoutineBanner" ru="{{ routine }}" hint-size="100%,240px"></dc-import>
       <dc-import name="FeaturedProducts" fp="{{ featured }}" hint-size="100%,440px"></dc-import>
       <dc-import name="CollectionStrip" co="{{ collections }}" hint-size="100%,420px"></dc-import>
-      <dc-import name="EditorialBlock" ed="{{ editorial }}" hint-size="100%,340px"></dc-import>
       <dc-import name="BrandStrip" br="{{ brandStrip }}" hint-size="100%,220px"></dc-import>
 
       <section data-screen-label="Garantía" style="padding:clamp(48px,6vw,88px) clamp(18px,2.5vw,38px);border-top:1px solid #e3d4ca;display:flex;flex-direction:column;align-items:center;text-align:center;gap:16px">
@@ -54,25 +53,7 @@ input::placeholder{color:#6f5650;letter-spacing:0.12em}
         <p style="margin:6px 0 0;font-family:'Cormorant Garamond',serif;font-style:italic;font-size:20px;line-height:1.35;color:#8a5f54">{{ guarantee.claim }}</p>
       </section>
 
-      <sc-if value="{{ tips.hasItems }}">
-        <section data-screen-label="Consejos" style="padding:clamp(40px,5vw,72px) clamp(18px,2.5vw,38px);background:#f3eae4;border-top:1px solid #e3d4ca">
-          <div style="display:flex;flex-wrap:wrap;justify-content:space-between;align-items:baseline;gap:12px 20px">
-            <h2 style="margin:0;font-weight:400;font-size:12.5px;letter-spacing:0.2em">CONSEJOS LUMÉ</h2>
-            <button onClick="{{ tips.goAll }}" style="background:none;border:0;padding:4px 0;font-size:10px;letter-spacing:0.16em;color:#3f2a26;white-space:nowrap" style-hover="color:#a87a6e">VER TODOS&nbsp;&nbsp;→</button>
-          </div>
-          <div style="display:grid;grid-template-columns:repeat(auto-fit,minmax(min(100%,230px),1fr));gap:13px;margin-top:20px">
-            <sc-for list="{{ tips.items }}" as="t" hint-placeholder-count="3">
-              <button onClick="{{ tips.goAll }}" style="text-align:left;border:1px solid #e3d4ca;border-radius:4px;background:#f8f1ec;padding:22px 20px;display:flex;flex-direction:column;gap:8px;color:#3f2a26;cursor:pointer;transition:background .3s" style-hover="background:#efe3db">
-                <span style="font-family:'Cormorant Garamond',serif;font-weight:500;font-size:23px;line-height:1.15;color:#4a231f">{{ t.title }}</span>
-                <span style="font-size:12px;line-height:1.5;color:#6f5650">{{ t.lead }}</span>
-                <span style="margin-top:4px;font-size:9.5px;letter-spacing:0.16em;color:#8a6d65">LEER MÁS&nbsp;&nbsp;→</span>
-              </button>
-            </sc-for>
-          </div>
-        </section>
-      </sc-if>
-
-      <dc-import name="InstagramBlock" ig="{{ instagram }}" hint-size="100%,420px"></dc-import>
+<dc-import name="InstagramBlock" ig="{{ instagram }}" hint-size="100%,420px"></dc-import>
     </sc-if>
 
     <sc-if value="{{ isCatalog }}">
@@ -177,11 +158,39 @@ input::placeholder{color:#6f5650;letter-spacing:0.12em}
             <button onClick="{{ pd.toggleFav }}" aria-pressed="{{ pd.isFav }}" style="margin-top:14px;height:48px;width:100%;display:flex;align-items:center;justify-content:center;gap:10px;border:1px solid #cdb8ac;border-radius:999px;background:transparent;color:#4a3530;font-size:10.5px;letter-spacing:0.2em" style-hover="background:#ece0d8">
               <svg width="16" height="16" viewBox="0 0 24 24" fill="{{ pd.heartFill }}" stroke="{{ pd.heartStroke }}" stroke-width="1.4"><path d="M12 20.3s-7.6-4.6-7.6-10.3A4.2 4.2 0 0 1 12 7.5a4.2 4.2 0 0 1 7.6 2.5c0 5.7-7.6 10.3-7.6 10.3z"></path></svg>{{ pd.favText }}
             </button>
-            <div style="margin-top:26px;padding-top:20px;border-top:1px solid #e3d4ca;display:flex;flex-direction:column;gap:9px">
-              <span style="font-size:10px;letter-spacing:0.2em;color:#8a6d65">SOBRE ESTE PRODUCTO</span>
-              <span style="font-size:12.5px;line-height:1.6;color:#6f5650">{{ pd.factsLine }}</span>
-              <span style="font-size:11.5px;line-height:1.55;color:#8a6d65">¿Tenés una consulta antes de comprar? Escribinos por Instagram.</span>
-              <button onClick="{{ openInstagram }}" style="align-self:flex-start;margin-top:2px;background:none;border:0;padding:4px 0;font-size:10px;letter-spacing:0.16em;color:#8a5f54;text-decoration:underline;text-underline-offset:3px" style-hover="color:#4a231f">CONSULTAR POR INSTAGRAM&nbsp;&nbsp;→</button>
+            <div style="margin-top:26px;padding-top:22px;border-top:1px solid #e3d4ca;display:flex;flex-direction:column;gap:10px">
+              <span style="font-size:10px;letter-spacing:0.2em;color:#8a6d65">DESCRIPCIÓN</span>
+              <sc-for list="{{ pd.description }}" as="par" hint-placeholder-count="2">
+                <p style="margin:0;font-size:13px;line-height:1.7;color:#6f5650">{{ par.text }}</p>
+              </sc-for>
+            </div>
+            <div style="margin-top:22px;padding-top:22px;border-top:1px solid #e3d4ca;display:flex;flex-direction:column;gap:13px">
+              <span style="font-size:10px;letter-spacing:0.2em;color:#8a6d65">ESPECIFICACIONES</span>
+              <sc-for list="{{ pd.specs }}" as="sp" hint-placeholder-count="3">
+                <div style="display:flex;flex-direction:column;gap:2px">
+                  <span style="font-size:11px;letter-spacing:0.1em;text-transform:uppercase;color:#4a231f">{{ sp.label }}</span>
+                  <span style="font-size:12.5px;line-height:1.6;color:#6f5650">{{ sp.value }}</span>
+                </div>
+              </sc-for>
+              <span style="font-size:9.5px;line-height:1.5;color:#ab938a">{{ specsNote }}</span>
+            </div>
+            <sc-if value="{{ pd.hasHowTo }}">
+              <div style="margin-top:22px;padding-top:22px;border-top:1px solid #e3d4ca;display:flex;flex-direction:column;gap:10px">
+                <span style="font-size:10px;letter-spacing:0.2em;color:#8a6d65">CÓMO USAR</span>
+                <sc-for list="{{ pd.howTo }}" as="par" hint-placeholder-count="2">
+                  <p style="margin:0;font-size:13px;line-height:1.7;color:#6f5650">{{ par.text }}</p>
+                </sc-for>
+              </div>
+            </sc-if>
+            <sc-if value="{{ pd.hasWarning }}">
+              <p style="margin:18px 0 0;padding:12px 14px;border-radius:4px;background:#f3e0da;border:1px solid #dfbfb5;font-size:12px;line-height:1.55;color:#7a3f34">{{ pd.warning }}</p>
+            </sc-if>
+            <div style="margin-top:22px;padding-top:22px;border-top:1px solid #e3d4ca;display:flex;flex-direction:column;gap:10px">
+              <span style="font-size:11.5px;line-height:1.55;color:#8a6d65">¿Tenés una consulta antes de comprar? Escribinos.</span>
+              <div style="display:flex;flex-wrap:wrap;gap:9px">
+                <button onClick="{{ openWhatsapp }}" style="height:40px;padding:0 20px;border:1px solid #cdb8ac;border-radius:999px;background:transparent;color:#4a3530;font-size:9.5px;letter-spacing:0.16em" style-hover="background:#ece0d8">WHATSAPP&nbsp;&nbsp;→</button>
+                <button onClick="{{ openInstagram }}" style="height:40px;padding:0 20px;border:1px solid #cdb8ac;border-radius:999px;background:transparent;color:#4a3530;font-size:9.5px;letter-spacing:0.16em" style-hover="background:#ece0d8">INSTAGRAM&nbsp;&nbsp;→</button>
+              </div>
             </div>
             <button onClick="{{ goShop }}" style="margin-top:28px;background:none;border:0;padding:0;font-size:10px;letter-spacing:0.16em;color:#8a6d65" style-hover="color:#4a231f">←&nbsp;&nbsp;VOLVER AL CATÁLOGO</button>
           </div>
@@ -196,12 +205,9 @@ input::placeholder{color:#6f5650;letter-spacing:0.12em}
         <div style="display:grid;grid-template-columns:repeat(auto-fit,minmax(min(100%,300px),1fr));gap:13px;margin-top:30px">
           <sc-for list="{{ brands }}" as="b" hint-placeholder-count="3">
             <button onClick="{{ b.open }}" style="text-align:left;border:0;border-radius:4px;background:#ece1d9;padding:28px 26px 24px;display:flex;flex-direction:column;gap:18px;color:#3f2a26;transition:background .3s" style-hover="background:#e6d7cd">
-              <span style="font-family:'Cormorant Garamond',serif;font-weight:500;font-size:36px;line-height:1;color:#4a231f">{{ b.name }}</span>
-              <div style="display:flex;gap:6px;height:110px">
-                <sc-for list="{{ b.thumbs }}" as="t" hint-placeholder-count="3">
-                  <div style="flex:1;min-width:0;position:relative;background:#f3eae4;border-radius:3px;overflow:hidden"><img src="{{ t.image }}" alt="" loading="lazy" style="position:absolute;inset:0;width:100%;height:100%;object-fit:contain;padding:8%;mix-blend-mode:multiply"></div>
-                </sc-for>
-              </div>
+              <span style="position:relative;display:block;width:100%;aspect-ratio:1 / 1;max-height:260px;border-radius:3px;overflow:hidden;background:#fff">
+                <img src="{{ b.bag }}" alt="{{ b.alt }}" loading="lazy" style="position:absolute;inset:0;width:100%;height:100%;object-fit:contain;transition:transform .5s cubic-bezier(.2,.7,.2,1)" style-hover="transform:scale(1.04)">
+              </span>
               <span style="display:flex;justify-content:space-between;width:100%;font-size:10px;letter-spacing:0.16em"><span>{{ b.countLabel }}</span><span>VER PRODUCTOS&nbsp;&nbsp;→</span></span>
             </button>
           </sc-for>
@@ -209,30 +215,7 @@ input::placeholder{color:#6f5650;letter-spacing:0.12em}
       </section>
     </sc-if>
 
-    <sc-if value="{{ isTips }}">
-      <section data-screen-label="Consejos" style="padding:clamp(28px,4vw,56px) clamp(18px,2.5vw,38px) clamp(56px,7vw,100px)">
-        <nav aria-label="Ruta" style="display:flex;gap:8px;font-size:10px;letter-spacing:0.16em;color:#8a6d65">
-          <button onClick="{{ goHome }}" style="background:none;border:0;padding:0;font-size:10px;letter-spacing:0.16em;color:#8a6d65" style-hover="color:#4a231f">INICIO</button><span>/</span><span>CONSEJOS</span>
-        </nav>
-        <h1 style="margin:14px 0 0;font-family:'Cormorant Garamond',serif;font-weight:500;font-size:clamp(38px,4vw,58px);line-height:1;color:#4a231f">Consejos</h1>
-        <p style="margin:14px 0 0;max-width:50ch;font-size:13.5px;line-height:1.6;color:#6f5650">Información general sobre los formatos que tenemos en el catálogo, para que elijas con más contexto.</p>
-        <div style="display:flex;flex-direction:column;gap:13px;margin-top:clamp(26px,3.4vw,42px);max-width:760px">
-          <sc-for list="{{ tips.items }}" as="t" hint-placeholder-count="3">
-            <article style="border:1px solid #e3d4ca;border-radius:4px;background:#f8f1ec;padding:clamp(22px,2.6vw,34px);display:flex;flex-direction:column;gap:10px">
-              <span style="font-size:9.5px;letter-spacing:0.2em;color:#8a6d65">{{ t.lead }}</span>
-              <h2 style="margin:0;font-family:'Cormorant Garamond',serif;font-weight:500;font-size:clamp(25px,2.6vw,34px);line-height:1.12;color:#4a231f">{{ t.title }}</h2>
-              <sc-for list="{{ t.body }}" as="par" hint-placeholder-count="2">
-                <p style="margin:0;font-size:13px;line-height:1.7;color:#6f5650">{{ par.text }}</p>
-              </sc-for>
-              <button onClick="{{ t.open }}" style="align-self:flex-start;margin-top:6px;height:40px;padding:0 22px;border:1px solid #cdb8ac;border-radius:999px;background:transparent;color:#4a3530;font-size:9.5px;letter-spacing:0.18em" style-hover="background:#ece0d8">{{ t.linkLabel }}&nbsp;&nbsp;→</button>
-            </article>
-          </sc-for>
-        </div>
-        <p style="margin:clamp(26px,3vw,40px) 0 0;max-width:56ch;font-size:10px;line-height:1.55;color:#ab938a">{{ tips.note }}</p>
-      </section>
-    </sc-if>
-
-    <sc-if value="{{ isHelp }}">
+<sc-if value="{{ isHelp }}">
       <section data-screen-label="Ayuda" style="padding:clamp(28px,4vw,56px) clamp(18px,2.5vw,38px) clamp(56px,7vw,100px)">
         <nav aria-label="Ruta" style="display:flex;gap:8px;font-size:10px;letter-spacing:0.16em;color:#8a6d65">
           <button onClick="{{ goHome }}" style="background:none;border:0;padding:0;font-size:10px;letter-spacing:0.16em;color:#8a6d65" style-hover="color:#4a231f">INICIO</button><span>/</span><span>AYUDA</span>
@@ -360,7 +343,7 @@ class Component extends DCLogic {
       goHome: go('home'),
       goShop: go('catalog', { cat: 'all', brand: null, coll: null, query: '' }),
       goPerfumes: go('catalog', { cat: 'perfumes-body-mist', brand: null, coll: null, query: '' }),
-      goBrands: go('brands'), goTips: go('tips'), goFavs: go('favs'),
+      goBrands: go('brands'), goFavs: go('favs'),
       goHelp: topic => go('help', { helpTopic: topic || null })
     };
 
@@ -394,6 +377,9 @@ class Component extends DCLogic {
         open: b.view === 'brands' ? nav.goBrands : go('catalog', { cat: b.cat, brand: null, coll: null, query: '' })
       }))
     };
+
+    const wa = d.whatsapp || { display: '', url: '' };
+    const openWhatsapp = () => { if (wa.url) { try { window.open(wa.url, '_blank', 'noopener,noreferrer'); } catch (e) {} } };
 
     const ruDef = d.routine || {};
     const routine = Object.assign({ title: '', text: '', ctaLabel: 'VER PRODUCTOS', image: '', alt: '' }, ruDef, {
@@ -437,16 +423,12 @@ class Component extends DCLogic {
       })
     };
 
-    const edDef = d.editorial || {};
-    const editorial = Object.assign({ title: '', text: '', image: '', alt: '', ctaLabel: 'VER PRODUCTOS' }, edDef, {
-      open: edDef.collection ? go('catalog', { coll: edDef.collection, cat: 'all', brand: null, query: '' }) : nav.goShop
-    });
     const guarantee = Object.assign({ title: '', text: '', claim: '' }, d.guarantee || {});
 
     const brandCount = b => { const n = products.filter(p => p.brand === b.id).length; return n + (n === 1 ? ' PRODUCTO' : ' PRODUCTOS'); };
     const brandStrip = {
       viewAll: nav.goBrands,
-      items: d.brands.map(b => ({ name: b.name, countLabel: brandCount(b), ariaLabel: 'Ver productos de ' + b.name, open: go('catalog', { cat: 'all', brand: b.id, coll: null, query: '' }) }))
+      items: d.brands.map(b => ({ name: b.name, bag: b.bag, alt: b.name, countLabel: brandCount(b), ariaLabel: 'Ver productos de ' + b.name, open: go('catalog', { cat: 'all', brand: b.id, coll: null, query: '' }) }))
     };
 
     const igPosts = (d.instagramPosts || []).filter(x => x && x.url);
@@ -472,15 +454,6 @@ class Component extends DCLogic {
       gridStyle: { maxWidth: '1180px', margin: 'clamp(26px,3vw,40px) auto 0', display: 'grid', gridTemplateColumns: 'repeat(' + igCols + ',minmax(0,1fr))', gap: IG_GAP + 'px', justifyItems: 'stretch' },
       cellStyle: { position: 'relative', width: '100%', height: igH + 'px', borderRadius: '4px', overflow: 'hidden', background: '#f8f1ec', border: '1px solid #e3d4ca' },
       frameStyle: { position: 'absolute', top: 0, left: 0, width: IG_BASE + 'px', height: IG_BASE_H + 'px', border: 0, transform: 'scale(' + igScale + ')', transformOrigin: '0 0' }
-    };
-
-    const tips = {
-      hasItems: (d.tips || []).length > 0, note: d.tipsNote || '', goAll: nav.goTips,
-      items: (d.tips || []).map(t => ({
-        title: t.title, lead: t.lead, linkLabel: t.linkLabel || 'VER PRODUCTOS',
-        body: (t.body || []).map(x => ({ text: x })),
-        open: t.collection ? go('catalog', { coll: t.collection, cat: 'all', brand: null, query: '' }) : nav.goShop
-      }))
     };
 
     const help = {
@@ -524,7 +497,10 @@ class Component extends DCLogic {
         crumbCat: catLabel(mainCat), goCat: go('catalog', { cat: mainCat, brand: null, coll: null, query: '' }),
         priceLabel: pp.price != null ? this.money(pp.price, d.currency) : 'PRECIO A CONFIGURAR',
         catLinks: pp.categories.filter(c => c !== 'skincare').map(c => ({ label: catLabel(c), open: go('catalog', { cat: c, brand: null, coll: null, query: '' }) })),
-        factsLine: [pp.brandLabel, pp.name, pp.size].filter(Boolean).join(' · '),
+        description: (pp.description || []).map(t => ({ text: t })),
+        specs: (pp.specs || []).map(x => ({ label: x.label, value: x.value })),
+        hasHowTo: (pp.howTo || []).length > 0, howTo: (pp.howTo || []).map(t => ({ text: t })),
+        hasWarning: !!pp.warning, warning: pp.warning || '',
         qty: s.qty,
         inc: () => this.setState(x => ({ qty: x.qty + 1 })),
         dec: () => this.setState(x => ({ qty: Math.max(1, x.qty - 1) })),
@@ -533,7 +509,7 @@ class Component extends DCLogic {
       });
     }
 
-    const brands = d.brands.map(b => { const ps = products.filter(p => p.brand === b.id); return { name: b.name, countLabel: brandCount(b), thumbs: ps.slice(0, 4).map(p => ({ image: p.image })), open: go('catalog', { cat: 'all', brand: b.id, coll: null, query: '' }) }; });
+    const brands = d.brands.map(b => ({ name: b.name, bag: b.bag, alt: 'Bolsa de ' + b.name, countLabel: brandCount(b), open: go('catalog', { cat: 'all', brand: b.id, coll: null, query: '' }) }));
 
     const favs = {
       items: favItems, hasItems: favItems.length > 0, isEmpty: !!s.data && favItems.length === 0,
@@ -571,7 +547,7 @@ class Component extends DCLogic {
     const toast = { show: !!s.toast, text: s.toast || '', openCart: () => this.setState({ cartOpen: true, toast: null }) };
 
     const footer = Object.assign({}, nav, {
-      instagramHandle: ig.handle, openInstagram,
+      instagramHandle: ig.handle, openInstagram, openWhatsapp, whatsappLabel: wa.display,
       copyright: '© ' + new Date().getFullYear() + ' LUMÉ BEAUTY',
       shop: [{ label: 'Skincare coreano', open: go('catalog', { cat: 'skincare-coreano', brand: null, coll: null, query: '' }) },
              { label: 'Perfumes & body mist', open: nav.goPerfumes },
@@ -582,10 +558,10 @@ class Component extends DCLogic {
 
     return Object.assign({
       isHome: s.view === 'home', isCatalog: s.view === 'catalog', isProduct: s.view === 'product' && !!pd,
-      isBrands: s.view === 'brands', isTips: s.view === 'tips', isFavs: s.view === 'favs', isHelp: s.view === 'help',
-      hasAnnounce: anns.length > 0, announce, openInstagram,
-      header, hero, categories, benefits, routine, featured, collections, editorial, guarantee, brandStrip,
-      instagram, tips, help, catalog, pd, brands, favs, cart, toast, footer
+      isBrands: s.view === 'brands', isFavs: s.view === 'favs', isHelp: s.view === 'help',
+      hasAnnounce: anns.length > 0, announce, openInstagram, openWhatsapp, specsNote: d.specsNote || '',
+      header, hero, categories, benefits, routine, featured, collections, guarantee, brandStrip,
+      instagram, help, catalog, pd, brands, favs, cart, toast, footer
     }, nav);
   }
 }

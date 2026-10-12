@@ -33,11 +33,13 @@
     </nav>
 
     <div style="display:flex;flex-direction:column;align-items:flex-start;gap:10px">
-      <span style="font-size:10px;letter-spacing:0.22em;color:#8a6d65">INSTAGRAM</span>
+      <span style="font-size:10px;letter-spacing:0.22em;color:#8a6d65">CONTACTO</span>
+      <button onClick="{{ f.openWhatsapp }}" aria-label="Escribirnos por WhatsApp" style="background:none;border:0;padding:3px 0;display:flex;align-items:center;gap:9px;font-size:12px;letter-spacing:0.04em;color:#3f2a26" style-hover="color:#a87a6e">
+        <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.35" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M20.2 11.6a8.2 8.2 0 0 1-12.2 7.2L3.8 20.2l1.4-4.1A8.2 8.2 0 1 1 20.2 11.6z"></path><path d="M9.1 8.4c.3-.1.6 0 .8.3l.8 1.3c.2.3.1.6-.1.8l-.5.5c.6 1.2 1.5 2.1 2.7 2.7l.5-.5c.2-.2.5-.3.8-.1l1.3.8c.3.2.4.5.3.8-.3.9-1.2 1.4-2.1 1.2-2.6-.5-4.7-2.6-5.2-5.2-.2-.9.3-1.8 1.2-2.1z"></path></svg>{{ f.whatsappLabel }}
+      </button>
       <button onClick="{{ f.openInstagram }}" aria-label="Abrir el Instagram de Lumé Beauty en una pestaña nueva" style="background:none;border:0;padding:3px 0;display:flex;align-items:center;gap:9px;font-size:12px;letter-spacing:0.04em;color:#3f2a26" style-hover="color:#a87a6e">
         <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.35" aria-hidden="true"><rect x="3.5" y="3.5" width="17" height="17" rx="5"></rect><circle cx="12" cy="12" r="4"></circle><circle cx="17.2" cy="6.8" r="1.1" fill="currentColor" stroke="none"></circle></svg>{{ f.instagramHandle }}
       </button>
-      <p style="margin:0;max-width:26ch;font-size:11.5px;line-height:1.5;color:#6f5650">Es nuestro único canal de contacto: escribinos por mensaje directo.</p>
     </div>
 
   </div>

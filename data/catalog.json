@@ -32,15 +32,18 @@
   "brands": [
     {
       "id": "medicube",
-      "name": "Medicube"
+      "name": "Medicube",
+      "bag": "assets/marcas/medicube.webp"
     },
     {
       "id": "numbuzin",
-      "name": "Numbuzin"
+      "name": "Numbuzin",
+      "bag": "assets/marcas/numbuzin.webp"
     },
     {
       "id": "victorias-secret",
-      "name": "Victoria's Secret"
+      "name": "Victoria's Secret",
+      "bag": "assets/marcas/victorias-secret.webp"
     }
   ],
   "products": [
@@ -59,7 +62,33 @@
       "imagePadding": "7%",
       "price": 55000,
       "featured": true,
-      "tag": "NUEVO"
+      "tag": "NUEVO",
+      "description": [
+        "Combina cápsulas concentradas de vitamina C pura con una crema hidratante de alto rendimiento para iluminar y revitalizar la piel desde la primera aplicación.",
+        "Su tecnología de encapsulación mantiene la vitamina C estable hasta el momento del contacto, potenciando su acción antioxidante. Indicada para todo tipo de piel."
+      ],
+      "specs": [
+        {
+          "label": "50% extracto de espino marino",
+          "value": "Agua del árbol de vitaminas: aporta nutrición e hidratación, y deja la piel suave y flexible."
+        },
+        {
+          "label": "5% niacinamida (vitamina B3)",
+          "value": "Mejora la textura, minimiza la apariencia de los poros y suaviza las líneas finas. Ilumina el tono con un brillo natural."
+        },
+        {
+          "label": "Ácido hialurónico",
+          "value": "Repara y mejora la textura de la piel."
+        },
+        {
+          "label": "Contenido",
+          "value": "55 g. Apta para todo tipo de piel."
+        }
+      ],
+      "howTo": [
+        "Mezclá la cápsula de vitamina y el gel transparente en la proporción que le vaya a tu piel: para una sensación más ligera aumentá el gel, y para más hidratación y elasticidad aumentá las cápsulas.",
+        "Aplicá la mezcla por la mañana y por la noche, en rostro y cuello, después del sérum."
+      ]
     },
     {
       "id": "medicube-pdrn-pink-collagen",
@@ -76,7 +105,33 @@
       "imagePadding": "8%",
       "price": 58000,
       "featured": true,
-      "tag": "NUEVO"
+      "tag": "NUEVO",
+      "description": [
+        "La tecnología de encapsulación preserva el efecto reafirmante e hidratante del PDRN hasta que la piel lo absorbe por completo, para el máximo efecto «piel de cristal»: luminosa, firme y radiante.",
+        "Indicada para todo tipo de piel."
+      ],
+      "specs": [
+        {
+          "label": "ADN de salmón (PDRN)",
+          "value": "Cuida el tono irregular de la piel y promueve la renovación celular."
+        },
+        {
+          "label": "Colágeno hidrolizado y ácido hialurónico",
+          "value": "Aumentan la hidratación, la elasticidad y el brillo natural de la piel."
+        },
+        {
+          "label": "Niacinamida (vitamina B3)",
+          "value": "Promueve una apariencia saludable y uniforme."
+        },
+        {
+          "label": "Contenido",
+          "value": "55 g. Apta para todo tipo de piel."
+        }
+      ],
+      "howTo": [
+        "Mezclá la cápsula de vitamina y el gel transparente en la proporción que le vaya a tu piel: para una sensación más ligera aumentá el gel, y para más hidratación y elasticidad aumentá las cápsulas.",
+        "Aplicá la mezcla por la mañana y por la noche, en rostro y cuello, después del sérum."
+      ]
     },
     {
       "id": "numbuzin-no9-nad-retinol-eye-cream",
@@ -93,7 +148,42 @@
       "imagePadding": "5%",
       "price": 60000,
       "featured": true,
-      "tag": "NUEVO"
+      "tag": "NUEVO",
+      "description": [
+        "Crema de contorno de ojos antiedad que combina activos avanzados del k-beauty para tratar a la vez arrugas, pérdida de volumen, ojeras y flacidez en la delicada zona periocular.",
+        "Su textura perlada se absorbe rápido sin pesadez y es apta para uso diario. Sin parabenos ni sulfatos, cruelty-free. También puede aplicarse en surcos nasogenianos, entrecejo y líneas de expresión. Fabricada en Corea."
+      ],
+      "specs": [
+        {
+          "label": "Retinal liposomado",
+          "value": "Retinaldehído encapsulado: forma de vitamina A de nueva generación, actúa más rápido que el retinol tradicional y con mínima irritación."
+        },
+        {
+          "label": "NAD+",
+          "value": "Recarga la piel a nivel celular y apoya la producción de colágeno."
+        },
+        {
+          "label": "50 tipos de péptidos",
+          "value": "Aportan volumen y firmeza en las zonas hundidas."
+        },
+        {
+          "label": "Niacinamida",
+          "value": "Ilumina las ojeras y mejora la hiperpigmentación."
+        },
+        {
+          "label": "Ceramida NP y ácido hialurónico",
+          "value": "Refuerzan la barrera y sellan la hidratación."
+        },
+        {
+          "label": "Contenido",
+          "value": "10 ml."
+        }
+      ],
+      "howTo": [
+        "Aplicá una cantidad adecuada sobre el contorno de ojos limpio y dá suaves toquecitos con el dedo anular hasta que se absorba. Preferentemente de noche.",
+        "Si recién empezás con retinoides, usala 2 o 3 veces por semana e incrementá según tolerancia. Por la mañana, usá siempre protector solar."
+      ],
+      "warning": "No usar durante el embarazo."
     },
     {
       "id": "vs-pure-seduction",
@@ -109,7 +199,25 @@
       "image": "assets/productos/vs-pure-seduction-body-mist.webp",
       "imagePadding": "9% 0",
       "price": 40000,
-      "featured": true
+      "featured": true,
+      "description": [
+        "Una fragancia seductora y envolvente que despierta los sentidos con su combinación de notas afrutadas y florales.",
+        "Parte de la icónica línea «Secret Garden», ofrece una experiencia olfativa intensa y femenina, ideal para el uso diario: aporta frescura y deja un rastro sensual."
+      ],
+      "specs": [
+        {
+          "label": "Familia olfativa",
+          "value": "Afrutada y floral."
+        },
+        {
+          "label": "Línea",
+          "value": "Secret Garden, de Victoria’s Secret."
+        },
+        {
+          "label": "Contenido",
+          "value": "250 ml / 8.4 fl oz."
+        }
+      ]
     },
     {
       "id": "vs-velvet-petals",
@@ -125,7 +233,24 @@
       "image": "assets/productos/vs-velvet-petals-body-mist.webp",
       "imagePadding": "9% 0",
       "price": 40000,
-      "featured": true
+      "featured": true,
+      "description": [
+        "Una fragancia de la familia olfativa floral."
+      ],
+      "specs": [
+        {
+          "label": "Familia olfativa",
+          "value": "Floral."
+        },
+        {
+          "label": "Notas de fondo",
+          "value": "Glaseado de almendras y sándalo cremoso."
+        },
+        {
+          "label": "Contenido",
+          "value": "250 ml / 8.4 fl oz."
+        }
+      ]
     },
     {
       "id": "vs-coconut-passion",
@@ -141,7 +266,25 @@
       "image": "assets/productos/vs-coconut-passion-body-mist.webp",
       "imagePadding": "9% 0",
       "price": 40000,
-      "featured": true
+      "featured": true,
+      "description": [
+        "Una fragancia exótica y cálida que evoca la sensación de unas vacaciones tropicales.",
+        "Parte de la línea «Secret Garden», combina la suavidad de la vainilla con la frescura del coco. Para quien busca un aroma dulce y cremoso, con un toque playero que se disfruta en cualquier época del año."
+      ],
+      "specs": [
+        {
+          "label": "Familia olfativa",
+          "value": "Dulce y cremosa: vainilla y coco."
+        },
+        {
+          "label": "Línea",
+          "value": "Secret Garden, de Victoria’s Secret."
+        },
+        {
+          "label": "Contenido",
+          "value": "250 ml / 8.4 fl oz."
+        }
+      ]
     },
     {
       "id": "vs-bare-vanilla",
@@ -157,7 +300,25 @@
       "image": "assets/productos/vs-bare-vanilla-body-mist.webp",
       "imagePadding": "9% 0",
       "price": 40000,
-      "featured": true
+      "featured": true,
+      "description": [
+        "Una fragancia delicada y envolvente, con una mezcla de aromas cálidos y dulces. La opción ideal para quien busca un aroma suave pero duradero, que se adapta tanto al día como a la noche.",
+        "Es parte de la línea «Bare» de Victoria’s Secret, pensada para una sensación fresca y natural con un toque de lujo."
+      ],
+      "specs": [
+        {
+          "label": "Familia olfativa",
+          "value": "Cálida y dulce, con base de vainilla."
+        },
+        {
+          "label": "Línea",
+          "value": "Bare, de Victoria’s Secret."
+        },
+        {
+          "label": "Contenido",
+          "value": "250 ml / 8.4 fl oz."
+        }
+      ]
     }
   ],
   "instagram": {
@@ -183,7 +344,7 @@
     {
       "icon": "care",
       "title": "Asesoría personalizada",
-      "text": "Te ayudamos a elegir por Instagram."
+      "text": "Te ayudamos a elegir por WhatsApp o Instagram."
     }
   ],
   "collections": [
@@ -216,78 +377,18 @@
       ]
     }
   ],
-  "editorial": {
-    "title": "Tu ritual, a tu manera.",
-    "text": "Las cuatro brumas de Victoria’s Secret que tenemos hoy, en 250 ml. Elegí la que va con vos.",
-    "image": "assets/editorial/body-mist-lume.webp",
-    "alt": "Las brumas Pure Seduction, Velvet Petals, Coconut Passion y Bare Vanilla de Victoria’s Secret",
-    "ctaLabel": "VER BODY MIST",
-    "collection": "body-mist"
-  },
   "guarantee": {
     "title": "Elegimos cada producto con cuidado.",
     "text": "En Lumé reunimos una selección de skincare y beauty para que puedas descubrir tus próximos favoritos con información clara sobre cada producto.",
     "claim": "Trabajamos solamente con productos originales."
   },
-  "tips": [
-    {
-      "id": "sumar-crema-facial",
-      "title": "Cómo sumar una crema facial a tu rutina",
-      "lead": "Un producto nuevo por vez.",
-      "body": [
-        "Las cremas de rostro se aplican sobre la piel limpia, al final de la rutina, con la cantidad que indique el envase.",
-        "Si estás incorporando varios productos, conviene sumar uno por vez y dejar pasar unos días: así es más fácil notar cómo responde tu piel a cada uno."
-      ],
-      "linkLabel": "VER CREMAS FACIALES",
-      "collection": "cremas-faciales"
-    },
-    {
-      "id": "elegir-contorno-de-ojos",
-      "title": "Qué mirar al elegir un contorno de ojos",
-      "lead": "Formatos chicos que rinden mucho.",
-      "body": [
-        "El contorno es un producto pensado para una zona puntual del rostro, por eso suele venir en envases más chicos que una crema facial.",
-        "El No.9 NAD+ Retinol Volumetox de Numbuzin viene en 10 ml: se usa muy poca cantidad por aplicación, así que un envase chico dura bastante."
-      ],
-      "linkLabel": "VER CONTORNO DE OJOS",
-      "collection": "contorno-de-ojos"
-    },
-    {
-      "id": "elegir-body-mist",
-      "title": "Cómo elegir un body mist",
-      "lead": "Más suave que un perfume.",
-      "body": [
-        "Las brumas corporales tienen una concentración menor que un perfume: se aplican sobre la piel o la ropa y acompañan el día sin imponerse.",
-        "Los nombres dan una pista de por dónde va cada una: Bare Vanilla parte de la vainilla y Coconut Passion del coco. Las cuatro vienen en 250 ml."
-      ],
-      "linkLabel": "VER BODY MIST",
-      "collection": "body-mist"
-    }
-  ],
-  "tipsNote": "Información general sobre los productos del catalogo. No reemplaza la indicación de un profesional ni las instrucciones del envase.",
   "help": [
     {
       "id": "envios",
       "title": "Envíos",
       "body": [
-        "Todavia no tenemos publicadas las zonas ni los costos de envío.",
-        "Coordinamos cada envío al confirmar la compra. Si querés consultarlo antes, escribinos por Instagram."
-      ]
-    },
-    {
-      "id": "medios-de-pago",
-      "title": "Medios de pago",
-      "body": [
-        "Coordinamos el medio de pago al confirmar la compra.",
-        "No ofrecemos cuotas ni financiación."
-      ]
-    },
-    {
-      "id": "cambios",
-      "title": "Cambios y devoluciones",
-      "body": [
-        "Todavia no tenemos una política de cambios y devoluciones publicada.",
-        "Si tenés dudas sobre un producto, escribinos por Instagram antes de comprar."
+        "Hacemos envíos a todo el país.",
+        "Todavía no tenemos publicadas las zonas ni los costos. Coordinamos cada envío al confirmar la compra: si querés consultarlo antes, escribinos."
       ]
     },
     {
@@ -303,8 +404,9 @@
       "id": "contacto",
       "title": "Contacto",
       "body": [
-        "Nuestro canal es Instagram: @lumebeautyok_ar.",
-        "Escribinos por mensaje directo y seguimos la consulta por ahí."
+        "WhatsApp: +54 9 3704 81-4077.",
+        "Instagram: @lumebeautyok_ar.",
+        "Escribinos por donde te quede más cómodo y seguimos la consulta por ahí."
       ]
     }
   ],
@@ -330,5 +432,10 @@
     "image": "assets/editorial/rutina-lume.webp",
     "alt": "Textura cremosa en tonos rosados",
     "cat": "skincare-coreano"
-  }
+  },
+  "whatsapp": {
+    "display": "+54 9 3704 81-4077",
+    "url": "https://wa.me/5493704814077"
+  },
+  "specsNote": "Información de producto provista por el fabricante."
 }

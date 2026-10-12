@@ -12,9 +12,7 @@
   <div style="display:grid;grid-template-columns:minmax(0,1fr) auto minmax(0,1fr);align-items:center;height:96px;padding:0 40px">
     <nav aria-label="Principal" style="display:flex;align-items:center;gap:clamp(20px,2.3vw,36px)">
       <button onClick="{{ h.goShop }}" style="background:none;border:0;padding:6px 0;font-size:10.5px;letter-spacing:0.16em;color:#3f2a26" style-hover="color:#a87a6e">SHOP</button>
-      <button onClick="{{ h.goPerfumes }}" style="background:none;border:0;padding:6px 0;font-size:10.5px;letter-spacing:0.16em;color:#3f2a26" style-hover="color:#a87a6e">PERFUMES</button>
       <button onClick="{{ h.goBrands }}" style="background:none;border:0;padding:6px 0;font-size:10.5px;letter-spacing:0.16em;color:#3f2a26" style-hover="color:#a87a6e">MARCAS</button>
-      <button onClick="{{ h.goTips }}" style="background:none;border:0;padding:6px 0;font-size:10.5px;letter-spacing:0.16em;color:#3f2a26" style-hover="color:#a87a6e">CONSEJOS</button>
       <button onClick="{{ h.goHelp }}" style="background:none;border:0;padding:6px 0;font-size:10.5px;letter-spacing:0.16em;color:#3f2a26" style-hover="color:#a87a6e">AYUDA</button>
     </nav>
     <button onClick="{{ h.goHome }}" aria-label="LUMÉ Beauty — inicio" style="background:none;border:0;padding:0 18px 0 0;display:flex;flex-direction:column;align-items:center;color:#a87a6e">
@@ -62,7 +60,6 @@
         <button onClick="{{ c.open }}" style="background:none;border:0;border-bottom:1px solid #e6d8cf;text-align:left;padding:16px 0 16px 14px;font-size:12px;letter-spacing:0.2em;color:#6f5650">{{ c.label }}</button>
       </sc-for>
       <button onClick="{{ h.goBrands }}" style="background:none;border:0;border-bottom:1px solid #e6d8cf;text-align:left;padding:16px 0;font-size:12px;letter-spacing:0.2em;color:#3f2a26">MARCAS</button>
-      <button onClick="{{ h.goTips }}" style="background:none;border:0;border-bottom:1px solid #e6d8cf;text-align:left;padding:16px 0;font-size:12px;letter-spacing:0.2em;color:#3f2a26">CONSEJOS</button>
       <button onClick="{{ h.goFavs }}" style="background:none;border:0;border-bottom:1px solid #e6d8cf;text-align:left;padding:16px 0;display:flex;align-items:center;gap:10px;font-size:12px;letter-spacing:0.2em;color:#3f2a26">FAVORITOS<span style="font-size:10px;color:#8a6d65">{{ h.favCount }}</span></button>
       <button onClick="{{ h.goHelp }}" style="background:none;border:0;text-align:left;padding:16px 0;font-size:12px;letter-spacing:0.2em;color:#3f2a26">AYUDA</button>
     </nav>
