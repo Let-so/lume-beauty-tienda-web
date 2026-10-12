@@ -68,7 +68,12 @@
         <button onClick="{{ sl.openPrize }}" style="height:44px;padding:0 24px;border:1px solid #cdb8ac;border-radius:999px;background:transparent;color:#4a3530;font-size:10px;letter-spacing:0.18em" style-hover="background:#ece0d8">VER EL PRODUCTO&nbsp;&nbsp;→</button>
       </div>
     </sc-if>
-    <p style="margin:0;font-size:10.5px;letter-spacing:0.14em;color:#a8776a">{{ sl.spinsLeftLabel }}</p>
+    <div style="display:flex;flex-wrap:wrap;justify-content:center;align-items:center;gap:8px 16px">
+      <p style="margin:0;font-size:10.5px;letter-spacing:0.14em;color:#a8776a">{{ sl.spinsLeftLabel }}</p>
+      <button onClick="{{ sl.toggleSound }}" aria-pressed="{{ sl.soundOn }}" aria-label="{{ sl.soundAria }}" style="background:none;border:0;padding:6px 2px;display:flex;align-items:center;gap:7px;font-family:'Jost',sans-serif;font-size:9.5px;letter-spacing:0.14em;color:#a8776a" style-hover="color:#7a3f34">
+        <svg width="15" height="15" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.4" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="{{ sl.soundIcon }}"></path></svg>{{ sl.soundLabel }}
+      </button>
+    </div>
     <div style="display:flex;flex-direction:column;gap:3px;margin-top:4px">
       <sc-for list="{{ sl.terms }}" as="t" hint-placeholder-count="3">
         <span style="font-size:9.5px;line-height:1.5;color:#ab938a">{{ t.text }}</span>

@@ -3,7 +3,7 @@
 <head>
 <meta charset="utf-8">
 <meta name="viewport" content="width=device-width, initial-scale=1">
-<script>window.__DC_BUILD="6b07745597"</script>
+<script>window.__DC_BUILD="25077a49f9"</script>
 <script src="./support.js"></script>
 </head>
 <body>
@@ -245,14 +245,14 @@ input::placeholder{color:#6f5650;letter-spacing:0.12em}
 <script type="text/x-dc" data-dc-script>
 class Component extends DCLogic {
   state = { data: null, view: 'home', cat: 'all', brand: null, coll: null, productId: null, query: '', cart: {}, favs: {}, cartOpen: false, menuOpen: false, searchOpen: false, qty: 1, announceIndex: 0, toast: null, helpTopic: null,
-    slotOffsets: [0, 2, 4], slotSpinning: false, slotSnap: false, slotResult: null, slotPlays: null, slotPrize: null, w: typeof window !== 'undefined' ? window.innerWidth : 1440 };
+    slotOffsets: [0, 2, 4], slotSpinning: false, soundOn: true, slotSnap: false, slotResult: null, slotPlays: null, slotPrize: null, w: typeof window !== 'undefined' ? window.innerWidth : 1440 };
 
   componentDidMount() {
     this._r = () => this.setState({ w: window.innerWidth });
     this._k = e => { if (e.key === 'Escape') this.setState({ cartOpen: false, menuOpen: false }); };
     window.addEventListener('resize', this._r);
     window.addEventListener('keydown', this._k);
-    try { const g = JSON.parse(localStorage.getItem('lume_store_v1') || '{}'); this.setState({ cart: g.cart || {}, favs: g.favs || {}, slotPlays: g.slotPlays || null, slotPrize: g.slotPrize || null }); } catch (e) {}
+    try { const g = JSON.parse(localStorage.getItem('lume_store_v1') || '{}'); this.setState({ cart: g.cart || {}, favs: g.favs || {}, slotPlays: g.slotPlays || null, slotPrize: g.slotPrize || null, soundOn: g.soundOn !== false }); } catch (e) {}
     fetch('data/catalog.json?v=' + (window.__DC_BUILD || '')).then(r => r.json()).then(data => {
       this.setState({ data });
       const n = (data.announcements || []).length;
@@ -266,15 +266,17 @@ class Component extends DCLogic {
     if (this._toastT) { clearTimeout(this._toastT); this._toastT = null; }
     if (this._slotT) { clearTimeout(this._slotT); this._slotT = null; }
     if (this._snapT) { clearTimeout(this._snapT); this._snapT = null; }
+    if (this._ctx) { try { this._ctx.close(); } catch (e) {} this._ctx = null; this._master = null; this._nb = null; }
   }
   componentDidUpdate() {
     const s = this.state;
-    if (this._lastCart !== s.cart || this._lastFavs !== s.favs || this._lastPlays !== s.slotPlays || this._lastPrize !== s.slotPrize) {
+    if (this._lastCart !== s.cart || this._lastFavs !== s.favs || this._lastPlays !== s.slotPlays || this._lastPrize !== s.slotPrize || this._lastSound !== s.soundOn) {
       this._lastCart = s.cart;
       this._lastFavs = s.favs;
       this._lastPlays = s.slotPlays;
       this._lastPrize = s.slotPrize;
-      try { localStorage.setItem('lume_store_v1', JSON.stringify({ cart: s.cart, favs: s.favs, slotPlays: s.slotPlays, slotPrize: s.slotPrize })); } catch (e) {}
+      this._lastSound = s.soundOn;
+      try { localStorage.setItem('lume_store_v1', JSON.stringify({ cart: s.cart, favs: s.favs, slotPlays: s.slotPlays, slotPrize: s.slotPrize, soundOn: s.soundOn })); } catch (e) {}
     }
     if (this._lastCartOpen !== s.cartOpen) {
       this._lastCartOpen = s.cartOpen;
@@ -312,6 +314,90 @@ class Component extends DCLogic {
     this.setState(s => { const f = Object.assign({}, s.favs); if (f[id]) { delete f[id]; } else { f[id] = true; added = true; } return { favs: f }; });
     this.flash(added ? 'Guardado en favoritos' : 'Quitado de favoritos');
   }
+  // --- sonido sintetizado: sin archivos, se arma con osciladores y ruido ---
+  audio() {
+    if (!this.state.soundOn || typeof window === 'undefined') return null;
+    const AC = window.AudioContext || window.webkitAudioContext;
+    if (!AC) return null;
+    if (!this._ctx) { try { this._ctx = new AC(); } catch (e) { return null; } }
+    if (this._ctx.state === 'suspended') { try { this._ctx.resume(); } catch (e) {} }
+    return this._ctx;
+  }
+  maestro(ctx) {
+    if (!this._master || this._masterCtx !== ctx) {
+      // compresor como limitador: sin esto, el jingle y las monedas se suman
+      // por encima de 1.0 y la salida recorta
+      const c = ctx.createDynamicsCompressor();
+      c.threshold.value = -12; c.knee.value = 6; c.ratio.value = 14;
+      c.attack.value = 0.002; c.release.value = 0.14;
+      const g = ctx.createGain(); g.gain.value = 0.85;
+      c.connect(g); g.connect(ctx.destination);
+      this._master = c; this._masterCtx = ctx;
+    }
+    return this._master;
+  }
+  ruidoBuffer(ctx) {
+    if (!this._nb) {
+      const n = Math.floor(ctx.sampleRate * 0.12);
+      const b = ctx.createBuffer(1, n, ctx.sampleRate);
+      const d = b.getChannelData(0);
+      for (let i = 0; i < n; i++) d[i] = (Math.random() * 2 - 1) * Math.pow(1 - i / n, 2.2);
+      this._nb = b;
+    }
+    return this._nb;
+  }
+  golpe(ctx, t, dur, freq, q, vol) {
+    const src = ctx.createBufferSource(); src.buffer = this.ruidoBuffer(ctx);
+    const f = ctx.createBiquadFilter(); f.type = 'bandpass'; f.frequency.value = freq; f.Q.value = q;
+    const g = ctx.createGain();
+    g.gain.setValueAtTime(vol, t);
+    g.gain.exponentialRampToValueAtTime(0.0001, t + dur);
+    src.connect(f); f.connect(g); g.connect(this.maestro(ctx));
+    src.start(t); src.stop(t + dur);
+  }
+  nota(ctx, t, freq, dur, vol, tipo, caida) {
+    const o = ctx.createOscillator(); o.type = tipo || 'triangle';
+    o.frequency.setValueAtTime(freq, t);
+    if (caida) o.frequency.exponentialRampToValueAtTime(Math.max(40, caida), t + dur);
+    const g = ctx.createGain();
+    g.gain.setValueAtTime(0.0001, t);
+    g.gain.linearRampToValueAtTime(vol, t + 0.006);
+    g.gain.exponentialRampToValueAtTime(0.0001, t + dur);
+    o.connect(g); g.connect(this.maestro(ctx));
+    o.start(t); o.stop(t + dur + 0.02);
+  }
+  sonarGiro(frenos) {
+    const ctx = this.audio(); if (!ctx) return;
+    const t = ctx.currentTime + 0.01;
+    this.nota(ctx, t, 190, 0.16, 0.22, 'sine', 70);      // tiron de la palanca
+    this.golpe(ctx, t, 0.09, 1500, 1.1, 0.3);
+    frenos.forEach((fin, i) => {
+      let tt = 0.06;
+      while (tt < fin) {                                  // ticks de la tira
+        this.golpe(ctx, t + tt, 0.016, 2500 + i * 320, 3.2, 0.085);
+        tt += 0.036 + 0.1 * Math.pow(tt / fin, 3);        // se separan al frenar
+      }
+      this.golpe(ctx, t + fin, 0.07, 820 + i * 130, 1.4, 0.34);   // clac
+      this.nota(ctx, t + fin, 235 - i * 22, 0.1, 0.16, 'square');
+    });
+  }
+  sonarPremio() {
+    const ctx = this.audio(); if (!ctx) return;
+    const t = ctx.currentTime + 0.04;
+    [523.25, 659.25, 783.99, 1046.5, 1318.51].forEach((f, i) =>
+      this.nota(ctx, t + i * 0.085, f, 0.32, 0.17, 'triangle'));
+    for (let i = 0; i < 24; i++) {                        // lluvia de monedas
+      const tt = t + 0.3 + Math.random() * 0.95;
+      this.golpe(ctx, tt, 0.055, 3000 + Math.random() * 2800, 9, 0.1);
+      this.nota(ctx, tt, 1700 + Math.random() * 1500, 0.07, 0.045, 'sine');
+    }
+  }
+  sonarNada() {
+    const ctx = this.audio(); if (!ctx) return;
+    const t = ctx.currentTime + 0.02;
+    this.nota(ctx, t, 320, 0.17, 0.11, 'triangle');
+    this.nota(ctx, t + 0.14, 240, 0.28, 0.1, 'triangle');
+  }
   hoyISO() { return new Date().toISOString().slice(0, 10); }
   premioValido(pr, byId) {
     if (!pr || !pr.productId || !byId[pr.productId]) return null;
@@ -346,6 +432,8 @@ class Component extends DCLogic {
       slotOffsets: idx.map((k, i) => (3 + i) * n + k),
       slotPlays: { date: this.hoyISO(), used: this.girosUsados() + 1 }
     });
+    // se llama dentro del click: el navegador solo deja sonar tras un gesto
+    this.sonarGiro([2.3, 2.55, 2.8]);
 
     if (this._slotT) clearTimeout(this._slotT);
     this._slotT = setTimeout(() => {
@@ -358,7 +446,8 @@ class Component extends DCLogic {
                              wonAt: ahora, expiresAt: ahora + (cfg.prizeDays || 7) * 86400000 };
       }
       this.setState(cambio);
-      if (gana) this.flash('¡Ganaste ' + cfg.discountPct + '% en ' + prods[idx[0]].name + '!');
+      if (gana) { this.sonarPremio(); this.flash('¡Ganaste ' + cfg.discountPct + '% en ' + prods[idx[0]].name + '!'); }
+      else this.sonarNada();
       if (this._snapT) clearTimeout(this._snapT);
       this._snapT = setTimeout(() => { this._snapT = null; this.setState({ slotSnap: false }); }, 80);
     }, 2950);
@@ -470,6 +559,13 @@ class Component extends DCLogic {
       addLabel: premio ? 'AGREGAR CON ' + premio.pct + '% OFF' : '',
       addPrize: () => { if (premio) this.addToCart(premio.productId, 1); },
       openPrize: () => { if (premio) this.go('product', { productId: premio.productId, qty: 1 }); },
+      soundOn: s.soundOn,
+      soundLabel: s.soundOn ? 'SONIDO ACTIVADO' : 'SONIDO SILENCIADO',
+      soundAria: s.soundOn ? 'Silenciar el sonido de la tragamonedas' : 'Activar el sonido de la tragamonedas',
+      soundIcon: s.soundOn
+        ? 'M4 9.5h3.2L12 5.6v12.8L7.2 14.5H4z M15.4 9.1a4 4 0 0 1 0 5.8 M18 6.6a7.6 7.6 0 0 1 0 10.8'
+        : 'M4 9.5h3.2L12 5.6v12.8L7.2 14.5H4z M15.8 9.9l4.4 4.2 M20.2 9.9l-4.4 4.2',
+      toggleSound: () => this.setState(x => ({ soundOn: !x.soundOn })),
       hearts: [0, 1, 2, 3].map(() => ({ fill: s.slotSpinning ? '#e2749c' : '#eda8c0' })),
       reels: [0, 1, 2].map(i => ({
         items: tira,
