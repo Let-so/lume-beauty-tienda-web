@@ -374,9 +374,9 @@
       "id": "tragamonedas",
       "title": "La tragamonedas",
       "body": [
-        "Si los tres rodillos coinciden, ganás un 20% de descuento sobre una unidad de ese producto.",
-        "El premio vale 7 días desde que lo ganás.",
-        "Se aplica al confirmar la compra con nosotras. No se acumula con otras promociones."
+        "Si los tres rodillos coinciden, ganás un premio sorpresa.",
+        "Para saber cuál es, nos escribís por WhatsApp desde el botón que aparece al ganar. Lo definimos según el caso, así que el premio no siempre es el mismo.",
+        "El premio vale 7 días desde que lo ganás. No se acumula con otras promociones."
       ]
     },
     {
@@ -411,8 +411,7 @@
   "specsNote": "Información de producto provista por el fabricante.",
   "slot": {
     "title": "La tragamonedas Lumé",
-    "text": "Si los tres carteles coinciden, te llevás ese producto con 20% de descuento.",
-    "discountPct": 20,
+    "text": "Si los tres carteles coinciden, te llevás un premio secreto.",
     "winChance": 0.12,
     "spinsPerDay": 100,
     "prizeDays": 7

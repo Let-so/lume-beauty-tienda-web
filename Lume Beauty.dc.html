@@ -3,7 +3,7 @@
 <head>
 <meta charset="utf-8">
 <meta name="viewport" content="width=device-width, initial-scale=1">
-<script>window.__DC_BUILD="3c9dd82049"</script>
+<script>window.__DC_BUILD="5005504160"</script>
 <script src="./support.js"></script>
 </head>
 <body>
@@ -392,6 +392,19 @@ class Component extends DCLogic {
     this.nota(ctx, t, 320, 0.17, 0.11, 'triangle');
     this.nota(ctx, t + 0.14, 240, 0.28, 0.1, 'triangle');
   }
+  consultarPremio(pr, byId) {
+    const d = this.state.data || {}, wa = d.whatsapp || {};
+    if (!wa.url || !pr) return;
+    const prod = byId[pr.productId] || {};
+    const f = new Date(pr.wonAt);
+    const texto = [
+      'Hola, gané en la tragamonedas de la web.',
+      'Salieron tres: ' + (prod.brandLabel ? prod.brandLabel + ' ' + prod.name : 'un producto') + '.',
+      'Código: ' + (pr.code || 'sin código') + ' · ' + f.getDate() + '/' + (f.getMonth() + 1) + '/' + f.getFullYear(),
+      '¿Cuál es mi premio secreto?'
+    ].join(String.fromCharCode(10));
+    try { window.open(wa.url + '?text=' + encodeURIComponent(texto), '_blank', 'noopener,noreferrer'); } catch (e) {}
+  }
   hoyISO() { return new Date().toISOString().slice(0, 10); }
   premioValido(pr, byId) {
     if (!pr || !pr.productId || !byId[pr.productId]) return null;
@@ -438,13 +451,16 @@ class Component extends DCLogic {
                        slotResult: { win: gana, productId: prods[idx[0]].id } };
       if (gana) {
         const ahora = Date.now();
-        cambio.slotPrize = { productId: prods[idx[0]].id, pct: cfg.discountPct,
-                             wonAt: ahora, expiresAt: ahora + (cfg.prizeDays || 7) * 86400000 };
+        cambio.slotPrize = {
+          productId: prods[idx[0]].id, wonAt: ahora,
+          expiresAt: ahora + (cfg.prizeDays || 7) * 86400000,
+          code: 'LUME-' + Math.random().toString(36).slice(2, 6).toUpperCase()
+        };
       }
       this.setState(cambio);
       if (this._snapT) clearTimeout(this._snapT);
       this._snapT = setTimeout(() => { this._snapT = null; this.setState({ slotSnap: false }); }, 80);
-      if (gana) { this.sonarPremio(); this.flash('¡Ganaste ' + cfg.discountPct + '% en ' + prods[idx[0]].name + '!'); }
+      if (gana) { this.sonarPremio(); this.flash('¡Ganaste! Descubrí tu premio secreto.'); }
       else this.sonarNada();
     }, 2950);
   }
@@ -522,7 +538,7 @@ class Component extends DCLogic {
     const wa = d.whatsapp || { display: '', url: '' };
     const openWhatsapp = () => { if (wa.url) { try { window.open(wa.url, '_blank', 'noopener,noreferrer'); } catch (e) {} } };
 
-    const slCfg = Object.assign({ title: '', text: '', discountPct: 20, spinsPerDay: 100, prizeDays: 7 }, d.slot || {});
+    const slCfg = Object.assign({ title: '', text: '', spinsPerDay: 100, prizeDays: 7 }, d.slot || {});
     const usados = this.girosUsados();
     const restantes = Math.max(0, slCfg.spinsPerDay - usados);
     const premio = this.premioValido(s.slotPrize, byId);
@@ -536,9 +552,9 @@ class Component extends DCLogic {
 
     let mensaje = '', colorMsg = '#6f5650';
     if (s.slotSpinning) mensaje = '';
-    else if (res && res.win) { mensaje = '\u00a1Tres iguales! Ganaste ' + slCfg.discountPct + '% en ' + (byId[res.productId] || {}).name + '.'; colorMsg = '#7a3f34'; }
+    else if (res && res.win) { mensaje = '\u00a1Tres iguales! Ya ten\u00e9s un premio secreto esperando.'; colorMsg = '#7a3f34'; }
     else if (res) mensaje = 'Esta vez no salieron tres iguales.';
-    else if (premio) { mensaje = 'Ten\u00e9s un premio guardado: ' + premio.pct + '% en ' + (byId[premio.productId] || {}).name + ', hasta el ' + fecha(premio.expiresAt) + '.'; colorMsg = '#7a3f34'; }
+    else if (premio) { mensaje = 'Ten\u00e9s un premio secreto sin descubrir, hasta el ' + fecha(premio.expiresAt) + '.'; colorMsg = '#7a3f34'; }
 
     const slot = {
       title: slCfg.title, text: slCfg.text,
@@ -548,8 +564,9 @@ class Component extends DCLogic {
       hasMessage: !!mensaje, message: mensaje,
       messageStyle: { margin: 0, maxWidth: '44ch', fontSize: '13px', lineHeight: 1.55, color: colorMsg },
       hasPrizeActions: !!premio,
-      addLabel: premio ? 'AGREGAR CON ' + premio.pct + '% OFF' : '',
-      addPrize: () => { if (premio) this.addToCart(premio.productId, 1); },
+      prizeHint: 'Descubrí tu premio secreto acá',
+      askLabel: 'DESCUBRIR MI PREMIO',
+      askPrize: () => this.consultarPremio(premio, byId),
       openPrize: () => { if (premio) this.go('product', { productId: premio.productId, qty: 1 }); },
       soundOn: s.soundOn,
       soundLabel: s.soundOn ? 'SONIDO ACTIVADO' : 'SONIDO SILENCIADO',
@@ -663,7 +680,7 @@ class Component extends DCLogic {
     const IG_BASE = 326, IG_BASE_H = 530, IG_GAP = 9;
     const igPad = w < 640 ? 14 : Math.min(38, Math.max(18, w * 0.025));
     const igInner = Math.max(240, Math.min(w - 2 * igPad, 1180));
-    const igCols = igInner < 700 ? 2 : igInner < 1100 ? 3 : 4;
+    const igCols = igInner < 700 ? 2 : 4;   // 4 posts: 2x2 o una sola fila, sin huerfanos
     const igColW = Math.floor((igInner - IG_GAP * (igCols - 1)) / igCols);
     const igScale = Math.min(1, igColW / IG_BASE);
     const igH = Math.round(IG_BASE_H * igScale);
@@ -745,25 +762,18 @@ class Component extends DCLogic {
         open: () => this.go('product', { productId: id, qty: 1 }) };
     });
     const allPriced = items.length > 0 && Object.keys(s.cart).filter(id => byId[id]).every(id => byId[id].price != null);
-    const bruto = allPriced ? Object.keys(s.cart).filter(id => byId[id]).reduce((a, id) => a + byId[id].price * s.cart[id], 0) : 0;
-    const premioEnCarro = premio && s.cart[premio.productId] && byId[premio.productId].price != null ? premio : null;
-    const rebaja = premioEnCarro ? Math.round(byId[premioEnCarro.productId].price * premioEnCarro.pct / 100) : 0;
-    const sum = Math.max(0, bruto - (allPriced ? rebaja : 0));
+    const sum = allPriced ? Object.keys(s.cart).filter(id => byId[id]).reduce((a, id) => a + byId[id].price * s.cart[id], 0) : 0;
     const cart = {
       open: s.cartOpen, close: () => this.setState({ cartOpen: false }), goShop: nav.goShop,
       items, count: cartCount, isEmpty: items.length === 0, hasItems: items.length > 0,
       subtotalLabel: allPriced ? this.money(sum, d.currency) : '—',
       hasSubtotalNote: !allPriced, subtotalNote: 'El subtotal se mostrará cuando los precios estén configurados.',
-      hasPrize: !!premioEnCarro && allPriced,
-      prizeLabel: premioEnCarro ? 'Premio de la tragamonedas · ' + premioEnCarro.pct + '% en ' + byId[premioEnCarro.productId].name : '',
-      prizeAmount: premioEnCarro ? '− ' + this.money(rebaja, d.currency) : '',
       buy: () => {
         const message = [
           'Hola, quiero consultar y confirmar esta compra:',
           '',
           ...items.map(it => '- ' + it.title + ' (' + it.size + ') x ' + it.qty + ' — ' + it.priceLabel),
           '',
-          ...(premioEnCarro ? ['Premio de la tragamonedas: ' + premioEnCarro.pct + '% en ' + byId[premioEnCarro.productId].name + ' (− ' + this.money(rebaja, d.currency) + ')'] : []),
           'Subtotal: ' + (allPriced ? this.money(sum, d.currency) : 'a confirmar'),
           '¿Podemos coordinar la compra?'
         ].join('\n');
