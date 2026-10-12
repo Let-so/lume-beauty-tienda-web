@@ -401,6 +401,15 @@
       ]
     },
     {
+      "id": "tragamonedas",
+      "title": "La tragamonedas",
+      "body": [
+        "Si los tres rodillos coinciden, ganás un 20% de descuento sobre una unidad de ese producto.",
+        "El premio vale 7 días desde que lo ganás.",
+        "Se aplica al confirmar la compra con nosotras. No se acumula con otras promociones."
+      ]
+    },
+    {
       "id": "contacto",
       "title": "Contacto",
       "body": [
@@ -435,12 +444,7 @@
     "text": "Si los tres carteles coinciden, te llevás ese producto con 20% de descuento.",
     "discountPct": 20,
     "winChance": 0.12,
-    "spinsPerDay": 3,
-    "prizeDays": 7,
-    "terms": [
-      "Hasta 3 giros por día, desde este navegador.",
-      "El premio es de un 20% sobre una unidad del producto que salga, y vale 7 días.",
-      "Se aplica al confirmar la compra con nosotras. No se acumula con otras promociones."
-    ]
+    "spinsPerDay": 100,
+    "prizeDays": 7
   }
 }

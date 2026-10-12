@@ -3,7 +3,7 @@
 <head>
 <meta charset="utf-8">
 <meta name="viewport" content="width=device-width, initial-scale=1">
-<script>window.__DC_BUILD="25077a49f9"</script>
+<script>window.__DC_BUILD="ae34c5e7a7"</script>
 <script src="./support.js"></script>
 </head>
 <body>
@@ -526,7 +526,7 @@ class Component extends DCLogic {
     const wa = d.whatsapp || { display: '', url: '' };
     const openWhatsapp = () => { if (wa.url) { try { window.open(wa.url, '_blank', 'noopener,noreferrer'); } catch (e) {} } };
 
-    const slCfg = Object.assign({ title: '', text: '', discountPct: 20, spinsPerDay: 3, prizeDays: 7, terms: [] }, d.slot || {});
+    const slCfg = Object.assign({ title: '', text: '', discountPct: 20, spinsPerDay: 100, prizeDays: 7 }, d.slot || {});
     const tile = w < 420 ? 68 : w < 760 ? 84 : 98;
     const hueco = Math.round(tile * 0.09);
     const relleno = Math.round(tile * 0.26);
@@ -549,10 +549,8 @@ class Component extends DCLogic {
     const slot = {
       title: slCfg.title, text: slCfg.text,
       spin: () => this.girar(), disabled: bloqueado,
-      buttonLabel: s.slotSpinning ? 'GIRANDO…' : restantes === 0 ? 'VOLVÉ MAÑANA' : 'GIRAR',
-      spinsLeftLabel: !s.data ? 'CARGANDO…' : restantes === 1 ? 'TE QUEDA 1 GIRO HOY' : 'TE QUEDAN ' + restantes + ' GIROS HOY',
+      buttonLabel: s.slotSpinning ? 'GIRANDO…' : restantes === 0 ? 'VOLVÉ MÁS TARDE' : 'GIRAR',
       screenLabel: s.slotSpinning ? 'Girando' : 'Tragamonedas Lumé',
-      terms: (slCfg.terms || []).map(t => ({ text: t })),
       hasMessage: !!mensaje, message: mensaje,
       messageStyle: { margin: 0, maxWidth: '40ch', fontSize: '13px', lineHeight: 1.55, color: estiloMsg },
       hasPrizeActions: !!premio,
