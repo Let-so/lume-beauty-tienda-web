@@ -7,12 +7,12 @@
 </head>
 <body>
 <x-dc>
-<section data-screen-label="Marcas" style="padding:clamp(40px,5vw,72px) clamp(18px,2.5vw,38px) clamp(46px,5.5vw,80px);background:#f3eae4;border-top:1px solid #e3d4ca;font-family:'Jost',sans-serif;color:#3f2a26">
+<section data-screen-label="Marcas" style="padding:clamp(42px,5vw,72px) clamp(18px,2.5vw,38px);background:#f3eae4;border-top:1px solid #e3d4ca;font-family:'Jost',sans-serif;color:#3f2a26">
   <div style="display:flex;flex-wrap:wrap;justify-content:space-between;align-items:baseline;gap:12px 20px">
     <h2 style="margin:0;font-weight:400;font-size:12.5px;letter-spacing:0.2em">MARCAS DEL CATÁLOGO</h2>
     <button onClick="{{ br.viewAll }}" style="background:none;border:0;padding:4px 0;font-size:10px;letter-spacing:0.16em;color:#3f2a26;white-space:nowrap" style-hover="color:#a87a6e">VER TODAS LAS MARCAS&nbsp;&nbsp;→</button>
   </div>
-  <div style="display:grid;grid-template-columns:repeat(auto-fit,minmax(min(100%,150px),1fr));gap:clamp(8px,2vw,28px);margin-top:clamp(16px,2.4vw,30px)">
+  <div style="display:grid;grid-template-columns:repeat(3,minmax(0,1fr));gap:clamp(8px,2vw,28px);margin-top:clamp(16px,2.4vw,30px);max-width:720px;margin-left:auto;margin-right:auto">
     <sc-for list="{{ br.items }}" as="b" hint-placeholder-count="3">
       <button onClick="{{ b.open }}" aria-label="{{ b.ariaLabel }}" style="display:block;width:100%;background:none;border:0;padding:0;cursor:pointer">
         <span style="position:relative;display:block;width:100%;aspect-ratio:1 / 1">

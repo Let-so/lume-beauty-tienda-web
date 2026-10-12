@@ -7,7 +7,7 @@
 </head>
 <body>
 <x-dc>
-<section data-screen-label="Categorías" aria-label="Categorías" style="background:#f3eae4;padding:clamp(24px,3vw,40px) clamp(14px,2.5vw,38px) clamp(26px,3.2vw,44px);font-family:'Jost',sans-serif;color:#3f2a26">
+<section data-screen-label="Categorías" aria-label="Categorías" style="background:#f3eae4;padding:clamp(20px,2.6vw,30px) clamp(18px,2.5vw,38px);font-family:'Jost',sans-serif;color:#3f2a26">
   <div style="max-width:1180px;margin:0 auto;display:flex;flex-wrap:wrap;justify-content:center;align-items:flex-start;gap:clamp(16px,4vw,54px)">
     <sc-for list="{{ c.items }}" as="it" hint-placeholder-count="3">
       <button onClick="{{ it.open }}" aria-label="{{ it.ariaLabel }}" style="background:none;border:0;padding:0;display:flex;flex-direction:column;align-items:center;gap:10px;width:clamp(82px,22vw,128px);cursor:pointer;color:#3f2a26">

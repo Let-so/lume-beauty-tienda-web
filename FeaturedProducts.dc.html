@@ -7,7 +7,7 @@
 </head>
 <body>
 <x-dc>
-<section data-screen-label="Productos destacados" style="padding:clamp(34px,4vw,56px) 0 clamp(40px,5vw,64px);background:#f3eae4;font-family:'Jost',sans-serif;color:#3f2a26">
+<section data-screen-label="Productos destacados" style="padding:clamp(42px,5vw,72px) 0;background:#f3eae4;font-family:'Jost',sans-serif;color:#3f2a26">
   <div style="display:flex;justify-content:space-between;align-items:baseline;gap:16px;padding:0 clamp(18px,2.5vw,38px) 6px">
     <h2 style="margin:0;font-weight:400;font-size:12.5px;letter-spacing:0.2em">PRODUCTOS DESTACADOS</h2>
     <button onClick="{{ fp.viewAll }}" style="background:none;border:0;padding:4px 0;font-size:10px;letter-spacing:0.16em;color:#3f2a26;white-space:nowrap" style-hover="color:#a87a6e">VER TODO&nbsp;&nbsp;→</button>
@@ -18,7 +18,7 @@
     <div style="overflow-x:auto;scroll-snap-type:x mandatory;scrollbar-width:none;-webkit-overflow-scrolling:touch;padding:0 clamp(18px,2.5vw,38px) 6px;scroll-padding:0 clamp(18px,2.5vw,38px)">
       <div style="{{ fp.railStyle }}">
         <sc-for list="{{ fp.products }}" as="p" hint-placeholder-count="7">
-          <div style="scroll-snap-align:start;min-width:0">
+          <div style="scroll-snap-align:start;min-width:0;height:100%">
             <dc-import name="ProductCard" product="{{ p }}" hint-size="100%,370px"></dc-import>
           </div>
         </sc-for>

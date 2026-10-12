@@ -24,10 +24,7 @@
     <span style="font-size:11px;line-height:1.35;color:#8a6d65">{{ product.size }}</span>
     <sc-if value="{{ product.hasPrice }}"><span style="margin-top:7px;font-family:'Cormorant Garamond',serif;font-size:23px;line-height:1;letter-spacing:0.01em;color:#4a231f">{{ product.priceLabel }}</span></sc-if>
   </div>
-  <div style="margin:13px 4px 0;display:flex;flex-direction:column;gap:7px">
-    <button onClick="{{ product.add }}" style="height:38px;border:0;border-radius:999px;background:#b38d83;color:#fdf8f5;font-family:'Jost',sans-serif;font-size:9.5px;letter-spacing:0.2em;transition:background .25s" style-hover="background:#a07a70">{{ product.addLabel }}</button>
-    <button onClick="{{ product.open }}" style="height:28px;border:0;background:none;color:#8a6d65;font-family:'Jost',sans-serif;font-size:9.5px;letter-spacing:0.16em;text-decoration:underline;text-underline-offset:3px" style-hover="color:#4a231f">VER FICHA&nbsp;&nbsp;→</button>
-  </div>
+  <button onClick="{{ product.add }}" style="margin:13px 4px 0;height:38px;border:0;border-radius:999px;background:#b38d83;color:#fdf8f5;font-family:'Jost',sans-serif;font-size:9.5px;letter-spacing:0.2em;transition:background .25s" style-hover="background:#a07a70">{{ product.addLabel }}</button>
 </article>
 </x-dc>
 <script type="text/x-dc" data-dc-script data-props="{&quot;$preview&quot;:{&quot;width&quot;:220,&quot;height&quot;:380},&quot;product&quot;:{&quot;editor&quot;:null,&quot;tsType&quot;:&quot;object&quot;}}"></script>

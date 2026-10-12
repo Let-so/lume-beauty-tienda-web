@@ -3,7 +3,7 @@
 <head>
 <meta charset="utf-8">
 <meta name="viewport" content="width=device-width, initial-scale=1">
-<script>window.__DC_BUILD="b7783cff7d"</script>
+<script>window.__DC_BUILD="3c9dd82049"</script>
 <script src="./support.js"></script>
 </head>
 <body>
@@ -28,6 +28,7 @@ input{font-family:inherit}
 input::placeholder{color:#6f5650;letter-spacing:0.12em}
 :focus-visible{outline:1px solid #a87a6e;outline-offset:3px}
 ::selection{background:#e2c9bd}
+[data-sc-name="ProductCard"]{height:100%}
 </style>
 </helmet>
 <div style="min-height:100vh;background:#f3eae4;display:flex;flex-direction:column">
@@ -43,10 +44,9 @@ input::placeholder{color:#6f5650;letter-spacing:0.12em}
       <dc-import name="CategoryBanners" c="{{ categories }}" hint-size="100%,170px"></dc-import>
       <dc-import name="SlotMachine" sl="{{ slot }}" hint-size="100%,520px"></dc-import>
       <dc-import name="FeaturedProducts" fp="{{ featured }}" hint-size="100%,440px"></dc-import>
-      <dc-import name="CollectionStrip" co="{{ collections }}" hint-size="100%,420px"></dc-import>
       <dc-import name="BrandStrip" br="{{ brandStrip }}" hint-size="100%,220px"></dc-import>
 
-      <section data-screen-label="Garantía" style="padding:clamp(48px,6vw,88px) clamp(18px,2.5vw,38px);border-top:1px solid #e3d4ca;display:flex;flex-direction:column;align-items:center;text-align:center;gap:16px">
+      <section data-screen-label="Garantía" style="padding:clamp(42px,5vw,72px) clamp(18px,2.5vw,38px);border-top:1px solid #e3d4ca;display:flex;flex-direction:column;align-items:center;text-align:center;gap:16px">
         <span style="font-size:11px;letter-spacing:0.3em;color:#8a6d65">GARANTÍA LUMÉ</span>
         <h2 style="margin:0;max-width:16ch;font-family:'Cormorant Garamond',serif;font-weight:500;font-size:clamp(34px,4.6vw,70px);line-height:1;letter-spacing:-0.01em;color:#4a231f;text-wrap:balance">{{ guarantee.title }}</h2>
         <p style="margin:0;max-width:54ch;font-size:13.5px;line-height:1.65;color:#6f5650">{{ guarantee.text }}</p>
@@ -57,14 +57,11 @@ input::placeholder{color:#6f5650;letter-spacing:0.12em}
     </sc-if>
 
     <sc-if value="{{ isCatalog }}">
-      <section data-screen-label="Catálogo" style="padding:clamp(28px,4vw,56px) clamp(18px,2.5vw,38px) clamp(48px,6vw,88px)">
+      <section data-screen-label="Catálogo" style="padding:clamp(26px,3.2vw,44px) clamp(18px,2.5vw,38px) clamp(42px,5vw,72px)">
         <nav aria-label="Ruta" style="display:flex;gap:8px;font-size:10px;letter-spacing:0.16em;color:#8a6d65">
           <button onClick="{{ goHome }}" style="background:none;border:0;padding:0;font-size:10px;letter-spacing:0.16em;color:#8a6d65" style-hover="color:#4a231f">INICIO</button><span>/</span><span>SHOP</span>
         </nav>
         <h1 style="margin:14px 0 0;font-family:'Cormorant Garamond',serif;font-weight:500;font-size:clamp(38px,4vw,58px);line-height:1;color:#4a231f">{{ catalog.title }}</h1>
-        <sc-if value="{{ catalog.hasNote }}">
-          <p style="margin:10px 0 0;max-width:52ch;font-size:13px;line-height:1.55;color:#6f5650">{{ catalog.note }}</p>
-        </sc-if>
         <sc-if value="{{ catalog.hasQuery }}">
           <div style="margin-top:12px;display:flex;flex-wrap:wrap;align-items:baseline;gap:6px 14px;font-size:13px;color:#6f5650">
             <span>Resultados para “{{ catalog.query }}”</span>
@@ -77,9 +74,6 @@ input::placeholder{color:#6f5650;letter-spacing:0.12em}
           </sc-for>
           <sc-if value="{{ catalog.hasBrand }}">
             <button onClick="{{ catalog.clearBrand }}" aria-label="Quitar filtro de marca" style="height:36px;padding:0 16px;border-radius:999px;border:1px solid #b38d83;background:#ecdcd3;color:#4a3530;font-size:10px;letter-spacing:0.14em">{{ catalog.brandChip }}&nbsp;&nbsp;×</button>
-          </sc-if>
-          <sc-if value="{{ catalog.hasColl }}">
-            <button onClick="{{ catalog.clearColl }}" aria-label="Quitar agrupación" style="height:36px;padding:0 16px;border-radius:999px;border:1px solid #b38d83;background:#ecdcd3;color:#4a3530;font-size:10px;letter-spacing:0.14em">{{ catalog.collChip }}&nbsp;&nbsp;×</button>
           </sc-if>
         </div>
         <p style="margin:22px 0 18px;font-size:10.5px;letter-spacing:0.16em;color:#8a6d65">{{ catalog.countLabel }}</p>
@@ -98,7 +92,7 @@ input::placeholder{color:#6f5650;letter-spacing:0.12em}
     </sc-if>
 
     <sc-if value="{{ isFavs }}">
-      <section data-screen-label="Favoritos" style="padding:clamp(28px,4vw,56px) clamp(18px,2.5vw,38px) clamp(48px,6vw,88px)">
+      <section data-screen-label="Favoritos" style="padding:clamp(26px,3.2vw,44px) clamp(18px,2.5vw,38px) clamp(42px,5vw,72px)">
         <nav aria-label="Ruta" style="display:flex;gap:8px;font-size:10px;letter-spacing:0.16em;color:#8a6d65">
           <button onClick="{{ goHome }}" style="background:none;border:0;padding:0;font-size:10px;letter-spacing:0.16em;color:#8a6d65" style-hover="color:#4a231f">INICIO</button><span>/</span><span>FAVORITOS</span>
         </nav>
@@ -127,7 +121,7 @@ input::placeholder{color:#6f5650;letter-spacing:0.12em}
     </sc-if>
 
     <sc-if value="{{ isProduct }}">
-      <section data-screen-label="Ficha de producto" style="padding:clamp(24px,3.5vw,48px) clamp(18px,2.5vw,38px) clamp(48px,6vw,88px)">
+      <section data-screen-label="Ficha de producto" style="padding:clamp(26px,3.2vw,44px) clamp(18px,2.5vw,38px) clamp(42px,5vw,72px)">
         <nav aria-label="Ruta" style="display:flex;flex-wrap:wrap;gap:8px;font-size:10px;letter-spacing:0.16em;color:#8a6d65">
           <button onClick="{{ goHome }}" style="background:none;border:0;padding:0;font-size:10px;letter-spacing:0.16em;color:#8a6d65" style-hover="color:#4a231f">INICIO</button><span>/</span>
           <button onClick="{{ pd.goCat }}" style="background:none;border:0;padding:0;font-size:10px;letter-spacing:0.16em;color:#8a6d65;text-transform:uppercase" style-hover="color:#4a231f">{{ pd.crumbCat }}</button><span>/</span>
@@ -199,10 +193,10 @@ input::placeholder{color:#6f5650;letter-spacing:0.12em}
     </sc-if>
 
     <sc-if value="{{ isBrands }}">
-      <section data-screen-label="Marcas" style="padding:clamp(28px,4vw,56px) clamp(18px,2.5vw,38px) clamp(48px,6vw,88px)">
+      <section data-screen-label="Marcas" style="padding:clamp(26px,3.2vw,44px) clamp(18px,2.5vw,38px) clamp(42px,5vw,72px)">
         <h1 style="margin:0;font-family:'Cormorant Garamond',serif;font-weight:500;font-size:clamp(38px,4vw,58px);line-height:1;color:#4a231f">Marcas</h1>
         <p style="margin:14px 0 0;max-width:50ch;font-size:13px;line-height:1.55;color:#6f5650">Estas son las marcas que hoy tenemos en el catálogo.</p>
-        <div style="display:grid;grid-template-columns:repeat(auto-fit,minmax(min(100%,300px),1fr));gap:13px;margin-top:30px">
+        <div style="display:grid;grid-template-columns:repeat(auto-fit,minmax(min(45%,250px),1fr));gap:clamp(10px,2vw,22px);margin-top:clamp(22px,2.6vw,32px)">
           <sc-for list="{{ brands }}" as="b" hint-placeholder-count="3">
             <button onClick="{{ b.open }}" aria-label="{{ b.ariaLabel }}" style="border:0;background:none;padding:10px 6px 4px;display:flex;flex-direction:column;align-items:center;gap:18px;color:#3f2a26;cursor:pointer">
               <span style="position:relative;display:block;width:100%;aspect-ratio:1 / 1;max-height:280px">
@@ -216,7 +210,7 @@ input::placeholder{color:#6f5650;letter-spacing:0.12em}
     </sc-if>
 
 <sc-if value="{{ isHelp }}">
-      <section data-screen-label="Ayuda" style="padding:clamp(28px,4vw,56px) clamp(18px,2.5vw,38px) clamp(56px,7vw,100px)">
+      <section data-screen-label="Ayuda" style="padding:clamp(26px,3.2vw,44px) clamp(18px,2.5vw,38px) clamp(42px,5vw,72px)">
         <nav aria-label="Ruta" style="display:flex;gap:8px;font-size:10px;letter-spacing:0.16em;color:#8a6d65">
           <button onClick="{{ goHome }}" style="background:none;border:0;padding:0;font-size:10px;letter-spacing:0.16em;color:#8a6d65" style-hover="color:#4a231f">INICIO</button><span>/</span><span>AYUDA</span>
         </nav>
@@ -244,23 +238,14 @@ input::placeholder{color:#6f5650;letter-spacing:0.12em}
 </x-dc>
 <script type="text/x-dc" data-dc-script>
 class Component extends DCLogic {
-  state = { data: null, view: 'home', cat: 'all', brand: null, coll: null, productId: null, query: '', cart: {}, favs: {}, cartOpen: false, menuOpen: false, searchOpen: false, qty: 1, announceIndex: 0, toast: null, helpTopic: null,
-    slotSpinning: false, soundOn: true, slotSymbols: [], slot3dReady: false, slotResult: null, slotPlays: null, slotPrize: null, w: typeof window !== 'undefined' ? window.innerWidth : 1440 };
+  state = { data: null, view: 'home', cat: 'all', brand: null, productId: null, query: '', cart: {}, favs: {}, cartOpen: false, menuOpen: false, searchOpen: false, qty: 1, announceIndex: 0, toast: null, helpTopic: null,
+    slotSpinning: false, slotSnap: false, soundOn: true, slotOffsets: [0, 2, 4], slotResult: null, slotPlays: null, slotPrize: null, w: typeof window !== 'undefined' ? window.innerWidth : 1440 };
 
   componentDidMount() {
     this._r = () => this.setState({ w: window.innerWidth });
     this._k = e => { if (e.key === 'Escape') this.setState({ cartOpen: false, menuOpen: false }); };
     window.addEventListener('resize', this._r);
     window.addEventListener('keydown', this._k);
-    // la maquina 3D vive en un iframe: avisa cuando esta lista y cuando el
-    // visitante toca su propio boton o la palanca
-    this._msg = e => {
-      const m = e.data;
-      if (!m || m.fuente !== 'lume-slot') return;
-      if (m.tipo === 'listo') this.setState({ slotSymbols: m.simbolos || [], slot3dReady: true });
-      if (m.tipo === 'pedido') this.girar();
-    };
-    window.addEventListener('message', this._msg);
     try { const g = JSON.parse(localStorage.getItem('lume_store_v1') || '{}'); this.setState({ cart: g.cart || {}, favs: g.favs || {}, slotPlays: g.slotPlays || null, slotPrize: g.slotPrize || null, soundOn: g.soundOn !== false }); } catch (e) {}
     fetch('data/catalog.json?v=' + (window.__DC_BUILD || '')).then(r => r.json()).then(data => {
       this.setState({ data });
@@ -271,10 +256,10 @@ class Component extends DCLogic {
   componentWillUnmount() {
     window.removeEventListener('resize', this._r);
     window.removeEventListener('keydown', this._k);
-    window.removeEventListener('message', this._msg);
     if (this._ann) { clearInterval(this._ann); this._ann = null; }
     if (this._toastT) { clearTimeout(this._toastT); this._toastT = null; }
     if (this._slotT) { clearTimeout(this._slotT); this._slotT = null; }
+    if (this._snapT) { clearTimeout(this._snapT); this._snapT = null; }
     if (this._ctx) { try { this._ctx.close(); } catch (e) {} this._ctx = null; this._master = null; this._nb = null; }
   }
   componentDidUpdate() {
@@ -407,12 +392,6 @@ class Component extends DCLogic {
     this.nota(ctx, t, 320, 0.17, 0.11, 'triangle');
     this.nota(ctx, t + 0.14, 240, 0.28, 0.1, 'triangle');
   }
-  enviarGiro(stops) {
-    try {
-      const fr = document.querySelector('[data-screen-label="Tragamonedas"] iframe');
-      if (fr && fr.contentWindow) fr.contentWindow.postMessage({ tipo: 'girar', stops }, '*');
-    } catch (e) {}
-  }
   hoyISO() { return new Date().toISOString().slice(0, 10); }
   premioValido(pr, byId) {
     if (!pr || !pr.productId || !byId[pr.productId]) return null;
@@ -446,25 +425,25 @@ class Component extends DCLogic {
       slotSpinning: true, slotResult: null,
       slotPlays: { date: this.hoyISO(), used: this.girosUsados() + 1 }
     });
-    // traducir el indice del catalogo al hueco que usa la maquina 3D
-    const simbolos = this.state.slotSymbols || [];
-    this.enviarGiro(idx.map(k => {
-      const j = simbolos.indexOf(prods[k].slotSymbol);
-      return j >= 0 ? j : k;
-    }));
+    // cada rodillo da unas vueltas y frena en su simbolo; despues se reposiciona
+    // sin transicion para que la tira no crezca indefinidamente
+    this.setState({ slotOffsets: idx.map((k, i) => (3 + i) * n + k) });
     // se llama dentro del click: el navegador solo deja sonar tras un gesto
     this.sonarGiro([2.3, 2.55, 2.8]);
 
     if (this._slotT) clearTimeout(this._slotT);
     this._slotT = setTimeout(() => {
       this._slotT = null;
-      const cambio = { slotSpinning: false, slotResult: { win: gana, productId: prods[idx[0]].id } };
+      const cambio = { slotSpinning: false, slotSnap: true, slotOffsets: idx.slice(),
+                       slotResult: { win: gana, productId: prods[idx[0]].id } };
       if (gana) {
         const ahora = Date.now();
         cambio.slotPrize = { productId: prods[idx[0]].id, pct: cfg.discountPct,
                              wonAt: ahora, expiresAt: ahora + (cfg.prizeDays || 7) * 86400000 };
       }
       this.setState(cambio);
+      if (this._snapT) clearTimeout(this._snapT);
+      this._snapT = setTimeout(() => { this._snapT = null; this.setState({ slotSnap: false }); }, 80);
       if (gana) { this.sonarPremio(); this.flash('¡Ganaste ' + cfg.discountPct + '% en ' + prods[idx[0]].name + '!'); }
       else this.sonarNada();
     }, 2950);
@@ -493,7 +472,7 @@ class Component extends DCLogic {
 
   renderVals() {
     const s = this.state, w = s.w;
-    const d = s.data || { products: [], categories: [], brands: [], homeBanners: [], announcements: [], benefits: [], collections: [], tips: [], help: [], instagramGallery: [], currency: 'ARS' };
+    const d = s.data || { products: [], categories: [], brands: [], homeBanners: [], announcements: [], benefits: [], tips: [], help: [], instagramGallery: [], currency: 'ARS' };
     const products = d.products, byId = {};
     products.forEach(p => { byId[p.id] = p; });
     const catLabel = id => { const c = d.categories.find(x => x.id === id); return c ? c.label : id; };
@@ -503,8 +482,8 @@ class Component extends DCLogic {
 
     const nav = {
       goHome: go('home'),
-      goShop: go('catalog', { cat: 'all', brand: null, coll: null, query: '' }),
-      goPerfumes: go('catalog', { cat: 'perfumes-body-mist', brand: null, coll: null, query: '' }),
+      goShop: go('catalog', { cat: 'all', brand: null, query: '' }),
+      goPerfumes: go('catalog', { cat: 'perfumes-body-mist', brand: null, query: '' }),
       goBrands: go('brands'), goFavs: go('favs'),
       goHelp: topic => go('help', { helpTopic: topic || null })
     };
@@ -521,9 +500,9 @@ class Component extends DCLogic {
       isDesktop: w >= 1024, isCompact: w < 1024, query: s.query, cartCount,
       favCount, favFill: favCount ? '#b38d83' : 'none',
       goHelp: nav.goHelp(null),
-      cats: d.categories.map(c => ({ label: c.label.toUpperCase(), open: go('catalog', { cat: c.id, brand: null, coll: null, query: '' }) })),
+      cats: d.categories.map(c => ({ label: c.label.toUpperCase(), open: go('catalog', { cat: c.id, brand: null, query: '' }) })),
       menuOpen: s.menuOpen, menuClosed: !s.menuOpen, searchOpen: s.searchOpen,
-      onQuery: e => { const v = e.target.value; const x = { query: v }; if (v.trim() && this.state.view !== 'catalog') Object.assign(x, { view: 'catalog', cat: 'all', brand: null, coll: null, menuOpen: false }); this.setState(x); },
+      onQuery: e => { const v = e.target.value; const x = { query: v }; if (v.trim() && this.state.view !== 'catalog') Object.assign(x, { view: 'catalog', cat: 'all', brand: null, menuOpen: false }); this.setState(x); },
       onKey: e => { if (e.key === 'Enter') this.go('catalog', { searchOpen: false }); },
       onSearch: () => this.go('catalog'),
       openCart: () => this.setState({ cartOpen: true, menuOpen: false }),
@@ -536,36 +515,38 @@ class Component extends DCLogic {
     const categories = {
       items: d.homeBanners.map(b => ({
         image: b.image, label: b.label, ariaLabel: 'Ver ' + b.label,
-        open: b.view === 'brands' ? nav.goBrands : go('catalog', { cat: b.cat, brand: null, coll: null, query: '' })
+        open: b.view === 'brands' ? nav.goBrands : go('catalog', { cat: b.cat, brand: null, query: '' })
       }))
     };
 
     const wa = d.whatsapp || { display: '', url: '' };
     const openWhatsapp = () => { if (wa.url) { try { window.open(wa.url, '_blank', 'noopener,noreferrer'); } catch (e) {} } };
 
-    const slCfg = Object.assign({ title: '', text: '', discountPct: 20, spinsPerDay: 100, prizeDays: 7, frame: 'web/tragamonedas.html' }, d.slot || {});
+    const slCfg = Object.assign({ title: '', text: '', discountPct: 20, spinsPerDay: 100, prizeDays: 7 }, d.slot || {});
     const usados = this.girosUsados();
     const restantes = Math.max(0, slCfg.spinsPerDay - usados);
     const premio = this.premioValido(s.slotPrize, byId);
     const res = s.slotResult;
     const bloqueado = !s.data || s.slotSpinning || restantes === 0;
     const fecha = t => { const x = new Date(t); return x.getDate() + '/' + (x.getMonth() + 1); };
+    const angosto = w < 620, tile = angosto ? 74 : w < 900 ? 88 : 104;
+    const hueco = Math.round(tile * 0.08), oro = '#d9a87f', oroClaro = '#f0cba6';
+    const tira = [];
+    for (let i = 0; i < 8; i++) products.forEach(pp2 => tira.push({ image: pp2.image }));
 
     let mensaje = '', colorMsg = '#6f5650';
     if (s.slotSpinning) mensaje = '';
-    else if (res && res.win) { mensaje = '¡Tres iguales! Ganaste ' + slCfg.discountPct + '% en ' + (byId[res.productId] || {}).name + '.'; colorMsg = '#7a3f34'; }
+    else if (res && res.win) { mensaje = '\u00a1Tres iguales! Ganaste ' + slCfg.discountPct + '% en ' + (byId[res.productId] || {}).name + '.'; colorMsg = '#7a3f34'; }
     else if (res) mensaje = 'Esta vez no salieron tres iguales.';
-    else if (premio) { mensaje = 'Tenés un premio guardado: ' + premio.pct + '% en ' + (byId[premio.productId] || {}).name + ', hasta el ' + fecha(premio.expiresAt) + '.'; colorMsg = '#7a3f34'; }
+    else if (premio) { mensaje = 'Ten\u00e9s un premio guardado: ' + premio.pct + '% en ' + (byId[premio.productId] || {}).name + ', hasta el ' + fecha(premio.expiresAt) + '.'; colorMsg = '#7a3f34'; }
 
     const slot = {
       title: slCfg.title, text: slCfg.text,
       spin: () => this.girar(), disabled: bloqueado,
-      buttonLabel: s.slotSpinning ? 'GIRANDO…' : restantes === 0 ? 'VOLVÉ MÁS TARDE' : 'GIRAR',
-      frameSrc: slCfg.frame, frameTitle: 'Tragamonedas Lumé en 3D',
-      // el aviso solo aparece si ya jugaron y la maquina nunca dijo estar lista
-      showFallbackNote: !s.slot3dReady && !!res,
+      buttonLabel: s.slotSpinning ? 'GIRANDO\u2026' : restantes === 0 ? 'VOLV\u00c9 M\u00c1S TARDE' : 'SPIN',
+      screenLabel: s.slotSpinning ? 'Girando' : 'Tragamonedas Lum\u00e9',
       hasMessage: !!mensaje, message: mensaje,
-      messageStyle: { margin: 0, maxWidth: '40ch', fontSize: '13px', lineHeight: 1.55, color: colorMsg },
+      messageStyle: { margin: 0, maxWidth: '44ch', fontSize: '13px', lineHeight: 1.55, color: colorMsg },
       hasPrizeActions: !!premio,
       addLabel: premio ? 'AGREGAR CON ' + premio.pct + '% OFF' : '',
       addPrize: () => { if (premio) this.addToCart(premio.productId, 1); },
@@ -577,14 +558,73 @@ class Component extends DCLogic {
         ? 'M4 9.5h3.2L12 5.6v12.8L7.2 14.5H4z M15.4 9.1a4 4 0 0 1 0 5.8 M18 6.6a7.6 7.6 0 0 1 0 10.8'
         : 'M4 9.5h3.2L12 5.6v12.8L7.2 14.5H4z M15.8 9.9l4.4 4.2 M20.2 9.9l-4.4 4.2',
       toggleSound: () => this.setState(x => ({ soundOn: !x.soundOn })),
-      frameStyle: { width: '100%', maxWidth: w < 640 ? '440px' : '700px', margin: 'clamp(16px,2.4vw,30px) auto 0',
-                    aspectRatio: w < 640 ? '1 / 1.04' : '16 / 10' },
-      iframeStyle: { display: 'block', width: '100%', height: '100%', border: 0, background: 'transparent' },
-      buttonStyle: { height: '48px', padding: '0 42px', border: 0, borderRadius: '999px',
-                     background: bloqueado ? '#cfb3a8' : 'linear-gradient(180deg,#c4897a,#a96a5c)',
-                     color: '#fdf8f5', fontFamily: "'Jost',sans-serif", fontSize: '10.5px', letterSpacing: '0.22em',
-                     cursor: bloqueado ? 'default' : 'pointer',
-                     boxShadow: bloqueado ? 'none' : '0 6px 0 #8d5447, 0 14px 22px rgba(92,49,41,0.28)' }
+
+      bannerStyle: {
+        position: 'relative', overflow: 'hidden', boxSizing: 'border-box',
+        maxWidth: '980px', margin: '0 auto',
+        display: 'flex', flexDirection: angosto ? 'column' : 'row',
+        alignItems: 'center', justifyContent: 'center',
+        gap: angosto ? '20px' : 'clamp(26px,3.6vw,52px)',
+        padding: angosto ? '28px 20px 32px' : 'clamp(28px,3.2vw,42px) clamp(34px,4vw,58px)',
+        borderRadius: angosto ? '26px' : '34px',
+        border: '2px solid ' + oro,
+        background: 'linear-gradient(135deg,#fdf4ee 0%,#f7e4da 46%,#f0cfc2 100%)',
+        boxShadow: '0 22px 46px rgba(92,49,41,0.17), inset 0 2px 0 rgba(255,255,255,0.7)'
+      },
+      glowStyle: { position: 'absolute', inset: '6px', borderRadius: angosto ? '20px' : '28px', border: '1px solid ' + oroClaro, pointerEvents: 'none' },
+      textoStyle: {
+        position: 'relative', display: 'flex', flexDirection: 'column',
+        alignItems: angosto ? 'center' : 'flex-start', textAlign: angosto ? 'center' : 'left',
+        gap: '9px', flex: '0 1 auto', minWidth: 0, maxWidth: angosto ? '100%' : '330px'
+      },
+      logoStyle: {
+        display: 'flex', flexDirection: 'column', alignItems: 'center',
+        fontFamily: "'Cormorant Garamond',serif", fontWeight: 500,
+        fontSize: angosto ? '30px' : 'clamp(32px,3vw,42px)', lineHeight: 0.9,
+        letterSpacing: '0.03em', color: '#9c6f66'
+      },
+      logoSubStyle: { fontFamily: "'Jost',sans-serif", fontSize: '8.5px', letterSpacing: '0.58em', paddingLeft: '0.58em', marginTop: '6px', color: '#b98a6e' },
+      tituloStyle: { margin: '6px 0 0', maxWidth: '15ch', fontFamily: "'Cormorant Garamond',serif", fontWeight: 500, fontSize: angosto ? '27px' : 'clamp(28px,2.8vw,40px)', lineHeight: 1.05, letterSpacing: '-0.01em', color: '#4a231f' },
+      textStyle: { margin: 0, maxWidth: '34ch', fontSize: angosto ? '12.5px' : '13.5px', lineHeight: 1.55, color: '#7a5248' },
+
+      maquinaStyle: { position: 'relative', display: 'flex', flexDirection: 'column', alignItems: 'center', gap: 'clamp(14px,1.8vw,20px)', flex: '0 0 auto' },
+      screenStyle: {
+        display: 'flex', gap: hueco + 'px', padding: Math.round(tile * 0.13) + 'px',
+        borderRadius: Math.round(tile * 0.17) + 'px',
+        background: 'linear-gradient(180deg,#fbf0e8,#f0dccf)',
+        border: '2px solid ' + oro,
+        boxShadow: 'inset 0 3px 10px rgba(92,49,41,0.22), 0 6px 16px rgba(92,49,41,0.14)'
+      },
+      windowStyle: {
+        width: tile + 'px', height: tile + 'px', overflow: 'hidden',
+        borderRadius: Math.round(tile * 0.1) + 'px', border: '1px solid ' + oroClaro,
+        boxShadow: 'inset 0 7px 12px rgba(63,42,38,0.20), inset 0 -7px 12px rgba(63,42,38,0.16)'
+      },
+      tileStyle: { display: 'flex', alignItems: 'center', justifyContent: 'center', width: tile + 'px', height: tile + 'px', flex: '0 0 auto', background: '#f1e4da' },
+      reels: [0, 1, 2].map(i => ({
+        items: tira,
+        stripStyle: {
+          display: 'flex', flexDirection: 'column', willChange: 'transform',
+          transform: 'translateY(-' + ((s.slotOffsets[i] || 0) * tile) + 'px)',
+          transition: s.slotSnap ? 'none' : 'transform 2.3s cubic-bezier(.12,.76,.22,1)',
+          transitionDelay: s.slotSnap ? '0s' : (i * 0.25) + 's'
+        }
+      })),
+      buttonStyle: {
+        height: '46px', width: angosto ? '100%' : Math.round(tile * 3 + hueco * 2 + tile * 0.26) + 'px',
+        maxWidth: '340px', border: '2px solid ' + oro, borderRadius: '999px',
+        background: bloqueado ? '#dcc5bb' : 'linear-gradient(180deg,#e2a99f,#c98a80)',
+        color: '#fdf3ee', fontFamily: "'Jost',sans-serif", fontSize: '11px', letterSpacing: '0.3em',
+        cursor: bloqueado ? 'default' : 'pointer',
+        boxShadow: bloqueado ? 'none' : '0 4px 0 rgba(140,80,68,0.55), 0 10px 18px rgba(92,49,41,0.2)'
+      },
+      leverStyle: {
+        position: 'absolute', right: '-34px', top: '34%',
+        transform: 'translateY(-50%)', display: angosto ? 'none' : 'flex',
+        flexDirection: 'column', alignItems: 'center', pointerEvents: 'none'
+      },
+      leverKnobStyle: { display: 'block', width: '26px', height: '26px', borderRadius: '50%', background: 'radial-gradient(circle at 34% 28%,#f6d2b4,#c08a63)', boxShadow: '0 5px 12px rgba(92,49,41,0.3)' },
+      leverBarStyle: { display: 'block', width: '7px', height: Math.round(tile * 0.95) + 'px', borderRadius: '4px', background: 'linear-gradient(90deg,#bb8a63,#ecc9a4)' }
     };
 
     const ICONS = {
@@ -608,28 +648,12 @@ class Component extends DCLogic {
       railStyle: { display: 'grid', gridTemplateColumns: 'repeat(' + Math.max(1, featProducts.length) + ',minmax(168px,1fr))', gap: '13px' }
     };
 
-    const collDefs = d.collections || [], collById = {};
-    collDefs.forEach(c => { collById[c.id] = c; });
-    const collections = {
-      title: 'Encontrá tu próximo favorito.',
-      text: 'Descubrí nuestra selección de skincare y beauty para acompañar tus momentos de cuidado personal.',
-      items: collDefs.map(c => {
-        const ps = (c.products || []).map(id => byId[id]).filter(Boolean);
-        return {
-          label: c.label, note: c.note, ariaLabel: 'Ver ' + c.label,
-          countLabel: ps.length + (ps.length === 1 ? ' PRODUCTO' : ' PRODUCTOS'),
-          thumbs: ps.slice(0, 3).map(p => ({ image: p.image })),
-          open: go('catalog', { coll: c.id, cat: 'all', brand: null, query: '' })
-        };
-      })
-    };
-
     const guarantee = Object.assign({ title: '', text: '', claim: '' }, d.guarantee || {});
 
     const brandCount = b => { const n = products.filter(p => p.brand === b.id).length; return n + (n === 1 ? ' PRODUCTO' : ' PRODUCTOS'); };
     const brandStrip = {
       viewAll: nav.goBrands,
-      items: d.brands.map(b => ({ name: b.name, bag: b.bag, alt: b.name, countLabel: brandCount(b), ariaLabel: 'Ver productos de ' + b.name, open: go('catalog', { cat: 'all', brand: b.id, coll: null, query: '' }) }))
+      items: d.brands.map(b => ({ name: b.name, bag: b.bag, alt: b.name, countLabel: brandCount(b), ariaLabel: 'Ver productos de ' + b.name, open: go('catalog', { cat: 'all', brand: b.id, query: '' }) }))
     };
 
     const igPosts = (d.instagramPosts || []).filter(x => x && x.url);
@@ -665,25 +689,20 @@ class Component extends DCLogic {
     };
 
     let list = products;
-    if (s.coll && collById[s.coll]) { const ids = collById[s.coll].products || []; list = list.filter(p => ids.indexOf(p.id) >= 0); }
     if (s.cat !== 'all') list = list.filter(p => p.categories.indexOf(s.cat) >= 0);
     if (s.brand) list = list.filter(p => p.brand === s.brand);
     const q = this.norm(s.query.trim());
     if (q) list = list.filter(p => this.norm([p.brandLabel, p.name, p.subtitle, p.size].concat(p.categories.map(catLabel)).join(' ')).indexOf(q) >= 0);
     const brandObj = d.brands.find(b => b.id === s.brand);
-    const collObj = collById[s.coll];
     const filterDefs = [{ id: 'all', label: 'Todos' }].concat(d.categories);
     const catalog = {
-      title: collObj ? collObj.label : brandObj ? brandObj.name : s.cat === 'all' ? 'Todos los productos' : catLabel(s.cat),
-      hasNote: !!(collObj && collObj.note), note: collObj ? collObj.note : '',
+      title: brandObj ? brandObj.name : s.cat === 'all' ? 'Todos los productos' : catLabel(s.cat),
       hasQuery: !!q, query: s.query.trim(),
       clearQuery: () => this.setState({ query: '' }),
       hasBrand: !!brandObj, brandChip: brandObj ? brandObj.name.toUpperCase() : '',
       clearBrand: () => this.setState({ brand: null }),
-      hasColl: !!collObj, collChip: collObj ? collObj.label.toUpperCase() : '',
-      clearColl: () => this.setState({ coll: null }),
-      reset: () => this.setState({ cat: 'all', brand: null, coll: null, query: '' }),
-      filters: filterDefs.map(f => { const active = s.cat === f.id && !collObj; return { label: f.label.toUpperCase(), active, select: () => this.setState({ cat: f.id, coll: null }), style: { height: '36px', padding: '0 16px', borderRadius: '999px', border: '1px solid ' + (active ? '#b38d83' : '#cdb8ac'), background: active ? '#b38d83' : 'transparent', color: active ? '#fdf8f5' : '#4a3530', fontSize: '10px', letterSpacing: '0.14em', transition: 'background .2s' } }; }),
+      reset: () => this.setState({ cat: 'all', brand: null, query: '' }),
+      filters: filterDefs.map(f => { const active = s.cat === f.id; return { label: f.label.toUpperCase(), active, select: () => this.setState({ cat: f.id }), style: { height: '36px', padding: '0 16px', borderRadius: '999px', border: '1px solid ' + (active ? '#b38d83' : '#cdb8ac'), background: active ? '#b38d83' : 'transparent', color: active ? '#fdf8f5' : '#4a3530', fontSize: '10px', letterSpacing: '0.14em', transition: 'background .2s' } }; }),
       countLabel: s.data ? list.length + (list.length === 1 ? ' PRODUCTO' : ' PRODUCTOS') : 'CARGANDO…',
       empty: !!s.data && list.length === 0,
       results: list.map(p => this.decorate(p))
@@ -695,9 +714,9 @@ class Component extends DCLogic {
       const dp = this.decorate(pp);
       const mainCat = pp.categories.find(c => c !== 'skincare') || pp.categories[0];
       pd = Object.assign(dp, {
-        crumbCat: catLabel(mainCat), goCat: go('catalog', { cat: mainCat, brand: null, coll: null, query: '' }),
+        crumbCat: catLabel(mainCat), goCat: go('catalog', { cat: mainCat, brand: null, query: '' }),
         priceLabel: pp.price != null ? this.money(pp.price, d.currency) : 'PRECIO A CONFIGURAR',
-        catLinks: pp.categories.filter(c => c !== 'skincare').map(c => ({ label: catLabel(c), open: go('catalog', { cat: c, brand: null, coll: null, query: '' }) })),
+        catLinks: pp.categories.filter(c => c !== 'skincare').map(c => ({ label: catLabel(c), open: go('catalog', { cat: c, brand: null, query: '' }) })),
         description: (pp.description || []).map(t => ({ text: t })),
         specs: (pp.specs || []).map(x => ({ label: x.label, value: x.value })),
         hasHowTo: (pp.howTo || []).length > 0, howTo: (pp.howTo || []).map(t => ({ text: t })),
@@ -710,7 +729,7 @@ class Component extends DCLogic {
       });
     }
 
-    const brands = d.brands.map(b => ({ name: b.name, bag: b.bag, alt: 'Bolsa de ' + b.name, ariaLabel: 'Ver productos de ' + b.name, countLabel: brandCount(b), open: go('catalog', { cat: 'all', brand: b.id, coll: null, query: '' }) }));
+    const brands = d.brands.map(b => ({ name: b.name, bag: b.bag, alt: 'Bolsa de ' + b.name, ariaLabel: 'Ver productos de ' + b.name, countLabel: brandCount(b), open: go('catalog', { cat: 'all', brand: b.id, query: '' }) }));
 
     const favs = {
       items: favItems, hasItems: favItems.length > 0, isEmpty: !!s.data && favItems.length === 0,
@@ -757,7 +776,7 @@ class Component extends DCLogic {
     const footer = Object.assign({}, nav, {
       instagramHandle: ig.handle, openInstagram, openWhatsapp, whatsappLabel: wa.display,
       copyright: '© ' + new Date().getFullYear() + ' LUMÉ BEAUTY',
-      shop: [{ label: 'Skincare coreano', open: go('catalog', { cat: 'skincare-coreano', brand: null, coll: null, query: '' }) },
+      shop: [{ label: 'Skincare coreano', open: go('catalog', { cat: 'skincare-coreano', brand: null, query: '' }) },
              { label: 'Perfumes & body mist', open: nav.goPerfumes },
              { label: 'Marcas', open: nav.goBrands },
              { label: 'Ver todos los productos', open: nav.goShop }],
@@ -768,7 +787,7 @@ class Component extends DCLogic {
       isHome: s.view === 'home', isCatalog: s.view === 'catalog', isProduct: s.view === 'product' && !!pd,
       isBrands: s.view === 'brands', isFavs: s.view === 'favs', isHelp: s.view === 'help',
       hasAnnounce: anns.length > 0, announce, openInstagram, openWhatsapp, specsNote: d.specsNote || '',
-      header, hero, categories, benefits, slot, featured, collections, guarantee, brandStrip,
+      header, hero, categories, benefits, slot, featured, guarantee, brandStrip,
       instagram, help, catalog, pd, brands, favs, cart, toast, footer
     }, nav);
   }
