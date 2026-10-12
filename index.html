@@ -3,7 +3,7 @@
 <head>
 <meta charset="utf-8">
 <meta name="viewport" content="width=device-width, initial-scale=1">
-<script>window.__DC_BUILD="82604a6544"</script>
+<script>window.__DC_BUILD="6b07745597"</script>
 <script src="./support.js"></script>
 </head>
 <body>
@@ -41,7 +41,7 @@ input::placeholder{color:#6f5650;letter-spacing:0.12em}
       <dc-import name="HeroBanner" hero="{{ hero }}" hint-size="100%,415px"></dc-import>
       <dc-import name="Benefits" bn="{{ benefits }}" hint-size="100%,110px"></dc-import>
       <dc-import name="CategoryBanners" c="{{ categories }}" hint-size="100%,170px"></dc-import>
-      <dc-import name="RoutineBanner" ru="{{ routine }}" hint-size="100%,240px"></dc-import>
+      <dc-import name="SlotMachine" sl="{{ slot }}" hint-size="100%,520px"></dc-import>
       <dc-import name="FeaturedProducts" fp="{{ featured }}" hint-size="100%,440px"></dc-import>
       <dc-import name="CollectionStrip" co="{{ collections }}" hint-size="100%,420px"></dc-import>
       <dc-import name="BrandStrip" br="{{ brandStrip }}" hint-size="100%,220px"></dc-import>
@@ -244,14 +244,15 @@ input::placeholder{color:#6f5650;letter-spacing:0.12em}
 </x-dc>
 <script type="text/x-dc" data-dc-script>
 class Component extends DCLogic {
-  state = { data: null, view: 'home', cat: 'all', brand: null, coll: null, productId: null, query: '', cart: {}, favs: {}, cartOpen: false, menuOpen: false, searchOpen: false, qty: 1, announceIndex: 0, toast: null, helpTopic: null, w: typeof window !== 'undefined' ? window.innerWidth : 1440 };
+  state = { data: null, view: 'home', cat: 'all', brand: null, coll: null, productId: null, query: '', cart: {}, favs: {}, cartOpen: false, menuOpen: false, searchOpen: false, qty: 1, announceIndex: 0, toast: null, helpTopic: null,
+    slotOffsets: [0, 2, 4], slotSpinning: false, slotSnap: false, slotResult: null, slotPlays: null, slotPrize: null, w: typeof window !== 'undefined' ? window.innerWidth : 1440 };
 
   componentDidMount() {
     this._r = () => this.setState({ w: window.innerWidth });
     this._k = e => { if (e.key === 'Escape') this.setState({ cartOpen: false, menuOpen: false }); };
     window.addEventListener('resize', this._r);
     window.addEventListener('keydown', this._k);
-    try { const s = JSON.parse(localStorage.getItem('lume_store_v1') || '{}'); this.setState({ cart: s.cart || {}, favs: s.favs || {} }); } catch (e) {}
+    try { const g = JSON.parse(localStorage.getItem('lume_store_v1') || '{}'); this.setState({ cart: g.cart || {}, favs: g.favs || {}, slotPlays: g.slotPlays || null, slotPrize: g.slotPrize || null }); } catch (e) {}
     fetch('data/catalog.json?v=' + (window.__DC_BUILD || '')).then(r => r.json()).then(data => {
       this.setState({ data });
       const n = (data.announcements || []).length;
@@ -263,13 +264,17 @@ class Component extends DCLogic {
     window.removeEventListener('keydown', this._k);
     if (this._ann) { clearInterval(this._ann); this._ann = null; }
     if (this._toastT) { clearTimeout(this._toastT); this._toastT = null; }
+    if (this._slotT) { clearTimeout(this._slotT); this._slotT = null; }
+    if (this._snapT) { clearTimeout(this._snapT); this._snapT = null; }
   }
   componentDidUpdate() {
     const s = this.state;
-    if (this._lastCart !== s.cart || this._lastFavs !== s.favs) {
+    if (this._lastCart !== s.cart || this._lastFavs !== s.favs || this._lastPlays !== s.slotPlays || this._lastPrize !== s.slotPrize) {
       this._lastCart = s.cart;
       this._lastFavs = s.favs;
-      try { localStorage.setItem('lume_store_v1', JSON.stringify({ cart: s.cart, favs: s.favs })); } catch (e) {}
+      this._lastPlays = s.slotPlays;
+      this._lastPrize = s.slotPrize;
+      try { localStorage.setItem('lume_store_v1', JSON.stringify({ cart: s.cart, favs: s.favs, slotPlays: s.slotPlays, slotPrize: s.slotPrize })); } catch (e) {}
     }
     if (this._lastCartOpen !== s.cartOpen) {
       this._lastCartOpen = s.cartOpen;
@@ -306,6 +311,57 @@ class Component extends DCLogic {
     let added = false;
     this.setState(s => { const f = Object.assign({}, s.favs); if (f[id]) { delete f[id]; } else { f[id] = true; added = true; } return { favs: f }; });
     this.flash(added ? 'Guardado en favoritos' : 'Quitado de favoritos');
+  }
+  hoyISO() { return new Date().toISOString().slice(0, 10); }
+  premioValido(pr, byId) {
+    if (!pr || !pr.productId || !byId[pr.productId]) return null;
+    if (pr.expiresAt && Date.now() > pr.expiresAt) return null;
+    return pr;
+  }
+  girosUsados() {
+    const pl = this.state.slotPlays;
+    return pl && pl.date === this.hoyISO() ? pl.used : 0;
+  }
+  girar() {
+    const d = this.state.data;
+    if (!d || !d.slot || this.state.slotSpinning) return;
+    const cfg = d.slot, prods = d.products, n = prods.length;
+    if (!n || this.girosUsados() >= cfg.spinsPerDay) return;
+
+    const gana = Math.random() < cfg.winChance;
+    let idx;
+    if (gana) { const k = Math.floor(Math.random() * n); idx = [k, k, k]; }
+    else {
+      // reintentos acotados: un bucle abierto sobre Math.random puede no terminar
+      for (let intento = 0; intento < 12; intento++) {
+        idx = [0, 0, 0].map(() => Math.floor(Math.random() * n));
+        if (!(idx[0] === idx[1] && idx[1] === idx[2])) break;
+      }
+      if (n > 1 && idx[0] === idx[1] && idx[1] === idx[2]) idx[2] = (idx[2] + 1) % n;
+    }
+    // cada rodillo da unas vueltas y frena en su simbolo; despues se reposiciona
+    // sin transicion, para que la tira no crezca indefinidamente
+    this.setState({
+      slotSpinning: true, slotSnap: false, slotResult: null,
+      slotOffsets: idx.map((k, i) => (3 + i) * n + k),
+      slotPlays: { date: this.hoyISO(), used: this.girosUsados() + 1 }
+    });
+
+    if (this._slotT) clearTimeout(this._slotT);
+    this._slotT = setTimeout(() => {
+      this._slotT = null;
+      const cambio = { slotSpinning: false, slotSnap: true, slotOffsets: idx.slice(),
+                       slotResult: { win: gana, productId: prods[idx[0]].id } };
+      if (gana) {
+        const ahora = Date.now();
+        cambio.slotPrize = { productId: prods[idx[0]].id, pct: cfg.discountPct,
+                             wonAt: ahora, expiresAt: ahora + (cfg.prizeDays || 7) * 86400000 };
+      }
+      this.setState(cambio);
+      if (gana) this.flash('¡Ganaste ' + cfg.discountPct + '% en ' + prods[idx[0]].name + '!');
+      if (this._snapT) clearTimeout(this._snapT);
+      this._snapT = setTimeout(() => { this._snapT = null; this.setState({ slotSnap: false }); }, 80);
+    }, 2950);
   }
   openInstagram() {
     const url = ((this.state.data || {}).instagram || {}).url;
@@ -381,10 +437,63 @@ class Component extends DCLogic {
     const wa = d.whatsapp || { display: '', url: '' };
     const openWhatsapp = () => { if (wa.url) { try { window.open(wa.url, '_blank', 'noopener,noreferrer'); } catch (e) {} } };
 
-    const ruDef = d.routine || {};
-    const routine = Object.assign({ title: '', text: '', ctaLabel: 'VER PRODUCTOS', image: '', alt: '' }, ruDef, {
-      open: ruDef.cat ? go('catalog', { cat: ruDef.cat, brand: null, coll: null, query: '' }) : nav.goShop
-    });
+    const slCfg = Object.assign({ title: '', text: '', discountPct: 20, spinsPerDay: 3, prizeDays: 7, terms: [] }, d.slot || {});
+    const tile = w < 420 ? 68 : w < 760 ? 84 : 98;
+    const hueco = Math.round(tile * 0.09);
+    const relleno = Math.round(tile * 0.26);
+    const anchoCab = tile * 3 + hueco * 2 + relleno * 2 + 6;
+    const usados = this.girosUsados();
+    const restantes = Math.max(0, slCfg.spinsPerDay - usados);
+    const premio = this.premioValido(s.slotPrize, byId);
+    const res = s.slotResult;
+    const bloqueado = !s.data || s.slotSpinning || restantes === 0;
+    const tira = [];
+    for (let i = 0; i < 8; i++) products.forEach(pp2 => tira.push({ image: pp2.image }));
+    const fecha = t => { const x = new Date(t); return x.getDate() + '/' + (x.getMonth() + 1); };
+
+    let mensaje = '', estiloMsg = '#6f5650';
+    if (s.slotSpinning) { mensaje = ''; }
+    else if (res && res.win) { mensaje = '¡Tres iguales! Ganaste ' + slCfg.discountPct + '% en ' + (byId[res.productId] || {}).name + '.'; estiloMsg = '#7a3f34'; }
+    else if (res) { mensaje = 'Esta vez no salieron tres iguales.'; }
+    else if (premio) { mensaje = 'Tenés un premio guardado: ' + premio.pct + '% en ' + (byId[premio.productId] || {}).name + ', hasta el ' + fecha(premio.expiresAt) + '.'; estiloMsg = '#7a3f34'; }
+
+    const slot = {
+      title: slCfg.title, text: slCfg.text,
+      spin: () => this.girar(), disabled: bloqueado,
+      buttonLabel: s.slotSpinning ? 'GIRANDO…' : restantes === 0 ? 'VOLVÉ MAÑANA' : 'GIRAR',
+      spinsLeftLabel: !s.data ? 'CARGANDO…' : restantes === 1 ? 'TE QUEDA 1 GIRO HOY' : 'TE QUEDAN ' + restantes + ' GIROS HOY',
+      screenLabel: s.slotSpinning ? 'Girando' : 'Tragamonedas Lumé',
+      terms: (slCfg.terms || []).map(t => ({ text: t })),
+      hasMessage: !!mensaje, message: mensaje,
+      messageStyle: { margin: 0, maxWidth: '40ch', fontSize: '13px', lineHeight: 1.55, color: estiloMsg },
+      hasPrizeActions: !!premio,
+      addLabel: premio ? 'AGREGAR CON ' + premio.pct + '% OFF' : '',
+      addPrize: () => { if (premio) this.addToCart(premio.productId, 1); },
+      openPrize: () => { if (premio) this.go('product', { productId: premio.productId, qty: 1 }); },
+      hearts: [0, 1, 2, 3].map(() => ({ fill: s.slotSpinning ? '#e2749c' : '#eda8c0' })),
+      reels: [0, 1, 2].map(i => ({
+        items: tira,
+        stripStyle: {
+          display: 'flex', flexDirection: 'column', willChange: 'transform',
+          transform: 'translateY(-' + ((s.slotOffsets[i] || 0) * tile) + 'px)',
+          transition: s.slotSnap ? 'none' : 'transform 2.3s cubic-bezier(.12,.76,.22,1)',
+          transitionDelay: s.slotSnap ? '0s' : (i * 0.25) + 's'
+        }
+      })),
+      frameStyle: { position: 'relative', width: '100%', maxWidth: (anchoCab + 42) + 'px', margin: 'clamp(26px,3.4vw,44px) auto 0' },
+      cabinetStyle: { position: 'relative', width: '100%', maxWidth: anchoCab + 'px', margin: '0 auto', boxSizing: 'border-box', padding: relleno + 'px ' + relleno + 'px ' + Math.round(relleno * 0.8) + 'px', borderRadius: Math.round(tile * 0.46) + 'px ' + Math.round(tile * 0.46) + 'px 16px 16px', background: 'linear-gradient(180deg,#f9ded7 0%,#f1c8bd 58%,#e9b8ab 100%)', border: '3px solid #e0af9a', boxShadow: '0 24px 42px rgba(92,49,41,0.22), inset 0 2px 0 rgba(255,255,255,0.6)' },
+      leverStyle: { position: 'absolute', right: '0', top: '34%', display: 'flex', flexDirection: 'column', alignItems: 'center', pointerEvents: 'none' },
+      leverKnobStyle: { order: 1, display: 'block', width: Math.round(tile * 0.3) + 'px', height: Math.round(tile * 0.3) + 'px', borderRadius: '50%', background: 'radial-gradient(circle at 34% 28%,#f5c2b1,#c2826e)', boxShadow: '0 5px 12px rgba(92,49,41,0.28)' },
+      leverBarStyle: { order: 2, display: 'block', width: '7px', height: Math.round(tile * 0.85) + 'px', borderRadius: '4px', background: 'linear-gradient(90deg,#c0917f,#ebc8ba)' },
+      lampStyle: { display: 'block', width: Math.round(tile * 0.2) + 'px', height: Math.round(tile * 0.2) + 'px', borderRadius: '50%', background: 'radial-gradient(circle at 35% 30%,#f8e4cd,#dfba95)', boxShadow: 'inset 0 -2px 3px rgba(92,49,41,0.14)' },
+      heartsStyle: { display: 'flex', justifyContent: 'center', alignItems: 'center', gap: Math.round(tile * 0.16) + 'px', padding: '6px 0', margin: '0 0 ' + Math.round(relleno * 0.7) + 'px', borderRadius: '999px', background: 'linear-gradient(180deg,#f8e0d4,#eecabb)', boxShadow: 'inset 0 2px 5px rgba(92,49,41,0.14)' },
+      screenStyle: { display: 'flex', justifyContent: 'center', gap: hueco + 'px', padding: Math.round(tile * 0.12) + 'px', borderRadius: Math.round(tile * 0.16) + 'px', background: 'linear-gradient(180deg,#3d3654,#2d2840)', boxShadow: 'inset 0 4px 10px rgba(0,0,0,0.5)' },
+      windowStyle: { width: tile + 'px', height: tile + 'px', overflow: 'hidden', borderRadius: Math.round(tile * 0.1) + 'px', background: '#ece1d9', boxShadow: 'inset 0 5px 9px rgba(63,42,38,0.16), inset 0 -5px 9px rgba(63,42,38,0.12)' },
+      tileStyle: { display: 'flex', alignItems: 'center', justifyContent: 'center', width: tile + 'px', height: tile + 'px', flex: '0 0 auto', background: '#ece1d9' },
+      keyStyle: { display: 'block', width: Math.round(tile * 0.26) + 'px', height: Math.round(tile * 0.16) + 'px', borderRadius: '4px', background: 'linear-gradient(180deg,#fbe3da,#eec5b7)', boxShadow: '0 2px 0 #d9a894' },
+      baseStyle: { display: 'flex', justifyContent: 'center', padding: Math.round(relleno * 0.5) + 'px 0 0' },
+      buttonStyle: { height: Math.max(44, Math.round(tile * 0.54)) + 'px', padding: '0 ' + Math.round(tile * 0.45) + 'px', border: 0, borderRadius: '999px', background: bloqueado ? '#cfb3a8' : 'linear-gradient(180deg,#c4897a,#a96a5c)', color: '#fdf8f5', fontFamily: "'Jost',sans-serif", fontSize: '10.5px', letterSpacing: '0.22em', cursor: bloqueado ? 'default' : 'pointer', boxShadow: bloqueado ? 'none' : '0 6px 0 #8d5447, 0 14px 22px rgba(92,49,41,0.28)' }
+    };
 
     const ICONS = {
       shield: ['M12 3.2 5 6.1v5.5c0 4.1 2.9 7.5 7 8.4 4.1-.9 7-4.3 7-8.4V6.1L12 3.2z', 'M9.1 12.1l2 2 4-4.1'],
@@ -525,18 +634,25 @@ class Component extends DCLogic {
         open: () => this.go('product', { productId: id, qty: 1 }) };
     });
     const allPriced = items.length > 0 && Object.keys(s.cart).filter(id => byId[id]).every(id => byId[id].price != null);
-    const sum = allPriced ? Object.keys(s.cart).filter(id => byId[id]).reduce((a, id) => a + byId[id].price * s.cart[id], 0) : 0;
+    const bruto = allPriced ? Object.keys(s.cart).filter(id => byId[id]).reduce((a, id) => a + byId[id].price * s.cart[id], 0) : 0;
+    const premioEnCarro = premio && s.cart[premio.productId] && byId[premio.productId].price != null ? premio : null;
+    const rebaja = premioEnCarro ? Math.round(byId[premioEnCarro.productId].price * premioEnCarro.pct / 100) : 0;
+    const sum = Math.max(0, bruto - (allPriced ? rebaja : 0));
     const cart = {
       open: s.cartOpen, close: () => this.setState({ cartOpen: false }), goShop: nav.goShop,
       items, count: cartCount, isEmpty: items.length === 0, hasItems: items.length > 0,
       subtotalLabel: allPriced ? this.money(sum, d.currency) : '—',
       hasSubtotalNote: !allPriced, subtotalNote: 'El subtotal se mostrará cuando los precios estén configurados.',
+      hasPrize: !!premioEnCarro && allPriced,
+      prizeLabel: premioEnCarro ? 'Premio de la tragamonedas · ' + premioEnCarro.pct + '% en ' + byId[premioEnCarro.productId].name : '',
+      prizeAmount: premioEnCarro ? '− ' + this.money(rebaja, d.currency) : '',
       buy: () => {
         const message = [
           'Hola, quiero consultar y confirmar esta compra:',
           '',
           ...items.map(it => '- ' + it.title + ' (' + it.size + ') x ' + it.qty + ' — ' + it.priceLabel),
           '',
+          ...(premioEnCarro ? ['Premio de la tragamonedas: ' + premioEnCarro.pct + '% en ' + byId[premioEnCarro.productId].name + ' (− ' + this.money(rebaja, d.currency) + ')'] : []),
           'Subtotal: ' + (allPriced ? this.money(sum, d.currency) : 'a confirmar'),
           '¿Podemos coordinar la compra?'
         ].join('\n');
@@ -560,7 +676,7 @@ class Component extends DCLogic {
       isHome: s.view === 'home', isCatalog: s.view === 'catalog', isProduct: s.view === 'product' && !!pd,
       isBrands: s.view === 'brands', isFavs: s.view === 'favs', isHelp: s.view === 'help',
       hasAnnounce: anns.length > 0, announce, openInstagram, openWhatsapp, specsNote: d.specsNote || '',
-      header, hero, categories, benefits, routine, featured, collections, guarantee, brandStrip,
+      header, hero, categories, benefits, slot, featured, collections, guarantee, brandStrip,
       instagram, help, catalog, pd, brands, favs, cart, toast, footer
     }, nav);
   }

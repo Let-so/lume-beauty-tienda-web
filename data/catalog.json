@@ -425,17 +425,22 @@
       "url": "https://www.instagram.com/p/DeK5JnpPtfU/"
     }
   ],
-  "routine": {
-    "title": "Rutina LUMÉ",
-    "text": "Para una piel más luminosa",
-    "ctaLabel": "VER SKINCARE",
-    "image": "assets/editorial/rutina-lume.webp",
-    "alt": "Textura cremosa en tonos rosados",
-    "cat": "skincare-coreano"
-  },
   "whatsapp": {
     "display": "+54 9 3704 81-4077",
     "url": "https://wa.me/5493704814077"
   },
-  "specsNote": "Información de producto provista por el fabricante."
+  "specsNote": "Información de producto provista por el fabricante.",
+  "slot": {
+    "title": "La tragamonedas Lumé",
+    "text": "Si los tres carteles coinciden, te llevás ese producto con 20% de descuento.",
+    "discountPct": 20,
+    "winChance": 0.12,
+    "spinsPerDay": 3,
+    "prizeDays": 7,
+    "terms": [
+      "Hasta 3 giros por día, desde este navegador.",
+      "El premio es de un 20% sobre una unidad del producto que salga, y vale 7 días.",
+      "Se aplica al confirmar la compra con nosotras. No se acumula con otras promociones."
+    ]
+  }
 }
