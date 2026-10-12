@@ -15,64 +15,30 @@
   </div>
 
   <div style="{{ sl.frameStyle }}">
-    <div aria-hidden="true" style="{{ sl.leverStyle }}">
-      <span style="{{ sl.leverBarStyle }}"></span>
-      <span style="{{ sl.leverKnobStyle }}"></span>
-    </div>
-
-    <div style="{{ sl.cabinetStyle }}">
-      <div aria-hidden="true" style="display:flex;justify-content:center;align-items:center;gap:clamp(10px,2.4vw,18px);padding:2px 0 10px">
-        <span style="{{ sl.lampStyle }}"></span>
-        <span style="width:2px;height:16px;background:#d8a893;border-radius:1px"></span>
-        <span style="{{ sl.lampStyle }}"></span>
-      </div>
-
-      <div aria-hidden="true" style="{{ sl.heartsStyle }}">
-        <sc-for list="{{ sl.hearts }}" as="hh" hint-placeholder-count="4">
-          <svg width="15" height="15" viewBox="0 0 24 24" fill="{{ hh.fill }}"><path d="M12 20.3s-7.6-4.6-7.6-10.3A4.2 4.2 0 0 1 12 7.5a4.2 4.2 0 0 1 7.6 2.5c0 5.7-7.6 10.3-7.6 10.3z"></path></svg>
-        </sc-for>
-      </div>
-
-      <div style="{{ sl.screenStyle }}" aria-live="polite" aria-label="{{ sl.screenLabel }}">
-        <sc-for list="{{ sl.reels }}" as="r" hint-placeholder-count="3">
-          <div style="{{ sl.windowStyle }}">
-            <div style="{{ r.stripStyle }}">
-              <sc-for list="{{ r.items }}" as="it" hint-placeholder-count="8">
-                <span style="{{ sl.tileStyle }}"><img src="{{ it.image }}" alt="" loading="lazy" style="max-width:88%;max-height:88%;object-fit:contain;mix-blend-mode:multiply"></span>
-              </sc-for>
-            </div>
-          </div>
-        </sc-for>
-      </div>
-
-      <div aria-hidden="true" style="display:flex;justify-content:center;gap:clamp(8px,2vw,14px);padding:12px 0 4px">
-        <span style="{{ sl.keyStyle }}"></span>
-        <span style="{{ sl.keyStyle }}"></span>
-        <span style="{{ sl.keyStyle }}"></span>
-        <span style="{{ sl.keyStyle }}"></span>
-      </div>
-
-      <div style="{{ sl.baseStyle }}">
-        <button onClick="{{ sl.spin }}" disabled="{{ sl.disabled }}" style="{{ sl.buttonStyle }}">{{ sl.buttonLabel }}</button>
-      </div>
-    </div>
+    <iframe src="{{ sl.frameSrc }}" title="{{ sl.frameTitle }}" loading="lazy" scrolling="no" style="{{ sl.iframeStyle }}"></iframe>
   </div>
 
-  <div style="max-width:560px;margin:clamp(18px,2.4vw,28px) auto 0;display:flex;flex-direction:column;align-items:center;text-align:center;gap:12px">
+  <div style="max-width:560px;margin:clamp(12px,1.8vw,20px) auto 0;display:flex;flex-direction:column;align-items:center;text-align:center;gap:13px">
+    <button onClick="{{ sl.spin }}" disabled="{{ sl.disabled }}" style="{{ sl.buttonStyle }}">{{ sl.buttonLabel }}</button>
+
     <sc-if value="{{ sl.hasMessage }}">
       <p style="{{ sl.messageStyle }}">{{ sl.message }}</p>
     </sc-if>
+
     <sc-if value="{{ sl.hasPrizeActions }}">
       <div style="display:flex;flex-wrap:wrap;justify-content:center;gap:9px">
         <button onClick="{{ sl.addPrize }}" style="height:44px;padding:0 24px;border:0;border-radius:999px;background:#b38d83;color:#fdf8f5;font-size:10px;letter-spacing:0.2em" style-hover="background:#a07a70">{{ sl.addLabel }}</button>
         <button onClick="{{ sl.openPrize }}" style="height:44px;padding:0 24px;border:1px solid #cdb8ac;border-radius:999px;background:transparent;color:#4a3530;font-size:10px;letter-spacing:0.18em" style-hover="background:#ece0d8">VER EL PRODUCTO&nbsp;&nbsp;→</button>
       </div>
     </sc-if>
-    <div style="display:flex;flex-wrap:wrap;justify-content:center;align-items:center;gap:8px 16px">
-      <button onClick="{{ sl.toggleSound }}" aria-pressed="{{ sl.soundOn }}" aria-label="{{ sl.soundAria }}" style="background:none;border:0;padding:6px 2px;display:flex;align-items:center;gap:7px;font-family:'Jost',sans-serif;font-size:9.5px;letter-spacing:0.14em;color:#a8776a" style-hover="color:#7a3f34">
-        <svg width="15" height="15" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.4" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="{{ sl.soundIcon }}"></path></svg>{{ sl.soundLabel }}
-      </button>
-    </div>
+
+    <sc-if value="{{ sl.showFallbackNote }}">
+      <p style="margin:0;max-width:40ch;font-size:11px;line-height:1.5;color:#a8776a">No se pudo cargar la máquina en 3D, pero el juego funciona igual: tocá GIRAR.</p>
+    </sc-if>
+
+    <button onClick="{{ sl.toggleSound }}" aria-pressed="{{ sl.soundOn }}" aria-label="{{ sl.soundAria }}" style="background:none;border:0;padding:6px 2px;display:flex;align-items:center;gap:7px;font-family:'Jost',sans-serif;font-size:9.5px;letter-spacing:0.14em;color:#a8776a" style-hover="color:#7a3f34">
+      <svg width="15" height="15" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.4" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="{{ sl.soundIcon }}"></path></svg>{{ sl.soundLabel }}
+    </button>
   </div>
 </section>
 </x-dc>

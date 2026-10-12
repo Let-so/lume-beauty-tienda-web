@@ -3,7 +3,7 @@
 <head>
 <meta charset="utf-8">
 <meta name="viewport" content="width=device-width, initial-scale=1">
-<script>window.__DC_BUILD="ae34c5e7a7"</script>
+<script>window.__DC_BUILD="b7783cff7d"</script>
 <script src="./support.js"></script>
 </head>
 <body>
@@ -245,13 +245,22 @@ input::placeholder{color:#6f5650;letter-spacing:0.12em}
 <script type="text/x-dc" data-dc-script>
 class Component extends DCLogic {
   state = { data: null, view: 'home', cat: 'all', brand: null, coll: null, productId: null, query: '', cart: {}, favs: {}, cartOpen: false, menuOpen: false, searchOpen: false, qty: 1, announceIndex: 0, toast: null, helpTopic: null,
-    slotOffsets: [0, 2, 4], slotSpinning: false, soundOn: true, slotSnap: false, slotResult: null, slotPlays: null, slotPrize: null, w: typeof window !== 'undefined' ? window.innerWidth : 1440 };
+    slotSpinning: false, soundOn: true, slotSymbols: [], slot3dReady: false, slotResult: null, slotPlays: null, slotPrize: null, w: typeof window !== 'undefined' ? window.innerWidth : 1440 };
 
   componentDidMount() {
     this._r = () => this.setState({ w: window.innerWidth });
     this._k = e => { if (e.key === 'Escape') this.setState({ cartOpen: false, menuOpen: false }); };
     window.addEventListener('resize', this._r);
     window.addEventListener('keydown', this._k);
+    // la maquina 3D vive en un iframe: avisa cuando esta lista y cuando el
+    // visitante toca su propio boton o la palanca
+    this._msg = e => {
+      const m = e.data;
+      if (!m || m.fuente !== 'lume-slot') return;
+      if (m.tipo === 'listo') this.setState({ slotSymbols: m.simbolos || [], slot3dReady: true });
+      if (m.tipo === 'pedido') this.girar();
+    };
+    window.addEventListener('message', this._msg);
     try { const g = JSON.parse(localStorage.getItem('lume_store_v1') || '{}'); this.setState({ cart: g.cart || {}, favs: g.favs || {}, slotPlays: g.slotPlays || null, slotPrize: g.slotPrize || null, soundOn: g.soundOn !== false }); } catch (e) {}
     fetch('data/catalog.json?v=' + (window.__DC_BUILD || '')).then(r => r.json()).then(data => {
       this.setState({ data });
@@ -262,10 +271,10 @@ class Component extends DCLogic {
   componentWillUnmount() {
     window.removeEventListener('resize', this._r);
     window.removeEventListener('keydown', this._k);
+    window.removeEventListener('message', this._msg);
     if (this._ann) { clearInterval(this._ann); this._ann = null; }
     if (this._toastT) { clearTimeout(this._toastT); this._toastT = null; }
     if (this._slotT) { clearTimeout(this._slotT); this._slotT = null; }
-    if (this._snapT) { clearTimeout(this._snapT); this._snapT = null; }
     if (this._ctx) { try { this._ctx.close(); } catch (e) {} this._ctx = null; this._master = null; this._nb = null; }
   }
   componentDidUpdate() {
@@ -398,6 +407,12 @@ class Component extends DCLogic {
     this.nota(ctx, t, 320, 0.17, 0.11, 'triangle');
     this.nota(ctx, t + 0.14, 240, 0.28, 0.1, 'triangle');
   }
+  enviarGiro(stops) {
+    try {
+      const fr = document.querySelector('[data-screen-label="Tragamonedas"] iframe');
+      if (fr && fr.contentWindow) fr.contentWindow.postMessage({ tipo: 'girar', stops }, '*');
+    } catch (e) {}
+  }
   hoyISO() { return new Date().toISOString().slice(0, 10); }
   premioValido(pr, byId) {
     if (!pr || !pr.productId || !byId[pr.productId]) return null;
@@ -428,18 +443,22 @@ class Component extends DCLogic {
     // cada rodillo da unas vueltas y frena en su simbolo; despues se reposiciona
     // sin transicion, para que la tira no crezca indefinidamente
     this.setState({
-      slotSpinning: true, slotSnap: false, slotResult: null,
-      slotOffsets: idx.map((k, i) => (3 + i) * n + k),
+      slotSpinning: true, slotResult: null,
       slotPlays: { date: this.hoyISO(), used: this.girosUsados() + 1 }
     });
+    // traducir el indice del catalogo al hueco que usa la maquina 3D
+    const simbolos = this.state.slotSymbols || [];
+    this.enviarGiro(idx.map(k => {
+      const j = simbolos.indexOf(prods[k].slotSymbol);
+      return j >= 0 ? j : k;
+    }));
     // se llama dentro del click: el navegador solo deja sonar tras un gesto
     this.sonarGiro([2.3, 2.55, 2.8]);
 
     if (this._slotT) clearTimeout(this._slotT);
     this._slotT = setTimeout(() => {
       this._slotT = null;
-      const cambio = { slotSpinning: false, slotSnap: true, slotOffsets: idx.slice(),
-                       slotResult: { win: gana, productId: prods[idx[0]].id } };
+      const cambio = { slotSpinning: false, slotResult: { win: gana, productId: prods[idx[0]].id } };
       if (gana) {
         const ahora = Date.now();
         cambio.slotPrize = { productId: prods[idx[0]].id, pct: cfg.discountPct,
@@ -448,8 +467,6 @@ class Component extends DCLogic {
       this.setState(cambio);
       if (gana) { this.sonarPremio(); this.flash('¡Ganaste ' + cfg.discountPct + '% en ' + prods[idx[0]].name + '!'); }
       else this.sonarNada();
-      if (this._snapT) clearTimeout(this._snapT);
-      this._snapT = setTimeout(() => { this._snapT = null; this.setState({ slotSnap: false }); }, 80);
     }, 2950);
   }
   openInstagram() {
@@ -526,33 +543,29 @@ class Component extends DCLogic {
     const wa = d.whatsapp || { display: '', url: '' };
     const openWhatsapp = () => { if (wa.url) { try { window.open(wa.url, '_blank', 'noopener,noreferrer'); } catch (e) {} } };
 
-    const slCfg = Object.assign({ title: '', text: '', discountPct: 20, spinsPerDay: 100, prizeDays: 7 }, d.slot || {});
-    const tile = w < 420 ? 68 : w < 760 ? 84 : 98;
-    const hueco = Math.round(tile * 0.09);
-    const relleno = Math.round(tile * 0.26);
-    const anchoCab = tile * 3 + hueco * 2 + relleno * 2 + 6;
+    const slCfg = Object.assign({ title: '', text: '', discountPct: 20, spinsPerDay: 100, prizeDays: 7, frame: 'web/tragamonedas.html' }, d.slot || {});
     const usados = this.girosUsados();
     const restantes = Math.max(0, slCfg.spinsPerDay - usados);
     const premio = this.premioValido(s.slotPrize, byId);
     const res = s.slotResult;
     const bloqueado = !s.data || s.slotSpinning || restantes === 0;
-    const tira = [];
-    for (let i = 0; i < 8; i++) products.forEach(pp2 => tira.push({ image: pp2.image }));
     const fecha = t => { const x = new Date(t); return x.getDate() + '/' + (x.getMonth() + 1); };
 
-    let mensaje = '', estiloMsg = '#6f5650';
-    if (s.slotSpinning) { mensaje = ''; }
-    else if (res && res.win) { mensaje = '¡Tres iguales! Ganaste ' + slCfg.discountPct + '% en ' + (byId[res.productId] || {}).name + '.'; estiloMsg = '#7a3f34'; }
-    else if (res) { mensaje = 'Esta vez no salieron tres iguales.'; }
-    else if (premio) { mensaje = 'Tenés un premio guardado: ' + premio.pct + '% en ' + (byId[premio.productId] || {}).name + ', hasta el ' + fecha(premio.expiresAt) + '.'; estiloMsg = '#7a3f34'; }
+    let mensaje = '', colorMsg = '#6f5650';
+    if (s.slotSpinning) mensaje = '';
+    else if (res && res.win) { mensaje = '¡Tres iguales! Ganaste ' + slCfg.discountPct + '% en ' + (byId[res.productId] || {}).name + '.'; colorMsg = '#7a3f34'; }
+    else if (res) mensaje = 'Esta vez no salieron tres iguales.';
+    else if (premio) { mensaje = 'Tenés un premio guardado: ' + premio.pct + '% en ' + (byId[premio.productId] || {}).name + ', hasta el ' + fecha(premio.expiresAt) + '.'; colorMsg = '#7a3f34'; }
 
     const slot = {
       title: slCfg.title, text: slCfg.text,
       spin: () => this.girar(), disabled: bloqueado,
       buttonLabel: s.slotSpinning ? 'GIRANDO…' : restantes === 0 ? 'VOLVÉ MÁS TARDE' : 'GIRAR',
-      screenLabel: s.slotSpinning ? 'Girando' : 'Tragamonedas Lumé',
+      frameSrc: slCfg.frame, frameTitle: 'Tragamonedas Lumé en 3D',
+      // el aviso solo aparece si ya jugaron y la maquina nunca dijo estar lista
+      showFallbackNote: !s.slot3dReady && !!res,
       hasMessage: !!mensaje, message: mensaje,
-      messageStyle: { margin: 0, maxWidth: '40ch', fontSize: '13px', lineHeight: 1.55, color: estiloMsg },
+      messageStyle: { margin: 0, maxWidth: '40ch', fontSize: '13px', lineHeight: 1.55, color: colorMsg },
       hasPrizeActions: !!premio,
       addLabel: premio ? 'AGREGAR CON ' + premio.pct + '% OFF' : '',
       addPrize: () => { if (premio) this.addToCart(premio.productId, 1); },
@@ -564,29 +577,14 @@ class Component extends DCLogic {
         ? 'M4 9.5h3.2L12 5.6v12.8L7.2 14.5H4z M15.4 9.1a4 4 0 0 1 0 5.8 M18 6.6a7.6 7.6 0 0 1 0 10.8'
         : 'M4 9.5h3.2L12 5.6v12.8L7.2 14.5H4z M15.8 9.9l4.4 4.2 M20.2 9.9l-4.4 4.2',
       toggleSound: () => this.setState(x => ({ soundOn: !x.soundOn })),
-      hearts: [0, 1, 2, 3].map(() => ({ fill: s.slotSpinning ? '#e2749c' : '#eda8c0' })),
-      reels: [0, 1, 2].map(i => ({
-        items: tira,
-        stripStyle: {
-          display: 'flex', flexDirection: 'column', willChange: 'transform',
-          transform: 'translateY(-' + ((s.slotOffsets[i] || 0) * tile) + 'px)',
-          transition: s.slotSnap ? 'none' : 'transform 2.3s cubic-bezier(.12,.76,.22,1)',
-          transitionDelay: s.slotSnap ? '0s' : (i * 0.25) + 's'
-        }
-      })),
-      frameStyle: { position: 'relative', width: '100%', maxWidth: (anchoCab + 42) + 'px', margin: 'clamp(26px,3.4vw,44px) auto 0' },
-      cabinetStyle: { position: 'relative', width: '100%', maxWidth: anchoCab + 'px', margin: '0 auto', boxSizing: 'border-box', padding: relleno + 'px ' + relleno + 'px ' + Math.round(relleno * 0.8) + 'px', borderRadius: Math.round(tile * 0.46) + 'px ' + Math.round(tile * 0.46) + 'px 16px 16px', background: 'linear-gradient(180deg,#f9ded7 0%,#f1c8bd 58%,#e9b8ab 100%)', border: '3px solid #e0af9a', boxShadow: '0 24px 42px rgba(92,49,41,0.22), inset 0 2px 0 rgba(255,255,255,0.6)' },
-      leverStyle: { position: 'absolute', right: '0', top: '34%', display: 'flex', flexDirection: 'column', alignItems: 'center', pointerEvents: 'none' },
-      leverKnobStyle: { order: 1, display: 'block', width: Math.round(tile * 0.3) + 'px', height: Math.round(tile * 0.3) + 'px', borderRadius: '50%', background: 'radial-gradient(circle at 34% 28%,#f5c2b1,#c2826e)', boxShadow: '0 5px 12px rgba(92,49,41,0.28)' },
-      leverBarStyle: { order: 2, display: 'block', width: '7px', height: Math.round(tile * 0.85) + 'px', borderRadius: '4px', background: 'linear-gradient(90deg,#c0917f,#ebc8ba)' },
-      lampStyle: { display: 'block', width: Math.round(tile * 0.2) + 'px', height: Math.round(tile * 0.2) + 'px', borderRadius: '50%', background: 'radial-gradient(circle at 35% 30%,#f8e4cd,#dfba95)', boxShadow: 'inset 0 -2px 3px rgba(92,49,41,0.14)' },
-      heartsStyle: { display: 'flex', justifyContent: 'center', alignItems: 'center', gap: Math.round(tile * 0.16) + 'px', padding: '6px 0', margin: '0 0 ' + Math.round(relleno * 0.7) + 'px', borderRadius: '999px', background: 'linear-gradient(180deg,#f8e0d4,#eecabb)', boxShadow: 'inset 0 2px 5px rgba(92,49,41,0.14)' },
-      screenStyle: { display: 'flex', justifyContent: 'center', gap: hueco + 'px', padding: Math.round(tile * 0.12) + 'px', borderRadius: Math.round(tile * 0.16) + 'px', background: 'linear-gradient(180deg,#3d3654,#2d2840)', boxShadow: 'inset 0 4px 10px rgba(0,0,0,0.5)' },
-      windowStyle: { width: tile + 'px', height: tile + 'px', overflow: 'hidden', borderRadius: Math.round(tile * 0.1) + 'px', background: '#ece1d9', boxShadow: 'inset 0 5px 9px rgba(63,42,38,0.16), inset 0 -5px 9px rgba(63,42,38,0.12)' },
-      tileStyle: { display: 'flex', alignItems: 'center', justifyContent: 'center', width: tile + 'px', height: tile + 'px', flex: '0 0 auto', background: '#ece1d9' },
-      keyStyle: { display: 'block', width: Math.round(tile * 0.26) + 'px', height: Math.round(tile * 0.16) + 'px', borderRadius: '4px', background: 'linear-gradient(180deg,#fbe3da,#eec5b7)', boxShadow: '0 2px 0 #d9a894' },
-      baseStyle: { display: 'flex', justifyContent: 'center', padding: Math.round(relleno * 0.5) + 'px 0 0' },
-      buttonStyle: { height: Math.max(44, Math.round(tile * 0.54)) + 'px', padding: '0 ' + Math.round(tile * 0.45) + 'px', border: 0, borderRadius: '999px', background: bloqueado ? '#cfb3a8' : 'linear-gradient(180deg,#c4897a,#a96a5c)', color: '#fdf8f5', fontFamily: "'Jost',sans-serif", fontSize: '10.5px', letterSpacing: '0.22em', cursor: bloqueado ? 'default' : 'pointer', boxShadow: bloqueado ? 'none' : '0 6px 0 #8d5447, 0 14px 22px rgba(92,49,41,0.28)' }
+      frameStyle: { width: '100%', maxWidth: w < 640 ? '440px' : '700px', margin: 'clamp(16px,2.4vw,30px) auto 0',
+                    aspectRatio: w < 640 ? '1 / 1.04' : '16 / 10' },
+      iframeStyle: { display: 'block', width: '100%', height: '100%', border: 0, background: 'transparent' },
+      buttonStyle: { height: '48px', padding: '0 42px', border: 0, borderRadius: '999px',
+                     background: bloqueado ? '#cfb3a8' : 'linear-gradient(180deg,#c4897a,#a96a5c)',
+                     color: '#fdf8f5', fontFamily: "'Jost',sans-serif", fontSize: '10.5px', letterSpacing: '0.22em',
+                     cursor: bloqueado ? 'default' : 'pointer',
+                     boxShadow: bloqueado ? 'none' : '0 6px 0 #8d5447, 0 14px 22px rgba(92,49,41,0.28)' }
     };
 
     const ICONS = {

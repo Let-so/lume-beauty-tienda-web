@@ -88,7 +88,8 @@
       "howTo": [
         "Mezclá la cápsula de vitamina y el gel transparente en la proporción que le vaya a tu piel: para una sensación más ligera aumentá el gel, y para más hidratación y elasticidad aumentá las cápsulas.",
         "Aplicá la mezcla por la mañana y por la noche, en rostro y cuello, después del sérum."
-      ]
+      ],
+      "slotSymbol": "vitac"
     },
     {
       "id": "medicube-pdrn-pink-collagen",
@@ -131,7 +132,8 @@
       "howTo": [
         "Mezclá la cápsula de vitamina y el gel transparente en la proporción que le vaya a tu piel: para una sensación más ligera aumentá el gel, y para más hidratación y elasticidad aumentá las cápsulas.",
         "Aplicá la mezcla por la mañana y por la noche, en rostro y cuello, después del sérum."
-      ]
+      ],
+      "slotSymbol": "pinkcream"
     },
     {
       "id": "numbuzin-no9-nad-retinol-eye-cream",
@@ -183,7 +185,8 @@
         "Aplicá una cantidad adecuada sobre el contorno de ojos limpio y dá suaves toquecitos con el dedo anular hasta que se absorba. Preferentemente de noche.",
         "Si recién empezás con retinoides, usala 2 o 3 veces por semana e incrementá según tolerancia. Por la mañana, usá siempre protector solar."
       ],
-      "warning": "No usar durante el embarazo."
+      "warning": "No usar durante el embarazo.",
+      "slotSymbol": "numbuzin"
     },
     {
       "id": "vs-pure-seduction",
@@ -217,7 +220,8 @@
           "label": "Contenido",
           "value": "250 ml / 8.4 fl oz."
         }
-      ]
+      ],
+      "slotSymbol": "seduction"
     },
     {
       "id": "vs-velvet-petals",
@@ -250,7 +254,8 @@
           "label": "Contenido",
           "value": "250 ml / 8.4 fl oz."
         }
-      ]
+      ],
+      "slotSymbol": "velvet"
     },
     {
       "id": "vs-coconut-passion",
@@ -284,7 +289,8 @@
           "label": "Contenido",
           "value": "250 ml / 8.4 fl oz."
         }
-      ]
+      ],
+      "slotSymbol": "coconut"
     },
     {
       "id": "vs-bare-vanilla",
@@ -318,7 +324,8 @@
           "label": "Contenido",
           "value": "250 ml / 8.4 fl oz."
         }
-      ]
+      ],
+      "slotSymbol": "vanilla"
     }
   ],
   "instagram": {
@@ -445,6 +452,7 @@
     "discountPct": 20,
     "winChance": 0.12,
     "spinsPerDay": 100,
-    "prizeDays": 7
+    "prizeDays": 7,
+    "frame": "web/tragamonedas.html"
   }
 }

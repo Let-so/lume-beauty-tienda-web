@@ -1,0 +1,292 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>Lumé Beauty — Tragamonedas</title>
+<script type="importmap">
+{
+  "imports": {
+    "three": "https://unpkg.com/three@0.184.0/build/three.module.js",
+    "three/addons/controls/OrbitControls.js": "https://unpkg.com/three@0.184.0/examples/jsm/controls/OrbitControls.js"
+  },
+  "integrity": {
+    "https://unpkg.com/three@0.184.0/build/three.module.js": "sha384-8FCZ1eVO6it4+pbec2aDtnTrwjWXZLJRC+MAGCIPDgsYnUrl/E0A2YlF8ioMKI/J",
+    "https://unpkg.com/three@0.184.0/build/three.core.js": "sha384-dw2ooPewaEIrAgl6oFDBmmBWCE9oW9LxRGcfwZ0hLvEprzo202wXl7vCYHRlSnOT",
+    "https://unpkg.com/three@0.184.0/examples/jsm/controls/OrbitControls.js": "sha384-4rziNxOBZKQ69i+w+f89KJ55TCYquwchVbByQwmaOeIOXdOU2PLDn3kOfXHwIJC9"
+  }
+}
+</script>
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Cormorant+Garamond:wght@500;600&display=swap&text=LUMÉBAYTGIR">
+<style>
+  html,body{margin:0;height:100%;background:transparent}
+  #lume-slot{position:relative;width:100%;height:100%;min-height:360px;outline:none;touch-action:pan-y}
+  #lume-slot canvas{display:block;width:100%;height:100%}
+  #lume-slot:focus-visible{outline:2px solid #b98a6e;outline-offset:-2px}
+</style>
+</head>
+<body>
+<div id="lume-slot" tabindex="0" role="img" aria-label="Tragamonedas Lumé Beauty"></div>
+<script type="module">
+import * as THREE from 'three';
+import { OrbitControls } from 'three/addons/controls/OrbitControls.js';
+
+// Los tres rodillos comparten el mismo orden de simbolos: asi el indice que
+// manda la pagina significa el mismo producto en los tres.
+const SYMS = ['vitac', 'pinkcream', 'numbuzin', 'seduction', 'velvet', 'coconut', 'vanilla'];
+const N = SYMS.length, STEP = Math.PI * 2 / N;
+const avisar = msg => { try { parent.postMessage(Object.assign({ fuente: 'lume-slot' }, msg), '*'); } catch (e) {} };
+
+let spinning = null;
+const host = document.getElementById('lume-slot');
+const renderer = new THREE.WebGLRenderer({ antialias: true, alpha: true, powerPreference: 'low-power' });
+renderer.setPixelRatio(Math.min(devicePixelRatio || 1, 1.5));
+renderer.shadowMap.enabled = true; renderer.shadowMap.type = THREE.PCFShadowMap;
+renderer.outputColorSpace = THREE.SRGBColorSpace;
+host.appendChild(renderer.domElement);
+const scene = new THREE.Scene();
+const camera = new THREE.PerspectiveCamera(35, 1, .05, 20);
+const controls = new OrbitControls(camera, renderer.domElement);
+Object.assign(controls, { enableDamping: true, dampingFactor: .08, enablePan: false, minDistance: .9, maxDistance: 3,
+  minPolarAngle: .6, maxPolarAngle: 1.6, minAzimuthAngle: -1.1, maxAzimuthAngle: 1.1 });
+scene.add(new THREE.HemisphereLight(0xffffff, 0xd8d2c4, 1.0));
+const key = new THREE.DirectionalLight(0xffffff, 2.2); key.position.set(4, 7, 5); key.castShadow = true;
+key.shadow.mapSize.set(1024, 1024); key.shadow.bias = -.0003; key.shadow.radius = 4;
+Object.assign(key.shadow.camera, { left: -.8, right: .8, top: .8, bottom: -.8, near: 1, far: 20 }); scene.add(key);
+const fill = new THREE.DirectionalLight(0xfff4e6, .5); fill.position.set(-5, 3, -4); scene.add(fill);
+const ground = new THREE.Mesh(new THREE.PlaneGeometry(4, 4), new THREE.ShadowMaterial({ opacity: .16 }));
+ground.rotation.x = -Math.PI / 2; ground.receiveShadow = true; scene.add(ground);
+try { await document.fonts.load('500 80px "Cormorant Garamond"'); } catch (e) {}
+
+const M = (name, color, o = {}) => { const m = new THREE.MeshStandardMaterial({ color, roughness: .5, metalness: 0, ...o }); m.name = name; return m; };
+const mat = {
+  cream: M('cream_lacquer', '#f5e9e0', { roughness: .38 }),
+  gold: M('rose_gold', '#efbb94', { roughness: .25, metalness: .3 }),
+  blush: M('blush_button', '#d99a96', { roughness: .3 }),
+  stone: M('terrazzo_stone', '#e6dbd0', { roughness: .9 }),
+  ivory: M('reel_ivory', '#fdf6f0', { roughness: .55, emissive: '#5a463c', emissiveIntensity: .6 }),
+  cavity: M('cavity', '#e7d2c4', { roughness: .7 }),
+  petal: M('petal', '#f2b8b4', { roughness: .7, side: THREE.DoubleSide }),
+};
+const root = new THREE.Group(); root.name = 'lume_slot_machine';
+const mesh = (name, geo, m, parent = root) => { const x = new THREE.Mesh(geo, m); x.name = name; x.castShadow = x.receiveShadow = true; parent.add(x); return x; };
+
+function labelTex(draw, w = 512, h = 256, s = 1) {
+  const c = document.createElement('canvas'); c.width = w * s; c.height = h * s;
+  const g = c.getContext('2d'); g.scale(s, s); draw(g, w, h);
+  const t = new THREE.CanvasTexture(c); t.colorSpace = THREE.SRGBColorSpace; t.anisotropy = 4; return t;
+}
+function labelPlane(name, tex, w, h, parent) {
+  const m = new THREE.MeshStandardMaterial({ map: tex, transparent: true, roughness: .5 }); m.name = name + '_mat';
+  const p = mesh(name, new THREE.PlaneGeometry(w, h), m, parent); p.castShadow = false; return p;
+}
+function rrect(w, h, r, cx = 0, cy = 0, path = new THREE.Shape()) {
+  const x = cx - w / 2, y = cy - h / 2;
+  path.moveTo(x + r, y); path.lineTo(x + w - r, y); path.quadraticCurveTo(x + w, y, x + w, y + r);
+  path.lineTo(x + w, y + h - r); path.quadraticCurveTo(x + w, y + h, x + w - r, y + h);
+  path.lineTo(x + r, y + h); path.quadraticCurveTo(x, y + h, x, y + h - r);
+  path.lineTo(x, y + r); path.quadraticCurveTo(x, y, x + r, y); return path;
+}
+const ext = (shape, depth, bevel = .01, seg = 4) => new THREE.ExtrudeGeometry(shape, { depth, bevelEnabled: bevel > 0, bevelThickness: bevel, bevelSize: bevel, bevelSegments: seg, curveSegments: 20 });
+
+const plinth = mesh('plinth', new THREE.CylinderGeometry(1, 1, .05, 48), mat.stone);
+plinth.scale.set(.5, 1, .34); plinth.position.y = .025;
+const B = .05;
+
+const W = .29, SH = .66, CROWN = .86, AW = .2;
+function cabinet(o) {
+  const s = new THREE.Shape();
+  s.moveTo(-W - o, .14); s.lineTo(W + o, .14); s.lineTo(W + o, SH - .06);
+  s.quadraticCurveTo(W + o, SH + o, W - .06, SH + o); s.lineTo(AW + o, SH + o);
+  s.bezierCurveTo(AW + o, CROWN - .06 + o, .12, CROWN + o, 0, CROWN + o);
+  s.bezierCurveTo(-.12, CROWN + o, -AW - o, CROWN - .06 + o, -AW - o, SH + o);
+  s.lineTo(-W + .06, SH + o); s.quadraticCurveTo(-W - o, SH + o, -W - o, SH - .06); s.closePath();
+  return s;
+}
+const WIN = { w: .43, h: .32, cy: .40 }, DEPTH = .40, FRONT = DEPTH / 2 + .012;
+const bodyShape = cabinet(0);
+bodyShape.holes.push(rrect(WIN.w, WIN.h, .025, 0, WIN.cy, new THREE.Path()));
+const body = mesh('cabinet', ext(bodyShape, DEPTH, .012), mat.cream);
+body.position.set(0, B, -DEPTH / 2);
+const bandShape = cabinet(.006); bandShape.holes.push(rrect(WIN.w + .05, WIN.h + .05, .04, 0, WIN.cy, new THREE.Path()));
+const band = mesh('cabinet_trim', ext(bandShape, .012, .004, 2), mat.gold);
+band.position.set(0, B, FRONT - .03);
+const bandBack = band.clone(); bandBack.name = 'cabinet_trim_back'; bandBack.position.z = -FRONT + .014; root.add(bandBack);
+const cav = mesh('reel_cavity', new THREE.BoxGeometry(WIN.w + .02, WIN.h + .02, .02), mat.cavity);
+cav.position.set(0, B + WIN.cy, -DEPTH / 2 - .002);
+
+const frameShape = rrect(WIN.w + .04, WIN.h + .04, .04, 0, 0);
+frameShape.holes.push(rrect(WIN.w, WIN.h, .025, 0, 0, new THREE.Path()));
+const frame = mesh('window_frame', ext(frameShape, .008, .006, 3), mat.gold);
+frame.position.set(0, B + WIN.cy, FRONT - .004);
+
+const ledge = mesh('ledge', ext(rrect(.6, .17, .04, 0, 0), DEPTH + .06, .014), mat.cream);
+ledge.position.set(0, B + .085 + .001, -DEPTH / 2);
+mesh('ledge_trim', ext(rrect(.612, .182, .045, 0, 0), .01, .004, 2), mat.gold)
+  .position.set(0, B + .086, DEPTH / 2 + .06 - .02);
+const LFRONT = DEPTH / 2 + .06 + .014;
+
+const pill = (w, h) => rrect(w, h, h / 2 - .0005, 0, 0);
+const btnRim = mesh('spin_button_rim', ext(pill(.25, .062), .008, .004, 3), mat.gold);
+btnRim.position.set(0, B + .088, LFRONT - .004);
+const btn = mesh('spin_button', ext(pill(.232, .046), .012, .006, 4), mat.blush);
+btn.position.set(0, B + .088, LFRONT + .002);
+
+function star2d(g, x, y, r, c) {
+  g.fillStyle = c; g.beginPath(); g.moveTo(x, y - r);
+  g.quadraticCurveTo(x, y, x + r, y); g.quadraticCurveTo(x, y, x, y + r);
+  g.quadraticCurveTo(x, y, x - r, y); g.quadraticCurveTo(x, y, x, y - r); g.fill();
+}
+const spinTex = labelTex((g, w, h) => {
+  g.fillStyle = '#fdf3ee'; g.font = '600 120px "Cormorant Garamond", serif'; g.textAlign = 'center'; g.textBaseline = 'middle';
+  g.letterSpacing = '24px'; g.fillText('GIRAR', w / 2 - 22, h / 2 + 6);
+  star2d(g, w / 2 + 222, h / 2, 22, '#fdf3ee');
+}, 512, 192, .8);
+labelPlane('spin_label', spinTex, .17, .06, root).position.set(0, B + .088, LFRONT + .021);
+
+const logoTex = labelTex((g, w, h) => {
+  g.textAlign = 'center'; g.textBaseline = 'alphabetic'; g.fillStyle = '#9c6f66';
+  g.font = '500 210px "Cormorant Garamond", serif'; g.letterSpacing = '14px'; g.fillText('LUMÉ', w / 2, 250);
+  g.fillStyle = '#b98a6e'; g.font = '600 50px "Cormorant Garamond", serif'; g.letterSpacing = '30px'; g.fillText('BEAUTY', w / 2 + 15, 340);
+  star2d(g, w / 2 + 290, 85, 30, '#c8956f');
+}, 1024, 400, .7);
+labelPlane('logo', logoTex, .34, .133, root).position.set(0, B + .72, FRONT + .001);
+
+function starShape(r) {
+  const s = new THREE.Shape(); s.moveTo(0, r);
+  s.quadraticCurveTo(0, 0, r, 0); s.quadraticCurveTo(0, 0, 0, -r); s.quadraticCurveTo(0, 0, -r, 0); s.quadraticCurveTo(0, 0, 0, r); return s;
+}
+[[-.255, .60, .012], [.255, .60, .012], [-.255, .27, .009], [.255, .27, .009], [-.24, .09, .011, LFRONT], [.24, .09, .011, LFRONT]].forEach(([x, y, r, z], i) => {
+  mesh('sparkle_' + i, ext(starShape(r), .003, .001, 1), mat.gold).position.set(x, B + y, (z ?? FRONT) + .001);
+});
+
+const R = .17, RW = .13, GAP = .011;
+const reels = [];
+const SIZES = {
+  seduction: { h: .155 }, velvet: { h: .155 }, vanilla: { h: .155 }, coconut: { h: .155 },
+  numbuzin: { h: .145 }, vitac: { w: .112 }, pinkcream: { w: .112 },
+};
+const loader = new THREE.TextureLoader();
+const prodMats = {}, prodImgs = {};
+await Promise.all(SYMS.map(k => new Promise(res => {
+  loader.load('img/' + k + '.webp', t => {
+    t.colorSpace = THREE.SRGBColorSpace; t.anisotropy = 4;
+    const m = new THREE.MeshStandardMaterial({ map: t, transparent: true, alphaTest: .04, roughness: .35,
+      emissive: '#ffffff', emissiveMap: t, emissiveIntensity: .22, side: THREE.DoubleSide, depthWrite: true });
+    m.name = 'product_' + k; prodMats[k] = m; prodImgs[k] = t.image.width / t.image.height; res();
+  }, undefined, res);
+})));
+function makeSymbol(type, parent) {
+  const p = SIZES[type], ar = prodImgs[type] || 1;
+  const w = p.w ?? p.h * ar, hh = p.h ?? p.w / ar;
+  const geo = new THREE.PlaneGeometry(w, hh, 1, 10), pos = geo.attributes.position, Rp = R + .004;
+  for (let i = 0; i < pos.count; i++) { const y = pos.getY(i), phi = y / Rp; pos.setY(i, Rp * Math.sin(phi)); pos.setZ(i, Rp * Math.cos(phi)); }
+  geo.computeVertexNormals();
+  const m = mesh('symbol_' + type, geo, prodMats[type], parent); m.castShadow = false; m.renderOrder = 2;
+  return m;
+}
+for (let i = 0; i < 3; i++) {
+  const reel = new THREE.Group(); reel.name = 'reel_' + (i + 1);
+  reel.position.set((i - 1) * (RW + GAP), B + WIN.cy, -.015); root.add(reel);
+  const drum = mesh('reel_drum_' + (i + 1), new THREE.CylinderGeometry(R, R, RW, 48), mat.ivory, reel);
+  drum.rotation.z = Math.PI / 2;
+  SYMS.forEach((t, k) => {
+    const pivot = new THREE.Group(); pivot.name = `reel_${i + 1}_slot_${k + 1}`;
+    pivot.rotation.x = -k * STEP; reel.add(pivot);
+    makeSymbol(t, pivot);
+  });
+  reel.rotation.x = ((i * 2) % N) * STEP;
+  reels.push(reel);
+}
+for (let i = 0; i < 4; i++) {
+  const x = -1.5 * (RW + GAP) + i * (RW + GAP) + GAP / 2 * (i === 0 ? 1 : i === 3 ? -1 : 0);
+  const ring = mesh('reel_divider_' + (i + 1), new THREE.CylinderGeometry(R + .006, R + .006, .006, 48), mat.gold);
+  ring.rotation.z = Math.PI / 2; ring.position.set(x, B + WIN.cy, -.015);
+}
+
+const hub = mesh('lever_mount', new THREE.CylinderGeometry(.045, .05, .03, 48), mat.cream);
+hub.rotation.z = Math.PI / 2; hub.position.set(W + .025, B + .38, 0);
+const hubRing = mesh('lever_mount_ring', new THREE.TorusGeometry(.045, .005, 8, 32), mat.gold);
+hubRing.rotation.y = Math.PI / 2; hubRing.position.set(W + .04, B + .38, 0);
+const lever = new THREE.Group(); lever.name = 'lever'; lever.position.set(W + .055, B + .38, 0); root.add(lever);
+mesh('lever_hub', new THREE.CylinderGeometry(.03, .03, .03, 48), mat.gold, lever).rotation.z = Math.PI / 2;
+mesh('lever_arm', new THREE.CylinderGeometry(.009, .012, .26, 32), mat.gold, lever).position.set(.012, .13, 0);
+mesh('lever_knob', new THREE.SphereGeometry(.036, 24, 16), mat.gold, lever).position.set(.012, .275, 0);
+lever.rotation.x = -.18;
+
+[[-.38, .052, .14, .4], [.4, .052, .08, 2.1], [-.15, .052, .25, 1.2], [.3, .003, .42, -.6], [-.5, .003, .38, 2.7]].forEach(([x, y, z, r], i) => {
+  const p = mesh('petal_' + i, new THREE.SphereGeometry(.05, 24, 12, 0, Math.PI * 2, 0, Math.PI / 2), mat.petal);
+  p.scale.set(1, .12, .6); p.position.set(x, y, z); p.rotation.y = r;
+});
+
+scene.add(root);
+const box = new THREE.Box3().setFromObject(root), ctr = box.getCenter(new THREE.Vector3());
+ground.position.y = box.min.y; controls.target.copy(ctr);
+camera.position.set(ctr.x + .35, ctr.y + .2, ctr.z + 1.8);
+let dirty = true;
+const fit = () => { const w = host.clientWidth || 1, hh = host.clientHeight || 1; renderer.setSize(w, hh, false); camera.aspect = w / hh;
+  camera.position.z = ctr.z + (w / hh < 1 ? 2.1 : 1.42); camera.updateProjectionMatrix(); dirty = true; };
+new ResizeObserver(fit).observe(host); fit();
+const loop = () => { if (controls.update() || dirty || spinning) { renderer.render(scene, camera); dirty = false; } };
+new IntersectionObserver(([e]) => renderer.setAnimationLoop(e.isIntersecting ? loop : null)).observe(host);
+
+[body, band, bandBack, frame, ledge, cav].forEach(m => m.castShadow = false);
+reels.forEach(r => r.traverse(o => { if (o.isMesh) o.receiveShadow = false; }));
+
+// --- giro: la pagina decide en que simbolo frena cada rodillo ---
+// El pivote del hueco k esta en -k*STEP, asi que el hueco k queda al frente
+// cuando la rotacion del rodillo vale k*STEP (modulo 2 pi).
+function objetivo(actual, k, vueltas) {
+  const deseado = k * STEP, giro = Math.PI * 2;
+  let t = Math.ceil((actual + vueltas * giro - deseado) / giro) * giro + deseado;
+  if (t <= actual + 0.001) t += giro;
+  return t;
+}
+function girar(stops) {
+  if (spinning) return;
+  const t0 = performance.now();
+  spinning = reels.map((r, i) => ({
+    from: r.rotation.x,
+    to: objetivo(r.rotation.x, stops[i] % N, 4 + i),
+    dur: 1600 + i * 450,
+  }));
+  const tick = now => {
+    const t = now - t0;
+    lever.rotation.x = -.18 + Math.sin(Math.min(t / 600, 1) * Math.PI) * 1.0;
+    let done = true;
+    reels.forEach((r, i) => {
+      const s = spinning[i], k = Math.min(t / s.dur, 1);
+      r.rotation.x = s.from + (s.to - s.from) * (1 - Math.pow(1 - k, 3));
+      if (k < 1) done = false;
+    });
+    if (done) {
+      reels.forEach((r, i) => { r.rotation.x = spinning[i].to; });
+      spinning = null; dirty = true;
+      avisar({ tipo: 'fin' });
+    } else requestAnimationFrame(tick);
+  };
+  requestAnimationFrame(tick);
+}
+
+const pedirGiro = () => { if (!spinning) avisar({ tipo: 'pedido' }); };
+const ray = new THREE.Raycaster(), ptr = new THREE.Vector2(), hits = [btn, btnRim, ...lever.children];
+const canvas = renderer.domElement;
+const pick = e => { const r = canvas.getBoundingClientRect(); ptr.set((e.clientX - r.left) / r.width * 2 - 1, -(e.clientY - r.top) / r.height * 2 + 1);
+  ray.setFromCamera(ptr, camera); return ray.intersectObjects(hits, false).length > 0; };
+let down = null;
+canvas.addEventListener('pointerdown', e => down = [e.clientX, e.clientY]);
+canvas.addEventListener('pointerup', e => { if (down && Math.hypot(e.clientX - down[0], e.clientY - down[1]) < 5 && pick(e)) pedirGiro(); down = null; });
+canvas.addEventListener('pointermove', e => { canvas.style.cursor = pick(e) ? 'pointer' : ''; });
+host.addEventListener('keydown', e => { if (e.code === 'Space' || e.code === 'Enter') { e.preventDefault(); pedirGiro(); } });
+
+addEventListener('message', e => {
+  const d = e.data;
+  if (!d || d.fuente === 'lume-slot') return;
+  if (d.tipo === 'girar' && Array.isArray(d.stops)) girar(d.stops);
+  if (d.tipo === 'ping') avisar({ tipo: 'listo', simbolos: SYMS });
+});
+avisar({ tipo: 'listo', simbolos: SYMS });
+</script>
+</body>
+</html>
