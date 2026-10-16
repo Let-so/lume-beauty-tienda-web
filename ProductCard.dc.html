@@ -24,6 +24,7 @@
     <sc-if value="{{ product.hasSubtitle }}"><span style="font-size:12.5px;line-height:1.35;color:#6f5650">{{ product.subtitle }}</span></sc-if>
     <span style="font-size:11px;line-height:1.35;color:#8a6d65">{{ product.size }}</span>
     <sc-if value="{{ product.hasPrice }}"><span style="margin-top:7px;font-family:'Cormorant Garamond',serif;font-size:23px;line-height:1;letter-spacing:0.01em;color:#4a231f">{{ product.priceLabel }}</span></sc-if>
+    <sc-if value="{{ product.sinPrecio }}"><span style="margin-top:9px;font-size:10px;letter-spacing:0.16em;color:#8a6d65">CONSULTAR PRECIO</span></sc-if>
   </div>
   <button onClick="{{ product.add }}" style="margin:13px 4px 0;height:38px;border:0;border-radius:999px;background:#b38d83;color:#fdf8f5;font-family:'Jost',sans-serif;font-size:9.5px;letter-spacing:0.2em;transition:background .25s" style-hover="background:#a07a70">{{ product.addLabel }}</button>
 </article>

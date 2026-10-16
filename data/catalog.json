@@ -20,6 +20,10 @@
     {
       "id": "maquillaje",
       "label": "Maquillaje"
+    },
+    {
+      "id": "limpieza",
+      "label": "Limpieza facial"
     }
   ],
   "homeBanners": [
@@ -616,7 +620,7 @@
           "value": "4 unidades de 34 g. Peso neto total 136 g."
         },
         {
-          "label": "Segun el envase",
+          "label": "Según el envase",
           "value": "Probiotics-Galactomyces Ferment Filtrate, ácido hialurónico de bajo peso molecular y colágeno de bajo peso molecular."
         },
         {
@@ -676,7 +680,7 @@
       "price": 43000,
       "featured": true,
       "description": [
-        "Protector solar facial de la linea Madagascar Centella Air-Fit.",
+        "Protector solar facial de la línea Madagascar Centella Air-Fit.",
         "Factor de protección SPF50+ PA++++ según lo indicado en el envase."
       ],
       "specs": [
@@ -691,6 +695,110 @@
         {
           "label": "Hecha con",
           "value": "Centella pura de Madagascar."
+        }
+      ]
+    },
+    {
+      "id": "medicube-azelaic-foam-cleanser",
+      "brand": "medicube",
+      "brandLabel": "Medicube",
+      "name": "Azelaic Acid Niacinamide Deep Clean Foam Cleanser",
+      "title": "Azelaic Acid Niacinamide",
+      "subtitle": "Deep Clean Foam Cleanser",
+      "size": "120 g",
+      "categories": [
+        "skincare-coreano",
+        "limpieza"
+      ],
+      "image": "assets/productos/medicube-azelaic-foam-cleanser.webp",
+      "imagePadding": "6%",
+      "price": null,
+      "featured": false,
+      "description": [
+        "Espuma limpiadora facial de la línea Azelaic Acid de Medicube.",
+        "Se usa como primer o segundo paso de la limpieza, según tu rutina."
+      ],
+      "specs": [
+        {
+          "label": "Contenido",
+          "value": "120 g / 4.23 oz."
+        },
+        {
+          "label": "Según el envase",
+          "value": "Ácido azelaico al 10 y niacinamida."
+        },
+        {
+          "label": "Precio",
+          "value": "A confirmar. Consultanos y te lo pasamos."
+        }
+      ]
+    },
+    {
+      "id": "medicube-super-cica-cleansing-balm",
+      "brand": "medicube",
+      "brandLabel": "Medicube",
+      "name": "Super Cica Deep Cleansing Balm",
+      "title": "Super Cica Deep Cleansing Balm",
+      "subtitle": "",
+      "size": "100 ml",
+      "categories": [
+        "skincare-coreano",
+        "limpieza"
+      ],
+      "image": "assets/productos/medicube-super-cica-cleansing-balm.webp",
+      "imagePadding": "8%",
+      "price": null,
+      "featured": false,
+      "description": [
+        "Bálsamo limpiador facial que se aplica sobre la piel seca y se emulsiona con agua.",
+        "Pensado como primer paso de la doble limpieza."
+      ],
+      "specs": [
+        {
+          "label": "Contenido",
+          "value": "100 ml / 3.38 fl. oz."
+        },
+        {
+          "label": "Según el envase",
+          "value": "Super Cica 7 y LHA (ácido capriloil salicilico)."
+        },
+        {
+          "label": "Precio",
+          "value": "A confirmar. Consultanos y te lo pasamos."
+        }
+      ]
+    },
+    {
+      "id": "skin1004-hyalu-cica-first-ampoule",
+      "brand": "skin1004",
+      "brandLabel": "SKIN1004",
+      "name": "Madagascar Centella Hyalu-Cica First Ampoule",
+      "title": "Hyalu-Cica First Ampoule",
+      "subtitle": "",
+      "size": "50 ml",
+      "categories": [
+        "skincare-coreano"
+      ],
+      "image": "assets/productos/skin1004-hyalu-cica-first-ampoule.webp",
+      "imagePadding": "6%",
+      "price": null,
+      "featured": false,
+      "description": [
+        "Ampolla facial de la línea Madagascar Centella Hyalu-Cica.",
+        "Se aplica después de limpiar, como primer paso de hidratación."
+      ],
+      "specs": [
+        {
+          "label": "Contenido",
+          "value": "50 ml / 1.69 fl. oz."
+        },
+        {
+          "label": "Hecha con",
+          "value": "Centella pura de Madagascar."
+        },
+        {
+          "label": "Precio",
+          "value": "A confirmar. Consultanos y te lo pasamos."
         }
       ]
     }

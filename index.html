@@ -3,7 +3,7 @@
 <head>
 <meta charset="utf-8">
 <meta name="viewport" content="width=device-width, initial-scale=1">
-<script>window.__DC_BUILD="d8f42e0d4f"</script>
+<script>window.__DC_BUILD="4ac819d39c"</script>
 <script src="./support.js"></script>
 </head>
 <body>
@@ -417,7 +417,7 @@ class Component extends DCLogic {
       openLabel: 'Ver ' + p.brandLabel + ' ' + p.name,
       alt: p.brandLabel + ' ' + p.name + ', ' + p.size,
       addLabel: n ? 'EN EL CARRITO · ' + n : 'AGREGAR AL CARRITO',
-      hasPrice: p.price != null, priceLabel: p.price != null ? this.money(p.price, (this.state.data || {}).currency) : '',
+      hasPrice: p.price != null, sinPrecio: p.price == null, priceLabel: p.price != null ? this.money(p.price, (this.state.data || {}).currency) : '',
       open: () => this.go('product', { productId: p.id, qty: 1 }),
       toggleFav: e => { stop(e); this.toggleFav(p.id); },
       add: e => { stop(e); this.addToCart(p.id, 1); },
@@ -569,7 +569,7 @@ class Component extends DCLogic {
       const mainCat = pp.categories.find(c => c !== 'skincare') || pp.categories[0];
       pd = Object.assign(dp, {
         crumbCat: catLabel(mainCat), goCat: go('catalog', { cat: mainCat, brand: null, query: '' }),
-        priceLabel: pp.price != null ? this.money(pp.price, d.currency) : 'PRECIO A CONFIGURAR',
+        priceLabel: pp.price != null ? this.money(pp.price, d.currency) : 'CONSULTAR PRECIO',
         catLinks: pp.categories.filter(c => c !== 'skincare').map(c => ({ label: catLabel(c), open: go('catalog', { cat: c, brand: null, query: '' }) })),
         description: (pp.description || []).map(t => ({ text: t })),
         specs: (pp.specs || []).map(x => ({ label: x.label, value: x.value })),
