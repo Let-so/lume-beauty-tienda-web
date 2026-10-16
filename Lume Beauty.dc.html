@@ -3,7 +3,7 @@
 <head>
 <meta charset="utf-8">
 <meta name="viewport" content="width=device-width, initial-scale=1">
-<script>window.__DC_BUILD="5005504160"</script>
+<script>window.__DC_BUILD="4a1a2b5eb9"</script>
 <script src="./support.js"></script>
 </head>
 <body>
@@ -42,7 +42,6 @@ input::placeholder{color:#6f5650;letter-spacing:0.12em}
       <dc-import name="HeroBanner" hero="{{ hero }}" hint-size="100%,415px"></dc-import>
       <dc-import name="Benefits" bn="{{ benefits }}" hint-size="100%,110px"></dc-import>
       <dc-import name="CategoryBanners" c="{{ categories }}" hint-size="100%,170px"></dc-import>
-      <dc-import name="SlotMachine" sl="{{ slot }}" hint-size="100%,520px"></dc-import>
       <dc-import name="FeaturedProducts" fp="{{ featured }}" hint-size="100%,440px"></dc-import>
       <dc-import name="BrandStrip" br="{{ brandStrip }}" hint-size="100%,220px"></dc-import>
 
@@ -186,8 +185,28 @@ input::placeholder{color:#6f5650;letter-spacing:0.12em}
                 <button onClick="{{ openInstagram }}" style="height:40px;padding:0 20px;border:1px solid #cdb8ac;border-radius:999px;background:transparent;color:#4a3530;font-size:9.5px;letter-spacing:0.16em" style-hover="background:#ece0d8">INSTAGRAM&nbsp;&nbsp;→</button>
               </div>
             </div>
+            <div style="margin-top:22px;padding-top:22px;border-top:1px solid #e3d4ca;display:flex;flex-direction:column;gap:10px">
+              <span style="font-size:10px;letter-spacing:0.2em;color:#8a6d65">COMPARTIR ESTE PRODUCTO</span>
+              <span style="font-size:11.5px;line-height:1.5;color:#8a6d65">Enviale el enlace a quien quieras: entra directo a este producto.</span>
+              <div style="display:flex;flex-wrap:wrap;gap:9px;margin-top:2px">
+                <button onClick="{{ pd.share }}" aria-label="{{ pd.shareLabel }}" style="height:44px;padding:0 22px;border:0;border-radius:999px;background:#b38d83;color:#fdf8f5;display:flex;align-items:center;gap:9px;font-size:9.5px;letter-spacing:0.18em" style-hover="background:#a07a70"><svg width="17" height="17" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><circle cx="18" cy="5.5" r="2.6"></circle><circle cx="6" cy="12" r="2.6"></circle><circle cx="18" cy="18.5" r="2.6"></circle><path d="M8.4 10.8 15.6 6.7"></path><path d="M8.4 13.2l7.2 4.1"></path></svg>COMPARTIR PRODUCTO</button>
+                <button onClick="{{ pd.copiar }}" style="height:44px;padding:0 22px;border:1px solid #cdb8ac;border-radius:999px;background:transparent;color:#4a3530;font-size:9.5px;letter-spacing:0.16em" style-hover="background:#ece0d8">COPIAR ENLACE</button>
+              </div>
+            </div>
             <button onClick="{{ goShop }}" style="margin-top:28px;background:none;border:0;padding:0;font-size:10px;letter-spacing:0.16em;color:#8a6d65" style-hover="color:#4a231f">←&nbsp;&nbsp;VOLVER AL CATÁLOGO</button>
           </div>
+        </div>
+      </section>
+    </sc-if>
+
+    <sc-if value="{{ isProductoPerdido }}">
+      <section data-screen-label="Producto no encontrado" style="padding:clamp(26px,3.2vw,44px) clamp(18px,2.5vw,38px) clamp(42px,5vw,72px);display:flex;flex-direction:column;align-items:flex-start;gap:16px">
+        <span style="font-size:10px;letter-spacing:0.2em;color:#8a6d65">PRODUCTO NO ENCONTRADO</span>
+        <h1 style="margin:0;max-width:20ch;font-family:'Cormorant Garamond',serif;font-weight:500;font-size:clamp(32px,3.6vw,50px);line-height:1.05;color:#4a231f">Este producto ya no está disponible.</h1>
+        <p style="margin:0;max-width:46ch;font-size:13.5px;line-height:1.6;color:#6f5650">Puede que lo hayamos sacado del catálogo o que el enlace esté incompleto. Mirá el resto de los productos o escribinos y te ayudamos a encontrarlo.</p>
+        <div style="display:flex;flex-wrap:wrap;gap:9px;margin-top:4px">
+          <button onClick="{{ goShop }}" style="height:44px;padding:0 26px;border:0;border-radius:999px;background:#b38d83;color:#fdf8f5;font-size:10px;letter-spacing:0.2em" style-hover="background:#a07a70">VER TODOS LOS PRODUCTOS&nbsp;&nbsp;→</button>
+          <button onClick="{{ openWhatsapp }}" style="height:44px;padding:0 26px;border:1px solid #cdb8ac;border-radius:999px;background:transparent;color:#4a3530;font-size:10px;letter-spacing:0.18em" style-hover="background:#ece0d8">ESCRIBINOS&nbsp;&nbsp;→</button>
         </div>
       </section>
     </sc-if>
@@ -200,7 +219,12 @@ input::placeholder{color:#6f5650;letter-spacing:0.12em}
           <sc-for list="{{ brands }}" as="b" hint-placeholder-count="3">
             <button onClick="{{ b.open }}" aria-label="{{ b.ariaLabel }}" style="border:0;background:none;padding:10px 6px 4px;display:flex;flex-direction:column;align-items:center;gap:18px;color:#3f2a26;cursor:pointer">
               <span style="position:relative;display:block;width:100%;aspect-ratio:1 / 1;max-height:280px">
-                <img src="{{ b.bag }}" alt="{{ b.alt }}" loading="lazy" style="position:absolute;inset:0;width:100%;height:100%;object-fit:contain;filter:drop-shadow(0 18px 22px rgba(92,49,41,0.20)) drop-shadow(0 4px 7px rgba(92,49,41,0.10));transition:transform .45s cubic-bezier(.2,.7,.2,1),filter .45s" style-hover="transform:translateY(-7px) scale(1.03);filter:drop-shadow(0 28px 34px rgba(92,49,41,0.26)) drop-shadow(0 8px 12px rgba(92,49,41,0.13))">
+                <sc-if value="{{ b.hasBag }}" hint-placeholder-val="{{ true }}">
+                  <img src="{{ b.bag }}" alt="{{ b.alt }}" loading="lazy" style="position:absolute;inset:0;width:100%;height:100%;object-fit:contain;filter:drop-shadow(0 18px 22px rgba(92,49,41,0.20)) drop-shadow(0 4px 7px rgba(92,49,41,0.10));transition:transform .45s cubic-bezier(.2,.7,.2,1),filter .45s" style-hover="transform:translateY(-7px) scale(1.03);filter:drop-shadow(0 28px 34px rgba(92,49,41,0.26)) drop-shadow(0 8px 12px rgba(92,49,41,0.13))">
+                </sc-if>
+                <sc-if value="{{ b.sinBolsa }}">
+                  <span style="position:absolute;inset:0;display:flex;align-items:center;justify-content:center;padding:12%;border:1px solid #e3d4ca;border-radius:4px;background:#f8f1ec;font-family:'Cormorant Garamond',serif;font-weight:500;font-size:clamp(20px,2.6vw,32px);line-height:1.1;text-align:center;color:#4a231f">{{ b.name }}</span>
+                </sc-if>
               </span>
               <span style="font-size:10px;letter-spacing:0.16em;color:#4a3530">VER PRODUCTOS&nbsp;&nbsp;→</span>
             </button>
@@ -239,14 +263,22 @@ input::placeholder{color:#6f5650;letter-spacing:0.12em}
 <script type="text/x-dc" data-dc-script>
 class Component extends DCLogic {
   state = { data: null, view: 'home', cat: 'all', brand: null, productId: null, query: '', cart: {}, favs: {}, cartOpen: false, menuOpen: false, searchOpen: false, qty: 1, announceIndex: 0, toast: null, helpTopic: null,
-    slotSpinning: false, slotSnap: false, soundOn: true, slotOffsets: [0, 2, 4], slotResult: null, slotPlays: null, slotPrize: null, w: typeof window !== 'undefined' ? window.innerWidth : 1440 };
+    w: typeof window !== 'undefined' ? window.innerWidth : 1440 };
 
   componentDidMount() {
     this._r = () => this.setState({ w: window.innerWidth });
     this._k = e => { if (e.key === 'Escape') this.setState({ cartOpen: false, menuOpen: false }); };
     window.addEventListener('resize', this._r);
     window.addEventListener('keydown', this._k);
-    try { const g = JSON.parse(localStorage.getItem('lume_store_v1') || '{}'); this.setState({ cart: g.cart || {}, favs: g.favs || {}, slotPlays: g.slotPlays || null, slotPrize: g.slotPrize || null, soundOn: g.soundOn !== false }); } catch (e) {}
+    // un enlace compartido entra directo a la ficha
+    const compartido = this.productoDeURL();
+    if (compartido) this.setState({ view: 'product', productId: compartido, qty: 1 });
+    this._pop = () => {
+      const id = this.productoDeURL();
+      this.setState(id ? { view: 'product', productId: id, qty: 1 } : { view: 'home', productId: null });
+    };
+    window.addEventListener('popstate', this._pop);
+    try { const g = JSON.parse(localStorage.getItem('lume_store_v1') || '{}'); this.setState({ cart: g.cart || {}, favs: g.favs || {} }); } catch (e) {}
     fetch('data/catalog.json?v=' + (window.__DC_BUILD || '')).then(r => r.json()).then(data => {
       this.setState({ data });
       const n = (data.announcements || []).length;
@@ -256,21 +288,16 @@ class Component extends DCLogic {
   componentWillUnmount() {
     window.removeEventListener('resize', this._r);
     window.removeEventListener('keydown', this._k);
+    window.removeEventListener('popstate', this._pop);
     if (this._ann) { clearInterval(this._ann); this._ann = null; }
     if (this._toastT) { clearTimeout(this._toastT); this._toastT = null; }
-    if (this._slotT) { clearTimeout(this._slotT); this._slotT = null; }
-    if (this._snapT) { clearTimeout(this._snapT); this._snapT = null; }
-    if (this._ctx) { try { this._ctx.close(); } catch (e) {} this._ctx = null; this._master = null; this._nb = null; }
   }
   componentDidUpdate() {
     const s = this.state;
-    if (this._lastCart !== s.cart || this._lastFavs !== s.favs || this._lastPlays !== s.slotPlays || this._lastPrize !== s.slotPrize || this._lastSound !== s.soundOn) {
+    if (this._lastCart !== s.cart || this._lastFavs !== s.favs) {
       this._lastCart = s.cart;
       this._lastFavs = s.favs;
-      this._lastPlays = s.slotPlays;
-      this._lastPrize = s.slotPrize;
-      this._lastSound = s.soundOn;
-      try { localStorage.setItem('lume_store_v1', JSON.stringify({ cart: s.cart, favs: s.favs, slotPlays: s.slotPlays, slotPrize: s.slotPrize, soundOn: s.soundOn })); } catch (e) {}
+      try { localStorage.setItem('lume_store_v1', JSON.stringify({ cart: s.cart, favs: s.favs })); } catch (e) {}
     }
     if (this._lastCartOpen !== s.cartOpen) {
       this._lastCartOpen = s.cartOpen;
@@ -278,7 +305,12 @@ class Component extends DCLogic {
     }
   }
 
-  go(view, extra) { this.setState(Object.assign({ view, menuOpen: false, searchOpen: false, cartOpen: false }, extra || {})); this.alInicio(); }
+  go(view, extra) {
+    const x = Object.assign({ view, menuOpen: false, searchOpen: false, cartOpen: false }, extra || {});
+    this.setState(x);
+    this.sincronizarURL(view, x.productId !== undefined ? x.productId : this.state.productId);
+    this.alInicio();
+  }
   alInicio() {
     try {
       window.scrollTo(0, 0);
@@ -309,160 +341,66 @@ class Component extends DCLogic {
     this.flash(added ? 'Guardado en favoritos' : 'Quitado de favoritos');
   }
   // --- sonido sintetizado: sin archivos, se arma con osciladores y ruido ---
-  audio() {
-    if (!this.state.soundOn || typeof window === 'undefined') return null;
-    const AC = window.AudioContext || window.webkitAudioContext;
-    if (!AC) return null;
-    if (!this._ctx) { try { this._ctx = new AC(); } catch (e) { return null; } }
-    if (this._ctx.state === 'suspended') { try { this._ctx.resume(); } catch (e) {} }
-    return this._ctx;
+  urlProducto(id) {
+    let base = (((this.state.data || {}).siteUrl) || '').trim();
+    if (!base && typeof location !== 'undefined') base = location.origin + location.pathname;
+    base = base.replace(/[?#].*$/, '');
+    return base + '?producto=' + encodeURIComponent(id);
   }
-  maestro(ctx) {
-    if (!this._master || this._masterCtx !== ctx) {
-      // compresor como limitador: sin esto, el jingle y las monedas se suman
-      // por encima de 1.0 y la salida recorta
-      const c = ctx.createDynamicsCompressor();
-      c.threshold.value = -12; c.knee.value = 6; c.ratio.value = 14;
-      c.attack.value = 0.002; c.release.value = 0.14;
-      const g = ctx.createGain(); g.gain.value = 0.85;
-      c.connect(g); g.connect(ctx.destination);
-      this._master = c; this._masterCtx = ctx;
-    }
-    return this._master;
+  productoDeURL() {
+    try {
+      const m = /[?&]producto=([^&#]+)/.exec((typeof location !== 'undefined' && location.search) || '');
+      return m ? decodeURIComponent(m[1]) : null;
+    } catch (e) { return null; }
   }
-  ruidoBuffer(ctx) {
-    if (!this._nb) {
-      const n = Math.floor(ctx.sampleRate * 0.12);
-      const b = ctx.createBuffer(1, n, ctx.sampleRate);
-      const d = b.getChannelData(0);
-      for (let i = 0; i < n; i++) d[i] = (Math.random() * 2 - 1) * Math.pow(1 - i / n, 2.2);
-      this._nb = b;
-    }
-    return this._nb;
+  sincronizarURL(view, productId) {
+    if (typeof history === 'undefined' || !history.pushState) return;
+    try {
+      const destino = view === 'product' && productId
+        ? location.pathname + '?producto=' + encodeURIComponent(productId)
+        : location.pathname;
+      if (location.pathname + location.search !== destino) history.pushState({ productId: productId || null }, '', destino);
+    } catch (e) {}
   }
-  golpe(ctx, t, dur, freq, q, vol) {
-    const src = ctx.createBufferSource(); src.buffer = this.ruidoBuffer(ctx);
-    const f = ctx.createBiquadFilter(); f.type = 'bandpass'; f.frequency.value = freq; f.Q.value = q;
-    const g = ctx.createGain();
-    g.gain.setValueAtTime(vol, t);
-    g.gain.exponentialRampToValueAtTime(0.0001, t + dur);
-    src.connect(f); f.connect(g); g.connect(this.maestro(ctx));
-    src.start(t); src.stop(t + dur);
+  copiarViejo(texto) {
+    try {
+      const t = document.createElement('textarea');
+      t.value = texto;
+      t.setAttribute('readonly', '');
+      t.style.position = 'fixed';
+      t.style.top = '-1000px';
+      document.body.appendChild(t);
+      t.select();
+      const ok = document.execCommand('copy');
+      document.body.removeChild(t);
+      return ok;
+    } catch (e) { return false; }
   }
-  nota(ctx, t, freq, dur, vol, tipo, caida) {
-    const o = ctx.createOscillator(); o.type = tipo || 'triangle';
-    o.frequency.setValueAtTime(freq, t);
-    if (caida) o.frequency.exponentialRampToValueAtTime(Math.max(40, caida), t + dur);
-    const g = ctx.createGain();
-    g.gain.setValueAtTime(0.0001, t);
-    g.gain.linearRampToValueAtTime(vol, t + 0.006);
-    g.gain.exponentialRampToValueAtTime(0.0001, t + dur);
-    o.connect(g); g.connect(this.maestro(ctx));
-    o.start(t); o.stop(t + dur + 0.02);
-  }
-  sonarGiro(frenos) {
-    const ctx = this.audio(); if (!ctx) return;
-    const t = ctx.currentTime + 0.01;
-    this.nota(ctx, t, 190, 0.16, 0.22, 'sine', 70);      // tiron de la palanca
-    this.golpe(ctx, t, 0.09, 1500, 1.1, 0.3);
-    frenos.forEach((fin, i) => {
-      let tt = 0.06;
-      while (tt < fin) {                                  // ticks de la tira
-        this.golpe(ctx, t + tt, 0.016, 2500 + i * 320, 3.2, 0.085);
-        tt += 0.036 + 0.1 * Math.pow(tt / fin, 3);        // se separan al frenar
+  copiarEnlace(url) {
+    const ok = () => this.flash('Enlace copiado. Ya lo pod\u00e9s pegar donde quieras.');
+    const falla = () => this.flash('No se pudo copiar el enlace. Prob\u00e1 de nuevo.');
+    try {
+      if (navigator.clipboard && navigator.clipboard.writeText) {
+        navigator.clipboard.writeText(url).then(ok, () => { if (this.copiarViejo(url)) ok(); else falla(); });
+        return;
       }
-      this.golpe(ctx, t + fin, 0.07, 820 + i * 130, 1.4, 0.34);   // clac
-      this.nota(ctx, t + fin, 235 - i * 22, 0.1, 0.16, 'square');
-    });
+    } catch (e) {}
+    if (this.copiarViejo(url)) ok(); else falla();
   }
-  sonarPremio() {
-    const ctx = this.audio(); if (!ctx) return;
-    const t = ctx.currentTime + 0.04;
-    [523.25, 659.25, 783.99, 1046.5, 1318.51].forEach((f, i) =>
-      this.nota(ctx, t + i * 0.085, f, 0.32, 0.17, 'triangle'));
-    for (let i = 0; i < 24; i++) {                        // lluvia de monedas
-      const tt = t + 0.3 + Math.random() * 0.95;
-      this.golpe(ctx, tt, 0.055, 3000 + Math.random() * 2800, 9, 0.1);
-      this.nota(ctx, tt, 1700 + Math.random() * 1500, 0.07, 0.045, 'sine');
-    }
-  }
-  sonarNada() {
-    const ctx = this.audio(); if (!ctx) return;
-    const t = ctx.currentTime + 0.02;
-    this.nota(ctx, t, 320, 0.17, 0.11, 'triangle');
-    this.nota(ctx, t + 0.14, 240, 0.28, 0.1, 'triangle');
-  }
-  consultarPremio(pr, byId) {
-    const d = this.state.data || {}, wa = d.whatsapp || {};
-    if (!wa.url || !pr) return;
-    const prod = byId[pr.productId] || {};
-    const f = new Date(pr.wonAt);
-    const texto = [
-      'Hola, gané en la tragamonedas de la web.',
-      'Salieron tres: ' + (prod.brandLabel ? prod.brandLabel + ' ' + prod.name : 'un producto') + '.',
-      'Código: ' + (pr.code || 'sin código') + ' · ' + f.getDate() + '/' + (f.getMonth() + 1) + '/' + f.getFullYear(),
-      '¿Cuál es mi premio secreto?'
-    ].join(String.fromCharCode(10));
-    try { window.open(wa.url + '?text=' + encodeURIComponent(texto), '_blank', 'noopener,noreferrer'); } catch (e) {}
-  }
-  hoyISO() { return new Date().toISOString().slice(0, 10); }
-  premioValido(pr, byId) {
-    if (!pr || !pr.productId || !byId[pr.productId]) return null;
-    if (pr.expiresAt && Date.now() > pr.expiresAt) return null;
-    return pr;
-  }
-  girosUsados() {
-    const pl = this.state.slotPlays;
-    return pl && pl.date === this.hoyISO() ? pl.used : 0;
-  }
-  girar() {
-    const d = this.state.data;
-    if (!d || !d.slot || this.state.slotSpinning) return;
-    const cfg = d.slot, prods = d.products, n = prods.length;
-    if (!n || this.girosUsados() >= cfg.spinsPerDay) return;
-
-    const gana = Math.random() < cfg.winChance;
-    let idx;
-    if (gana) { const k = Math.floor(Math.random() * n); idx = [k, k, k]; }
-    else {
-      // reintentos acotados: un bucle abierto sobre Math.random puede no terminar
-      for (let intento = 0; intento < 12; intento++) {
-        idx = [0, 0, 0].map(() => Math.floor(Math.random() * n));
-        if (!(idx[0] === idx[1] && idx[1] === idx[2])) break;
+  compartir(id) {
+    const prod = ((this.state.data || {}).products || []).find(x => x.id === id);
+    if (!prod) return;
+    const url = this.urlProducto(id);
+    const titulo = prod.brandLabel + ' ' + prod.name;
+    // primero el menu nativo del telefono; si no existe o falla, se copia
+    try {
+      if (typeof navigator !== 'undefined' && navigator.share) {
+        navigator.share({ title: titulo, text: titulo + ' en Lum\u00e9 Beauty', url })
+          .catch(e => { if (!e || e.name !== 'AbortError') this.copiarEnlace(url); });
+        return;
       }
-      if (n > 1 && idx[0] === idx[1] && idx[1] === idx[2]) idx[2] = (idx[2] + 1) % n;
-    }
-    // cada rodillo da unas vueltas y frena en su simbolo; despues se reposiciona
-    // sin transicion, para que la tira no crezca indefinidamente
-    this.setState({
-      slotSpinning: true, slotResult: null,
-      slotPlays: { date: this.hoyISO(), used: this.girosUsados() + 1 }
-    });
-    // cada rodillo da unas vueltas y frena en su simbolo; despues se reposiciona
-    // sin transicion para que la tira no crezca indefinidamente
-    this.setState({ slotOffsets: idx.map((k, i) => (3 + i) * n + k) });
-    // se llama dentro del click: el navegador solo deja sonar tras un gesto
-    this.sonarGiro([2.3, 2.55, 2.8]);
-
-    if (this._slotT) clearTimeout(this._slotT);
-    this._slotT = setTimeout(() => {
-      this._slotT = null;
-      const cambio = { slotSpinning: false, slotSnap: true, slotOffsets: idx.slice(),
-                       slotResult: { win: gana, productId: prods[idx[0]].id } };
-      if (gana) {
-        const ahora = Date.now();
-        cambio.slotPrize = {
-          productId: prods[idx[0]].id, wonAt: ahora,
-          expiresAt: ahora + (cfg.prizeDays || 7) * 86400000,
-          code: 'LUME-' + Math.random().toString(36).slice(2, 6).toUpperCase()
-        };
-      }
-      this.setState(cambio);
-      if (this._snapT) clearTimeout(this._snapT);
-      this._snapT = setTimeout(() => { this._snapT = null; this.setState({ slotSnap: false }); }, 80);
-      if (gana) { this.sonarPremio(); this.flash('¡Ganaste! Descubrí tu premio secreto.'); }
-      else this.sonarNada();
-    }, 2950);
+    } catch (e) {}
+    this.copiarEnlace(url);
   }
   openInstagram() {
     const url = ((this.state.data || {}).instagram || {}).url;
@@ -482,7 +420,9 @@ class Component extends DCLogic {
       hasPrice: p.price != null, priceLabel: p.price != null ? this.money(p.price, (this.state.data || {}).currency) : '',
       open: () => this.go('product', { productId: p.id, qty: 1 }),
       toggleFav: e => { stop(e); this.toggleFav(p.id); },
-      add: e => { stop(e); this.addToCart(p.id, 1); }
+      add: e => { stop(e); this.addToCart(p.id, 1); },
+      share: e => { stop(e); this.compartir(p.id); },
+      shareLabel: 'Compartir ' + p.brandLabel + ' ' + p.name
     });
   }
 
@@ -538,112 +478,6 @@ class Component extends DCLogic {
     const wa = d.whatsapp || { display: '', url: '' };
     const openWhatsapp = () => { if (wa.url) { try { window.open(wa.url, '_blank', 'noopener,noreferrer'); } catch (e) {} } };
 
-    const slCfg = Object.assign({ title: '', text: '', spinsPerDay: 100, prizeDays: 7 }, d.slot || {});
-    const usados = this.girosUsados();
-    const restantes = Math.max(0, slCfg.spinsPerDay - usados);
-    const premio = this.premioValido(s.slotPrize, byId);
-    const res = s.slotResult;
-    const bloqueado = !s.data || s.slotSpinning || restantes === 0;
-    const fecha = t => { const x = new Date(t); return x.getDate() + '/' + (x.getMonth() + 1); };
-    const angosto = w < 620, tile = angosto ? 74 : w < 900 ? 88 : 104;
-    const hueco = Math.round(tile * 0.08), oro = '#d9a87f', oroClaro = '#f0cba6';
-    const tira = [];
-    for (let i = 0; i < 8; i++) products.forEach(pp2 => tira.push({ image: pp2.image }));
-
-    let mensaje = '', colorMsg = '#6f5650';
-    if (s.slotSpinning) mensaje = '';
-    else if (res && res.win) { mensaje = '\u00a1Tres iguales! Ya ten\u00e9s un premio secreto esperando.'; colorMsg = '#7a3f34'; }
-    else if (res) mensaje = 'Esta vez no salieron tres iguales.';
-    else if (premio) { mensaje = 'Ten\u00e9s un premio secreto sin descubrir, hasta el ' + fecha(premio.expiresAt) + '.'; colorMsg = '#7a3f34'; }
-
-    const slot = {
-      title: slCfg.title, text: slCfg.text,
-      spin: () => this.girar(), disabled: bloqueado,
-      buttonLabel: s.slotSpinning ? 'GIRANDO\u2026' : restantes === 0 ? 'VOLV\u00c9 M\u00c1S TARDE' : 'SPIN',
-      screenLabel: s.slotSpinning ? 'Girando' : 'Tragamonedas Lum\u00e9',
-      hasMessage: !!mensaje, message: mensaje,
-      messageStyle: { margin: 0, maxWidth: '44ch', fontSize: '13px', lineHeight: 1.55, color: colorMsg },
-      hasPrizeActions: !!premio,
-      prizeHint: 'Descubrí tu premio secreto acá',
-      askLabel: 'DESCUBRIR MI PREMIO',
-      askPrize: () => this.consultarPremio(premio, byId),
-      openPrize: () => { if (premio) this.go('product', { productId: premio.productId, qty: 1 }); },
-      soundOn: s.soundOn,
-      soundLabel: s.soundOn ? 'SONIDO ACTIVADO' : 'SONIDO SILENCIADO',
-      soundAria: s.soundOn ? 'Silenciar el sonido de la tragamonedas' : 'Activar el sonido de la tragamonedas',
-      soundIcon: s.soundOn
-        ? 'M4 9.5h3.2L12 5.6v12.8L7.2 14.5H4z M15.4 9.1a4 4 0 0 1 0 5.8 M18 6.6a7.6 7.6 0 0 1 0 10.8'
-        : 'M4 9.5h3.2L12 5.6v12.8L7.2 14.5H4z M15.8 9.9l4.4 4.2 M20.2 9.9l-4.4 4.2',
-      toggleSound: () => this.setState(x => ({ soundOn: !x.soundOn })),
-
-      bannerStyle: {
-        position: 'relative', overflow: 'hidden', boxSizing: 'border-box',
-        maxWidth: '980px', margin: '0 auto',
-        display: 'flex', flexDirection: angosto ? 'column' : 'row',
-        alignItems: 'center', justifyContent: 'center',
-        gap: angosto ? '20px' : 'clamp(26px,3.6vw,52px)',
-        padding: angosto ? '28px 20px 32px' : 'clamp(28px,3.2vw,42px) clamp(34px,4vw,58px)',
-        borderRadius: angosto ? '26px' : '34px',
-        border: '2px solid ' + oro,
-        background: 'linear-gradient(135deg,#fdf4ee 0%,#f7e4da 46%,#f0cfc2 100%)',
-        boxShadow: '0 22px 46px rgba(92,49,41,0.17), inset 0 2px 0 rgba(255,255,255,0.7)'
-      },
-      glowStyle: { position: 'absolute', inset: '6px', borderRadius: angosto ? '20px' : '28px', border: '1px solid ' + oroClaro, pointerEvents: 'none' },
-      textoStyle: {
-        position: 'relative', display: 'flex', flexDirection: 'column',
-        alignItems: angosto ? 'center' : 'flex-start', textAlign: angosto ? 'center' : 'left',
-        gap: '9px', flex: '0 1 auto', minWidth: 0, maxWidth: angosto ? '100%' : '330px'
-      },
-      logoStyle: {
-        display: 'flex', flexDirection: 'column', alignItems: 'center',
-        fontFamily: "'Cormorant Garamond',serif", fontWeight: 500,
-        fontSize: angosto ? '30px' : 'clamp(32px,3vw,42px)', lineHeight: 0.9,
-        letterSpacing: '0.03em', color: '#9c6f66'
-      },
-      logoSubStyle: { fontFamily: "'Jost',sans-serif", fontSize: '8.5px', letterSpacing: '0.58em', paddingLeft: '0.58em', marginTop: '6px', color: '#b98a6e' },
-      tituloStyle: { margin: '6px 0 0', maxWidth: '15ch', fontFamily: "'Cormorant Garamond',serif", fontWeight: 500, fontSize: angosto ? '27px' : 'clamp(28px,2.8vw,40px)', lineHeight: 1.05, letterSpacing: '-0.01em', color: '#4a231f' },
-      textStyle: { margin: 0, maxWidth: '34ch', fontSize: angosto ? '12.5px' : '13.5px', lineHeight: 1.55, color: '#7a5248' },
-
-      maquinaStyle: { position: 'relative', display: 'flex', flexDirection: 'column', alignItems: 'center', gap: 'clamp(14px,1.8vw,20px)', flex: '0 0 auto' },
-      screenStyle: {
-        display: 'flex', gap: hueco + 'px', padding: Math.round(tile * 0.13) + 'px',
-        borderRadius: Math.round(tile * 0.17) + 'px',
-        background: 'linear-gradient(180deg,#fbf0e8,#f0dccf)',
-        border: '2px solid ' + oro,
-        boxShadow: 'inset 0 3px 10px rgba(92,49,41,0.22), 0 6px 16px rgba(92,49,41,0.14)'
-      },
-      windowStyle: {
-        width: tile + 'px', height: tile + 'px', overflow: 'hidden',
-        borderRadius: Math.round(tile * 0.1) + 'px', border: '1px solid ' + oroClaro,
-        boxShadow: 'inset 0 7px 12px rgba(63,42,38,0.20), inset 0 -7px 12px rgba(63,42,38,0.16)'
-      },
-      tileStyle: { display: 'flex', alignItems: 'center', justifyContent: 'center', width: tile + 'px', height: tile + 'px', flex: '0 0 auto', background: '#f1e4da' },
-      reels: [0, 1, 2].map(i => ({
-        items: tira,
-        stripStyle: {
-          display: 'flex', flexDirection: 'column', willChange: 'transform',
-          transform: 'translateY(-' + ((s.slotOffsets[i] || 0) * tile) + 'px)',
-          transition: s.slotSnap ? 'none' : 'transform 2.3s cubic-bezier(.12,.76,.22,1)',
-          transitionDelay: s.slotSnap ? '0s' : (i * 0.25) + 's'
-        }
-      })),
-      buttonStyle: {
-        height: '46px', width: angosto ? '100%' : Math.round(tile * 3 + hueco * 2 + tile * 0.26) + 'px',
-        maxWidth: '340px', border: '2px solid ' + oro, borderRadius: '999px',
-        background: bloqueado ? '#dcc5bb' : 'linear-gradient(180deg,#e2a99f,#c98a80)',
-        color: '#fdf3ee', fontFamily: "'Jost',sans-serif", fontSize: '11px', letterSpacing: '0.3em',
-        cursor: bloqueado ? 'default' : 'pointer',
-        boxShadow: bloqueado ? 'none' : '0 4px 0 rgba(140,80,68,0.55), 0 10px 18px rgba(92,49,41,0.2)'
-      },
-      leverStyle: {
-        position: 'absolute', right: '-34px', top: '34%',
-        transform: 'translateY(-50%)', display: angosto ? 'none' : 'flex',
-        flexDirection: 'column', alignItems: 'center', pointerEvents: 'none'
-      },
-      leverKnobStyle: { display: 'block', width: '26px', height: '26px', borderRadius: '50%', background: 'radial-gradient(circle at 34% 28%,#f6d2b4,#c08a63)', boxShadow: '0 5px 12px rgba(92,49,41,0.3)' },
-      leverBarStyle: { display: 'block', width: '7px', height: Math.round(tile * 0.95) + 'px', borderRadius: '4px', background: 'linear-gradient(90deg,#bb8a63,#ecc9a4)' }
-    };
-
     const ICONS = {
       shield: ['M12 3.2 5 6.1v5.5c0 4.1 2.9 7.5 7 8.4 4.1-.9 7-4.3 7-8.4V6.1L12 3.2z', 'M9.1 12.1l2 2 4-4.1'],
       tag: ['M12 4.2a7.8 7.8 0 1 0 0 15.6 7.8 7.8 0 0 0 0-15.6z', 'M12 11.4v4.6'],
@@ -670,7 +504,7 @@ class Component extends DCLogic {
     const brandCount = b => { const n = products.filter(p => p.brand === b.id).length; return n + (n === 1 ? ' PRODUCTO' : ' PRODUCTOS'); };
     const brandStrip = {
       viewAll: nav.goBrands,
-      items: d.brands.map(b => ({ name: b.name, bag: b.bag, alt: b.name, countLabel: brandCount(b), ariaLabel: 'Ver productos de ' + b.name, open: go('catalog', { cat: 'all', brand: b.id, query: '' }) }))
+      items: d.brands.map(b => ({ name: b.name, bag: b.bag || '', hasBag: !!b.bag, sinBolsa: !b.bag, alt: b.name, countLabel: brandCount(b), ariaLabel: 'Ver productos de ' + b.name, open: go('catalog', { cat: 'all', brand: b.id, query: '' }) }))
     };
 
     const igPosts = (d.instagramPosts || []).filter(x => x && x.url);
@@ -742,11 +576,15 @@ class Component extends DCLogic {
         inc: () => this.setState(x => ({ qty: x.qty + 1 })),
         dec: () => this.setState(x => ({ qty: Math.max(1, x.qty - 1) })),
         addMany: () => { this.addToCart(pp.id, this.state.qty); this.setState({ cartOpen: true, qty: 1, toast: null }); },
-        favText: dp.isFav ? 'EN FAVORITOS' : 'AGREGAR A FAVORITOS'
+        favText: dp.isFav ? 'EN FAVORITOS' : 'AGREGAR A FAVORITOS',
+        shareUrl: this.urlProducto(pp.id),
+        share: () => this.compartir(pp.id),
+        shareLabel: 'Compartir ' + pp.brandLabel + ' ' + pp.name,
+        copiar: () => this.copiarEnlace(this.urlProducto(pp.id))
       });
     }
 
-    const brands = d.brands.map(b => ({ name: b.name, bag: b.bag, alt: 'Bolsa de ' + b.name, ariaLabel: 'Ver productos de ' + b.name, countLabel: brandCount(b), open: go('catalog', { cat: 'all', brand: b.id, query: '' }) }));
+    const brands = d.brands.map(b => ({ name: b.name, bag: b.bag || '', hasBag: !!b.bag, sinBolsa: !b.bag, alt: 'Bolsa de ' + b.name, ariaLabel: 'Ver productos de ' + b.name, countLabel: brandCount(b), open: go('catalog', { cat: 'all', brand: b.id, query: '' }) }));
 
     const favs = {
       items: favItems, hasItems: favItems.length > 0, isEmpty: !!s.data && favItems.length === 0,
@@ -796,8 +634,9 @@ class Component extends DCLogic {
     return Object.assign({
       isHome: s.view === 'home', isCatalog: s.view === 'catalog', isProduct: s.view === 'product' && !!pd,
       isBrands: s.view === 'brands', isFavs: s.view === 'favs', isHelp: s.view === 'help',
+      isProductoPerdido: s.view === 'product' && !!s.productId && !!s.data && !pd,
       hasAnnounce: anns.length > 0, announce, openInstagram, openWhatsapp, specsNote: d.specsNote || '',
-      header, hero, categories, benefits, slot, featured, guarantee, brandStrip,
+      header, hero, categories, benefits, featured, guarantee, brandStrip,
       instagram, help, catalog, pd, brands, favs, cart, toast, footer
     }, nav);
   }

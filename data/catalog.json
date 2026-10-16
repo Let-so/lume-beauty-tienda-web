@@ -8,6 +8,18 @@
     {
       "id": "perfumes-body-mist",
       "label": "Perfumes & body mist"
+    },
+    {
+      "id": "mascarillas",
+      "label": "Mascarillas"
+    },
+    {
+      "id": "proteccion-solar",
+      "label": "Protección solar"
+    },
+    {
+      "id": "maquillaje",
+      "label": "Maquillaje"
     }
   ],
   "homeBanners": [
@@ -44,6 +56,22 @@
       "id": "victorias-secret",
       "name": "Victoria's Secret",
       "bag": "assets/marcas/victorias-secret.webp"
+    },
+    {
+      "id": "skin1004",
+      "name": "SKIN1004"
+    },
+    {
+      "id": "hidehere",
+      "name": "HIDEHERE"
+    },
+    {
+      "id": "biodance",
+      "name": "BIODANCE"
+    },
+    {
+      "id": "elroel",
+      "name": "ELROEL"
     }
   ],
   "products": [
@@ -319,6 +347,348 @@
           "value": "250 ml / 8.4 fl oz."
         }
       ]
+    },
+    {
+      "id": "skin1004-spot-cover-patch",
+      "brand": "skin1004",
+      "brandLabel": "SKIN1004",
+      "name": "Madagascar Centella Tea-Trica Spot Cover Patch",
+      "title": "Tea-Trica Spot Cover Patch",
+      "subtitle": "",
+      "size": "22 parches",
+      "categories": [
+        "skincare-coreano"
+      ],
+      "image": "assets/productos/skin1004-spot-cover-patch.webp",
+      "imagePadding": "6%",
+      "price": 11000,
+      "featured": true,
+      "description": [
+        "Parches hidrocoloides para aplicar sobre una imperfección puntual.",
+        "Ayudan a absorber las secreciones, proteger la zona y mantenerla limpia mientras los tenes puestos."
+      ],
+      "specs": [
+        {
+          "label": "Contenido",
+          "value": "22 parches."
+        },
+        {
+          "label": "Línea",
+          "value": "Madagascar Centella Tea-Trica."
+        },
+        {
+          "label": "Uso",
+          "value": "Sobre la piel limpia y seca, directamente sobre la imperfección."
+        }
+      ]
+    },
+    {
+      "id": "skin1004-hyalu-cica-hydrating-mask",
+      "brand": "skin1004",
+      "brandLabel": "SKIN1004",
+      "name": "Madagascar Centella Hyalu-Cica Hydrating Mask",
+      "title": "Hyalu-Cica Hydrating Mask",
+      "subtitle": "",
+      "size": "23 ml",
+      "categories": [
+        "skincare-coreano",
+        "mascarillas"
+      ],
+      "image": "assets/productos/skin1004-hyalu-cica-hydrating-mask.webp",
+      "imagePadding": "6%",
+      "price": 8000,
+      "featured": true,
+      "description": [
+        "Mascarilla facial en tela con centella asiática y ácido hialurónico.",
+        "Orientada a hidratar, calmar y mejorar la sensación de confort de la piel."
+      ],
+      "specs": [
+        {
+          "label": "Contenido",
+          "value": "23 ml / 0.77 fl. oz."
+        },
+        {
+          "label": "Línea",
+          "value": "Madagascar Centella Hyalu-Cica."
+        },
+        {
+          "label": "Hecha con",
+          "value": "Centella pura de Madagascar."
+        }
+      ]
+    },
+    {
+      "id": "skin1004-tea-trica-relaxing-mask",
+      "brand": "skin1004",
+      "brandLabel": "SKIN1004",
+      "name": "Madagascar Centella Tea-Trica Relaxing Mask",
+      "title": "Tea-Trica Relaxing Mask",
+      "subtitle": "",
+      "size": "24 ml",
+      "categories": [
+        "skincare-coreano",
+        "mascarillas"
+      ],
+      "image": "assets/productos/skin1004-tea-trica-relaxing-mask.webp",
+      "imagePadding": "6%",
+      "price": 6500,
+      "featured": false,
+      "description": [
+        "Mascarilla facial en tela de la linea Tea-Trica.",
+        "Pensada para el cuidado de pieles grasas o con imperfecciónes y para mejorar su aspecto."
+      ],
+      "specs": [
+        {
+          "label": "Contenido",
+          "value": "24 ml / 0.81 fl. oz."
+        },
+        {
+          "label": "Línea",
+          "value": "Madagascar Centella Tea-Trica."
+        },
+        {
+          "label": "Hecha con",
+          "value": "Centella pura de Madagascar."
+        }
+      ]
+    },
+    {
+      "id": "skin1004-watergel-sheet-ampoule-mask",
+      "brand": "skin1004",
+      "brandLabel": "SKIN1004",
+      "name": "Madagascar Centella Watergel Sheet Ampoule Mask",
+      "title": "Watergel Sheet Ampoule Mask",
+      "subtitle": "",
+      "size": "25 ml",
+      "categories": [
+        "skincare-coreano",
+        "mascarillas"
+      ],
+      "image": "assets/productos/skin1004-watergel-sheet-ampoule-mask.webp",
+      "imagePadding": "6%",
+      "price": 7200,
+      "featured": false,
+      "description": [
+        "Mascarilla facial en tela con esencia hidratante.",
+        "Ayuda a mantener la piel hidratada, suave y confortable."
+      ],
+      "specs": [
+        {
+          "label": "Contenido",
+          "value": "25 ml / 0.84 fl. oz."
+        },
+        {
+          "label": "Línea",
+          "value": "Madagascar Centella."
+        },
+        {
+          "label": "Hecha con",
+          "value": "Centella asiática pura de Madagascar."
+        }
+      ]
+    },
+    {
+      "id": "hidehere-hyaluronic-essence",
+      "brand": "hidehere",
+      "brandLabel": "HIDEHERE",
+      "name": "Hyaluronic Essence",
+      "title": "Hyaluronic Essence",
+      "subtitle": "",
+      "size": "25 ml",
+      "categories": [
+        "skincare-coreano"
+      ],
+      "image": "assets/productos/hidehere-hyaluronic-essence.webp",
+      "imagePadding": "6%",
+      "price": 17000,
+      "featured": false,
+      "description": [
+        "Esencia facial hidratante en sachet con pico dosificador.",
+        "Orientada a mejorar la retención de humedad, la suavidad y la elasticidad de la piel."
+      ],
+      "specs": [
+        {
+          "label": "Contenido",
+          "value": "0.84 fl. oz. (unos 25 ml)."
+        },
+        {
+          "label": "Formato",
+          "value": "Sachet con tapa a rosca."
+        }
+      ]
+    },
+    {
+      "id": "hidehere-collagen-sleeping-mask",
+      "brand": "hidehere",
+      "brandLabel": "HIDEHERE",
+      "name": "Collagen Sleeping Mask",
+      "title": "Collagen Sleeping Mask",
+      "subtitle": "",
+      "size": "25 ml",
+      "categories": [
+        "skincare-coreano",
+        "mascarillas"
+      ],
+      "image": "assets/productos/hidehere-collagen-sleeping-mask.webp",
+      "imagePadding": "6%",
+      "price": 17000,
+      "featured": false,
+      "description": [
+        "Mascarilla de noche sin enjuague: se aplica antes de dormir y se deja actuar.",
+        "Destinada a hidratar la piel y mejorar su aspecto al despertar."
+      ],
+      "specs": [
+        {
+          "label": "Contenido",
+          "value": "0.84 fl. oz. (unos 25 ml)."
+        },
+        {
+          "label": "Formato",
+          "value": "Sachet con tapa a rosca."
+        },
+        {
+          "label": "Uso",
+          "value": "De noche, como último paso de la rutina."
+        }
+      ]
+    },
+    {
+      "id": "hidehere-cica-care-sun-protector",
+      "brand": "hidehere",
+      "brandLabel": "HIDEHERE",
+      "name": "Cica Care Sun Protector SPF50+ PA++++",
+      "title": "Cica Care Sun Protector",
+      "subtitle": "SPF50+ PA++++",
+      "size": "25 ml",
+      "categories": [
+        "proteccion-solar"
+      ],
+      "image": "assets/productos/hidehere-cica-care-sun-protector.webp",
+      "imagePadding": "6%",
+      "price": 17000,
+      "featured": false,
+      "description": [
+        "Protector solar facial de la linea Cica Care, en sachet con pico dosificador.",
+        "Factor de protección SPF50+ PA++++ según lo indicado en el envase."
+      ],
+      "specs": [
+        {
+          "label": "Protección",
+          "value": "SPF50+ PA++++."
+        },
+        {
+          "label": "Contenido",
+          "value": "0.88 oz. (unos 25 ml)."
+        },
+        {
+          "label": "Formato",
+          "value": "Sachet con tapa a rosca."
+        }
+      ]
+    },
+    {
+      "id": "biodance-bio-collagen-real-deep-mask",
+      "brand": "biodance",
+      "brandLabel": "BIODANCE",
+      "name": "Bio-Collagen Real Deep Mask",
+      "title": "Bio-Collagen Real Deep Mask",
+      "subtitle": "",
+      "size": "4 unidades, 136 g",
+      "categories": [
+        "skincare-coreano",
+        "mascarillas"
+      ],
+      "image": "assets/productos/biodance-bio-collagen-real-deep-mask.webp",
+      "imagePadding": "8%",
+      "price": 46000,
+      "featured": true,
+      "description": [
+        "Mascarillas faciales de hidrogel, en caja de 4 unidades.",
+        "Orientadas a hidratar la piel, mejorar su apariencia y aportar una sensación de firmeza y suavidad."
+      ],
+      "specs": [
+        {
+          "label": "Contenido",
+          "value": "4 unidades de 34 g. Peso neto total 136 g."
+        },
+        {
+          "label": "Segun el envase",
+          "value": "Probiotics-Galactomyces Ferment Filtrate, ácido hialurónico de bajo peso molecular y colágeno de bajo peso molecular."
+        },
+        {
+          "label": "Tipo",
+          "value": "Mascarilla facial en lamina."
+        }
+      ]
+    },
+    {
+      "id": "elroel-blanc-cover-cream-stick",
+      "brand": "elroel",
+      "brandLabel": "ELROEL",
+      "name": "Blanc Cover Cream Stick Foundation",
+      "title": "Blanc Cover Cream Stick",
+      "subtitle": "Base en barra",
+      "size": "13 g",
+      "categories": [
+        "maquillaje"
+      ],
+      "image": "assets/productos/elroel-blanc-cover-cream-stick.webp",
+      "imagePadding": "6%",
+      "price": 60000,
+      "featured": false,
+      "description": [
+        "Base de maquillaje en barra, de textura cremosa.",
+        "Diseñada para dar cobertura y ayudar a conseguir un acabado uniforme."
+      ],
+      "specs": [
+        {
+          "label": "Contenido",
+          "value": "Peso neto 0.45 oz. / 13 g."
+        },
+        {
+          "label": "Formato",
+          "value": "Barra (stick foundation)."
+        },
+        {
+          "label": "A confirmar",
+          "value": "El tono exacto de esta unidad."
+        }
+      ]
+    },
+    {
+      "id": "skin1004-air-fit-suncream-plus",
+      "brand": "skin1004",
+      "brandLabel": "SKIN1004",
+      "name": "Madagascar Centella Air-Fit Suncream Plus SPF50+ PA++++",
+      "title": "Air-Fit Suncream Plus",
+      "subtitle": "SPF50+ PA++++",
+      "size": "50 ml",
+      "categories": [
+        "proteccion-solar",
+        "skincare-coreano"
+      ],
+      "image": "assets/productos/skin1004-air-fit-suncream-plus.webp",
+      "imagePadding": "6%",
+      "price": 43000,
+      "featured": true,
+      "description": [
+        "Protector solar facial de la linea Madagascar Centella Air-Fit.",
+        "Factor de protección SPF50+ PA++++ según lo indicado en el envase."
+      ],
+      "specs": [
+        {
+          "label": "Protección",
+          "value": "SPF50+ PA++++."
+        },
+        {
+          "label": "Contenido",
+          "value": "50 ml / 1.69 fl. oz."
+        },
+        {
+          "label": "Hecha con",
+          "value": "Centella pura de Madagascar."
+        }
+      ]
     }
   ],
   "instagram": {
@@ -371,15 +741,6 @@
       ]
     },
     {
-      "id": "tragamonedas",
-      "title": "La tragamonedas",
-      "body": [
-        "Si los tres rodillos coinciden, ganás un premio sorpresa.",
-        "Para saber cuál es, nos escribís por WhatsApp desde el botón que aparece al ganar. Lo definimos según el caso, así que el premio no siempre es el mismo.",
-        "El premio vale 7 días desde que lo ganás. No se acumula con otras promociones."
-      ]
-    },
-    {
       "id": "contacto",
       "title": "Contacto",
       "body": [
@@ -408,12 +769,6 @@
     "display": "+54 9 3704 81-4077",
     "url": "https://wa.me/5493704814077"
   },
-  "specsNote": "Información de producto provista por el fabricante.",
-  "slot": {
-    "title": "La tragamonedas Lumé",
-    "text": "Si los tres carteles coinciden, te llevás un premio secreto.",
-    "winChance": 0.12,
-    "spinsPerDay": 100,
-    "prizeDays": 7
-  }
+  "specsNote": "Información de producto tomada del envase y de la información del fabricante.",
+  "siteUrl": ""
 }
