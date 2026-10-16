@@ -3,7 +3,7 @@
 <head>
 <meta charset="utf-8">
 <meta name="viewport" content="width=device-width, initial-scale=1">
-<script>window.__DC_BUILD="4a1a2b5eb9"</script>
+<script>window.__DC_BUILD="d8f42e0d4f"</script>
 <script src="./support.js"></script>
 </head>
 <body>
@@ -504,7 +504,10 @@ class Component extends DCLogic {
     const brandCount = b => { const n = products.filter(p => p.brand === b.id).length; return n + (n === 1 ? ' PRODUCTO' : ' PRODUCTOS'); };
     const brandStrip = {
       viewAll: nav.goBrands,
-      items: d.brands.map(b => ({ name: b.name, bag: b.bag || '', hasBag: !!b.bag, sinBolsa: !b.bag, alt: b.name, countLabel: brandCount(b), ariaLabel: 'Ver productos de ' + b.name, open: go('catalog', { cat: 'all', brand: b.id, query: '' }) }))
+      gridStyle: { display: 'grid', gridTemplateColumns: 'repeat(' + (w < 620 ? 2 : 3) + ',minmax(0,1fr))',
+                   gap: w < 620 ? '10px' : 'clamp(14px,2.4vw,30px)', maxWidth: '760px',
+                   margin: 'clamp(16px,2.4vw,30px) auto 0' },
+      items: d.brands.slice(0, 6).map(b => ({ name: b.name, bag: b.bag || '', hasBag: !!b.bag, sinBolsa: !b.bag, alt: b.name, countLabel: brandCount(b), ariaLabel: 'Ver productos de ' + b.name, open: go('catalog', { cat: 'all', brand: b.id, query: '' }) }))
     };
 
     const igPosts = (d.instagramPosts || []).filter(x => x && x.url);

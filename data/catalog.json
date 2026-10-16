@@ -59,19 +59,23 @@
     },
     {
       "id": "skin1004",
-      "name": "SKIN1004"
+      "name": "SKIN1004",
+      "bag": "assets/marcas/skin1004.webp"
     },
     {
       "id": "hidehere",
-      "name": "HIDEHERE"
+      "name": "HIDEHERE",
+      "bag": "assets/marcas/hidehere.webp"
     },
     {
       "id": "biodance",
-      "name": "BIODANCE"
+      "name": "BIODANCE",
+      "bag": "assets/marcas/biodance.webp"
     },
     {
       "id": "elroel",
-      "name": "ELROEL"
+      "name": "ELROEL",
+      "bag": "assets/marcas/elroel.webp"
     }
   ],
   "products": [
