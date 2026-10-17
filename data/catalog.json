@@ -24,6 +24,10 @@
     {
       "id": "limpieza",
       "label": "Limpieza facial"
+    },
+    {
+      "id": "serums",
+      "label": "Sérums y ampollas"
     }
   ],
   "homeBanners": [
@@ -712,7 +716,7 @@
       ],
       "image": "assets/productos/medicube-azelaic-foam-cleanser.webp",
       "imagePadding": "6%",
-      "price": null,
+      "price": 37100,
       "featured": false,
       "description": [
         "Espuma limpiadora facial de la línea Azelaic Acid de Medicube.",
@@ -725,11 +729,7 @@
         },
         {
           "label": "Según el envase",
-          "value": "Ácido azelaico al 10 y niacinamida."
-        },
-        {
-          "label": "Precio",
-          "value": "A confirmar. Consultanos y te lo pasamos."
+          "value": "Ácido azelaico 10 y niacinamida."
         }
       ]
     },
@@ -747,7 +747,7 @@
       ],
       "image": "assets/productos/medicube-super-cica-cleansing-balm.webp",
       "imagePadding": "8%",
-      "price": null,
+      "price": 37100,
       "featured": false,
       "description": [
         "Bálsamo limpiador facial que se aplica sobre la piel seca y se emulsiona con agua.",
@@ -760,11 +760,7 @@
         },
         {
           "label": "Según el envase",
-          "value": "Super Cica 7 y LHA (ácido capriloil salicilico)."
-        },
-        {
-          "label": "Precio",
-          "value": "A confirmar. Consultanos y te lo pasamos."
+          "value": "Super Cica 7 y LHA (Capryloyl Salicylic Acid)."
         }
       ]
     },
@@ -775,13 +771,14 @@
       "name": "Madagascar Centella Hyalu-Cica First Ampoule",
       "title": "Hyalu-Cica First Ampoule",
       "subtitle": "",
-      "size": "50 ml",
+      "size": "100 ml",
       "categories": [
-        "skincare-coreano"
+        "skincare-coreano",
+        "serums"
       ],
       "image": "assets/productos/skin1004-hyalu-cica-first-ampoule.webp",
       "imagePadding": "6%",
-      "price": null,
+      "price": 32500,
       "featured": false,
       "description": [
         "Ampolla facial de la línea Madagascar Centella Hyalu-Cica.",
@@ -790,15 +787,11 @@
       "specs": [
         {
           "label": "Contenido",
-          "value": "50 ml / 1.69 fl. oz."
+          "value": "100 ml / 3.38 fl. oz."
         },
         {
-          "label": "Hecha con",
-          "value": "Centella pura de Madagascar."
-        },
-        {
-          "label": "Precio",
-          "value": "A confirmar. Consultanos y te lo pasamos."
+          "label": "Según el envase",
+          "value": "Hecha con centella pura de Madagascar."
         }
       ]
     }
