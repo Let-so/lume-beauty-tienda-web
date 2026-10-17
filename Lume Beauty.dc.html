@@ -3,7 +3,7 @@
 <head>
 <meta charset="utf-8">
 <meta name="viewport" content="width=device-width, initial-scale=1">
-<script>window.__DC_BUILD="a96fbbe442"</script>
+<script>window.__DC_BUILD="df0f69357e"</script>
 <script src="./support.js"></script>
 </head>
 <body>
@@ -502,12 +502,21 @@ class Component extends DCLogic {
     const guarantee = Object.assign({ title: '', text: '', claim: '' }, d.guarantee || {});
 
     const brandCount = b => { const n = products.filter(p => p.brand === b.id).length; return n + (n === 1 ? ' PRODUCTO' : ' PRODUCTOS'); };
+    // Son siete marcas: en una grilla cerrada la ultima fila queda coja, asi
+    // que se usa flex y la fila incompleta se centra sola.
+    const brCols = (() => {
+      const cols = w < 620 ? 2 : (w < 1000 ? 3 : 4);
+      const gap = w < 620 ? 10 : 24;
+      return { gap, ancho: cols >= 4 ? '1040px' : '760px',
+               caja: { flex: '0 0 calc((100% - ' + ((cols - 1) * gap) + 'px) / ' + cols + ')',
+                       background: 'none', border: 0, padding: 0, cursor: 'pointer' } };
+    })();
     const brandStrip = {
       viewAll: nav.goBrands,
-      gridStyle: { display: 'grid', gridTemplateColumns: 'repeat(' + (w < 620 ? 2 : 3) + ',minmax(0,1fr))',
-                   gap: w < 620 ? '10px' : 'clamp(14px,2.4vw,30px)', maxWidth: '760px',
+      gridStyle: { display: 'flex', flexWrap: 'wrap', justifyContent: 'center',
+                   gap: brCols.gap + 'px', maxWidth: brCols.ancho,
                    margin: 'clamp(16px,2.4vw,30px) auto 0' },
-      items: d.brands.slice(0, 6).map(b => ({ name: b.name, bag: b.bag || '', hasBag: !!b.bag, sinBolsa: !b.bag, alt: b.name, countLabel: brandCount(b), ariaLabel: 'Ver productos de ' + b.name, open: go('catalog', { cat: 'all', brand: b.id, query: '' }) }))
+      items: d.brands.map(b => ({ name: b.name, bag: b.bag || '', hasBag: !!b.bag, sinBolsa: !b.bag, alt: b.name, countLabel: brandCount(b), ariaLabel: 'Ver productos de ' + b.name, boxStyle: brCols.caja, open: go('catalog', { cat: 'all', brand: b.id, query: '' }) }))
     };
 
     const igPosts = (d.instagramPosts || []).filter(x => x && x.url);

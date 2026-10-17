@@ -14,7 +14,7 @@
   </div>
   <div style="{{ br.gridStyle }}">
     <sc-for list="{{ br.items }}" as="b" hint-placeholder-count="3">
-      <button onClick="{{ b.open }}" aria-label="{{ b.ariaLabel }}" style="display:block;width:100%;background:none;border:0;padding:0;cursor:pointer">
+      <button onClick="{{ b.open }}" aria-label="{{ b.ariaLabel }}" style="{{ b.boxStyle }}">
         <span style="position:relative;display:block;width:100%;aspect-ratio:1 / 1">
           <sc-if value="{{ b.hasBag }}" hint-placeholder-val="{{ true }}">
             <img src="{{ b.bag }}" alt="{{ b.alt }}" loading="lazy" style="position:absolute;inset:0;width:100%;height:100%;object-fit:contain;filter:drop-shadow(0 16px 20px rgba(92,49,41,0.20)) drop-shadow(0 4px 6px rgba(92,49,41,0.10));transition:transform .45s cubic-bezier(.2,.7,.2,1),filter .45s" style-hover="transform:translateY(-6px) scale(1.035);filter:drop-shadow(0 26px 30px rgba(92,49,41,0.26)) drop-shadow(0 7px 10px rgba(92,49,41,0.13))">
