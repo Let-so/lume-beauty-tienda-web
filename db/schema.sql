@@ -167,3 +167,30 @@ CREATE TABLE IF NOT EXISTS audit_log (
   at        TEXT NOT NULL
 );
 CREATE INDEX IF NOT EXISTS idx_registro_fecha ON audit_log(at);
+
+-- ──────────────── historial de precios y de stock ────────────────
+-- Se guardan aparte del producto porque son hechos pasados: el producto dice
+-- cuánto sale hoy, estas tablas dicen cuánto salía antes y por qué cambió.
+-- Sin esto, un cambio masivo mal hecho no se puede deshacer ni explicar.
+
+CREATE TABLE IF NOT EXISTS price_history (
+  id         INTEGER PRIMARY KEY,
+  product_id TEXT    NOT NULL REFERENCES product(id) ON DELETE CASCADE,
+  old_price  INTEGER,
+  new_price  INTEGER,
+  user_id    INTEGER,
+  reason     TEXT,
+  at         TEXT    NOT NULL
+);
+CREATE INDEX IF NOT EXISTS idx_precio_producto ON price_history(product_id, at);
+
+CREATE TABLE IF NOT EXISTS stock_movement (
+  id              INTEGER PRIMARY KEY,
+  product_id      TEXT    NOT NULL REFERENCES product(id) ON DELETE CASCADE,
+  delta           INTEGER NOT NULL,
+  resulting_stock INTEGER,
+  user_id         INTEGER,
+  reason          TEXT,
+  at              TEXT    NOT NULL
+);
+CREATE INDEX IF NOT EXISTS idx_stock_producto ON stock_movement(product_id, at);

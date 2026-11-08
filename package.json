@@ -1,0 +1,10 @@
+{
+  "devDependencies": {
+    "wrangler": "^4.158.0"
+  },
+  "type": "module",
+  "scripts": {
+    "test": "node tests/correr.mjs",
+    "dev": "wrangler pages dev"
+  }
+}
