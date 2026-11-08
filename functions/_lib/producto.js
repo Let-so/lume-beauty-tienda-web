@@ -41,12 +41,28 @@ function aPrecio(v, nombre, errores) {
   if (typeof v === 'number') {
     n = v;
   } else {
-    // Se aceptan formatos humanos como "$ 37.100", pero si al sacar los
-    // simbolos no queda ningun digito, eso no es un precio: es un error de
-    // tipeo. Convertirlo en 0 seria cambiar un precio en silencio, que es
-    // justo lo que no se debe hacer.
-    const limpio = String(v).replace(/[^\d.-]/g, '');
-    n = /\d/.test(limpio) ? Number(limpio) : NaN;
+    // En Argentina el punto separa los miles y la coma los decimales, al revés
+    // que en inglés. Si no se tiene en cuenta, "$ 19.900" se lee como 19,9 y
+    // se guarda un precio de 20 pesos en lugar de 19.900. Pasó de verdad en
+    // una prueba, y es el peor error posible acá: cambiar un precio sin que
+    // nadie se entere.
+    //
+    // Por eso se aceptan solo formas inequívocas y se rechaza todo lo demás,
+    // en vez de adivinar. "19.9" no se interpreta: no se sabe si son 19 pesos
+    // con 90 centavos o 19.900 mal escrito, así que se pide que lo aclaren.
+    const limpio = String(v).replace(/[\s$ ]/g, '');
+    if (/^-?\d+$/.test(limpio)) {
+      n = Number(limpio);                                   // 19900
+    } else if (/^-?\d{1,3}(\.\d{3})+$/.test(limpio)) {
+      n = Number(limpio.replace(/\./g, ''));                // 19.900
+    } else if (/^-?\d+,\d{1,2}$/.test(limpio)) {
+      n = Number(limpio.replace(',', '.'));                 // 19900,50
+    } else if (/^-?\d{1,3}(\.\d{3})+,\d{1,2}$/.test(limpio)) {
+      n = Number(limpio.replace(/\./g, '').replace(',', '.'));  // 19.900,50
+    } else {
+      errores.push(`${nombre}: escribí solo el número, por ejemplo 19900. No se entendió «${String(v).slice(0, 30)}».`);
+      return undefined;
+    }
   }
   if (!Number.isFinite(n)) {
     errores.push(`${nombre}: escribí un número, por ejemplo 37100.`);

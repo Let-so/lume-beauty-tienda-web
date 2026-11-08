@@ -195,7 +195,18 @@ def main():
     for t in ('brand', 'category', 'product', 'product_category', 'product_image',
               'product_text', 'product_spec', 'settings'):
         print('  %-18s %3d' % (t, cuenta(t)))
+
+    # Volcado en SQL, que es lo que consume wrangler para cargar la base de
+    # Cloudflare. El esquema se aplica aparte desde db/schema.sql.
+    semilla = os.path.join(RAIZ, 'db', 'seed.sql')
+    omitir = ('CREATE TABLE', 'CREATE INDEX', 'BEGIN', 'COMMIT')
+    with io.open(semilla, 'w', encoding='utf-8', newline=chr(10)) as f:
+        f.write('-- Generado por scripts/migrar.py. No editar a mano.' + chr(10))
+        for linea in cx.iterdump():
+            if not linea.startswith(omitir):
+                f.write(linea + chr(10))
     cx.close()
+    print('  semilla            %s' % os.path.relpath(semilla, RAIZ))
 
     print()
     if fallos:

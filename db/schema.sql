@@ -27,6 +27,11 @@ CREATE TABLE IF NOT EXISTS admin_user (
   password_salt       TEXT    NOT NULL,
   password_iterations INTEGER NOT NULL,
   role                TEXT    NOT NULL DEFAULT 'admin' CHECK (role IN ('admin')),
+  -- Código de recuperación: se genera una sola vez, se le entrega a Camila
+  -- para que lo guarde, y acá queda solo su resumen. Sin servicio de correo
+  -- es la única forma honesta de que pueda recuperar la contraseña sola.
+  recovery_hash       TEXT,
+  recovery_used_at    TEXT,
   created_at          TEXT    NOT NULL,
   last_login_at       TEXT
 );

@@ -21,3 +21,5 @@ db/*.db
 node_modules/
 .wrangler/
 .dev.vars
+db/admin.sql
+db/seed.sql

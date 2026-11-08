@@ -6,11 +6,16 @@
 
 import { igualSeguro, leerCookies, COOKIE_SESION, COOKIE_CSRF, ahora } from './http.js';
 
-// PBKDF2 es lo más fuerte que ofrece WebCrypto en Workers; argon2 y bcrypt no
-// están disponibles sin compilar WebAssembly. 210.000 iteraciones es lo que
-// recomienda OWASP para PBKDF2-HMAC-SHA256. El número queda guardado con cada
-// contraseña, así que se puede subir más adelante sin invalidar las existentes.
-export const ITERACIONES = 210000;
+// El estirado fuerte de la contraseña ocurre en el navegador, en
+// admin/clave.js, y ahí está explicado por qué. Lo que llega acá ya es una
+// clave de 256 bits derivada con 600.000 iteraciones.
+//
+// Por eso acá alcanza con pocas iteraciones: no están estirando una
+// contraseña débil, están volviendo a mezclar algo que ya es fuerte, con una
+// sal propia del servidor para que dos instalaciones no compartan resultados.
+// 2.000 iteraciones cuestan alrededor de 1 ms y entran holgadas en los 10 ms
+// de CPU que da el plan gratuito de Cloudflare.
+export const ITERACIONES = 2000;
 const LARGO_CLAVE = 32;
 const LARGO_SAL = 16;
 
@@ -76,6 +81,19 @@ export async function verificarPassword(password, usuario) {
 /**
  * Reglas mínimas de contraseña. Se pide longitud antes que símbolos raros:
  * una frase larga es más fuerte y mucho más fácil de recordar que "Xk3$a".
+ */
+/**
+ * Comprueba que lo que llegó tenga forma de clave derivada y no de contraseña
+ * en crudo. No es una defensa: es para detectar enseguida si el navegador no
+ * hizo su parte, en vez de dar un "contraseña incorrecta" que despiste.
+ */
+export function pareceClaveDerivada(valor) {
+  return typeof valor === 'string' && /^[A-Za-z0-9+/]{43}=$/.test(valor);
+}
+
+/**
+ * Reglas de la contraseña. Se usa en el navegador y al crear la cuenta, nunca
+ * en el servidor: ahí ya no se ve la contraseña, solo su derivación.
  */
 export function revisarPassword(password) {
   if (typeof password !== 'string' || password.length < 10) {

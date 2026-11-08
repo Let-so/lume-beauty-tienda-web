@@ -5,7 +5,7 @@ import {
   COOKIE_SESION, COOKIE_CSRF,
 } from '../../_lib/http.js';
 import {
-  verificarPassword, crearSesion, cerrarSesion, tokenAleatorio,
+  verificarPassword, pareceClaveDerivada, crearSesion, cerrarSesion, tokenAleatorio,
   intentosRecientes, anotarIntento, limpiarIntentos, registrar,
   MAX_INTENTOS, VENTANA_MINUTOS, SEGUNDOS_SESION,
 } from '../../_lib/auth.js';
@@ -23,6 +23,9 @@ export async function onRequestPost({ request, env }) {
   const email = String(data.email || '').trim().toLowerCase();
   const password = String(data.password || '');
   if (!email || !password) return error('Escribí tu correo y tu contraseña.');
+  if (!pareceClaveDerivada(password)) {
+    return error('Tu navegador no pudo preparar la contraseña. Actualizá la página e intentá de nuevo.');
+  }
 
   // Se frena por correo y por dirección de internet a la vez: así no alcanza
   // con cambiar de red para seguir probando contraseñas de la misma cuenta.

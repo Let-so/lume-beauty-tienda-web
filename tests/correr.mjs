@@ -17,6 +17,7 @@ import * as productoEP from '../functions/api/admin/productos/[id].js';
 import * as catalogoEP from '../functions/api/catalog.js';
 import { construirCatalogo } from '../functions/_lib/catalogo.js';
 import { hashearPassword, revisarPassword } from '../functions/_lib/auth.js';
+import { derivarEnCliente } from '../admin/clave.js';
 import { validarProducto, hacerSlug } from '../functions/_lib/producto.js';
 
 let bien = 0;
@@ -49,7 +50,7 @@ async function llamarAdmin(modulo, ruta, env, opciones = {}) {
 /** Login completo; devuelve las cookies y una función para llamadas autenticadas. */
 async function entrar(env, email, password) {
   const r = await llamarAdmin(sesionEP, '/api/admin/sesion', env, {
-    method: 'POST', body: { email, password },
+    method: 'POST', body: { email, password: await derivarEnCliente(email, password) },
     headers: { Origin: BASE_URL },
   });
   const cookies = cookiesDe(r);
@@ -69,7 +70,7 @@ const CLAVE = 'una frase larga y facil de recordar';
 
 async function preparar() {
   const { d1, catalogo } = baseConCatalogo();
-  const h = await hashearPassword(CLAVE);
+  const h = await hashearPassword(await derivarEnCliente('camila@lume.test', CLAVE));
   d1.db.prepare(
     `INSERT INTO admin_user (id,email,name,password_hash,password_salt,password_iterations,role,created_at)
      VALUES (1,'camila@lume.test','Camila',?,?,?,'admin',?)`
@@ -111,13 +112,13 @@ console.log('PRUEBAS DEL PANEL — ' + new Date().toISOString().slice(0, 16).rep
   const { env } = await preparar();
 
   const mal = await llamarAdmin(sesionEP, '/api/admin/sesion', env, {
-    method: 'POST', body: { email: 'camila@lume.test', password: 'equivocada' },
+    method: 'POST', body: { email: 'camila@lume.test', password: await derivarEnCliente('camila@lume.test', 'equivocada') },
     headers: { Origin: BASE_URL },
   });
   check('rechaza la contraseña incorrecta', mal.status === 401);
 
   const inexistente = await llamarAdmin(sesionEP, '/api/admin/sesion', env, {
-    method: 'POST', body: { email: 'otra@lume.test', password: CLAVE },
+    method: 'POST', body: { email: 'otra@lume.test', password: await derivarEnCliente('otra@lume.test', CLAVE) },
     headers: { Origin: BASE_URL },
   });
   const cuerpoMal = await mal.clone().json();
@@ -157,14 +158,14 @@ console.log('PRUEBAS DEL PANEL — ' + new Date().toISOString().slice(0, 16).rep
   let ultima;
   for (let i = 0; i < 9; i++) {
     ultima = await llamarAdmin(sesionEP, '/api/admin/sesion', env, {
-      method: 'POST', body: { email: 'camila@lume.test', password: 'probando' + i },
+      method: 'POST', body: { email: 'camila@lume.test', password: await derivarEnCliente('camila@lume.test', 'probando' + i) },
       headers: { Origin: BASE_URL },
     });
   }
   check('frena después de varios intentos fallidos', ultima.status === 429);
 
   const conLaBuena = await llamarAdmin(sesionEP, '/api/admin/sesion', env, {
-    method: 'POST', body: { email: 'camila@lume.test', password: CLAVE },
+    method: 'POST', body: { email: 'camila@lume.test', password: await derivarEnCliente('camila@lume.test', CLAVE) },
     headers: { Origin: BASE_URL },
   });
   check('el freno vale incluso con la contraseña correcta', conLaBuena.status === 429);
@@ -424,6 +425,22 @@ console.log('PRUEBAS DEL PANEL — ' + new Date().toISOString().slice(0, 16).rep
   }, { esNuevo: true });
   check('acepta una oferta bien armada', ofertaBien.errores.length === 0);
 
+  // Los puntos de los miles son la trampa: en Argentina "19.900" son
+  // diecinueve mil novecientos, no diecinueve con nueve.
+  const precio = x => {
+    const r = validarProducto({ name: 'P', brand: 'medicube', price: x,
+                                images: ['a.webp'], status: 'draft' }, { esNuevo: true });
+    return r.valor ? r.valor.price : 'ERROR';
+  };
+  check('un numero pelado se guarda igual', precio('19900') === 19900);
+  check('"$ 19.900" son 19900 pesos, no 20', precio('$ 19.900') === 19900);
+  check('"1.234.567" se lee completo', precio('1.234.567') === 1234567);
+  check('la coma son los centavos', precio('19900,50') === 19901);
+  check('punto de miles y coma de centavos juntos', precio('19.900,50') === 19901);
+  check('un precio que no se entiende se rechaza en vez de adivinarse', precio('19.9') === 'ERROR');
+  check('un texto cualquiera se rechaza', precio('carisimo') === 'ERROR');
+  check('vacio sigue significando a confirmar', precio('') === null);
+
   const textoLargo = validarProducto({
     name: 'Y'.repeat(500), brand: 'medicube', images: ['a.webp'], status: 'draft',
   }, { esNuevo: true });
@@ -470,6 +487,34 @@ console.log('PRUEBAS DEL PANEL — ' + new Date().toISOString().slice(0, 16).rep
   check('queda registrado el ingreso', acciones.includes('login'));
   check('queda registrado el apagado de la tienda', acciones.includes('tienda_en_mantenimiento'));
   check('queda registrado el encendido', acciones.includes('tienda_publicada'));
+}
+
+// ────────── 13. el login entra en los límites del plan gratuito ──────────
+{
+  seccion('13. El login entra en los límites de Cloudflare');
+  const { ITERACIONES, hashearPassword } = await import('../functions/_lib/auth.js');
+  const { ITERACIONES_CLIENTE, derivarEnCliente } = await import('../admin/clave.js');
+
+  // Cloudflare rechaza PBKDF2 con más de 100.000 iteraciones, y el plan
+  // gratuito corta a los 10 ms de CPU por petición. Si alguien sube este
+  // número "por seguridad", el login deja de funcionar en producción aunque
+  // ande perfecto en la computadora. Pasó: por eso existe esta prueba.
+  check('el servidor no pasa el tope de iteraciones de Cloudflare', ITERACIONES <= 100000);
+
+  const t = Date.now();
+  await hashearPassword('clave-derivada-de-prueba');
+  const ms = Date.now() - t;
+  check(`el servidor resuelve el hash en ${ms} ms, dentro de los 10 ms de CPU`, ms < 10);
+
+  check('el navegador sí estira fuerte la contraseña', ITERACIONES_CLIENTE >= 600000);
+
+  const a1 = await derivarEnCliente('una@lume.test', 'la misma contrasena');
+  const a2 = await derivarEnCliente('otra@lume.test', 'la misma contrasena');
+  check('dos cuentas con la misma contraseña derivan distinto', a1 !== a2);
+  check('la misma cuenta siempre deriva igual',
+    a1 === await derivarEnCliente('una@lume.test', 'la misma contrasena'));
+  check('lo que viaja por la red no es la contraseña',
+    !a1.includes('contrasena') && a1.length === 44);
 }
 
 // ══════════════════════════════════════════════════════════════════════

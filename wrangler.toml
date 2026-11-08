@@ -1,0 +1,26 @@
+# Configuración de Cloudflare Pages.
+#
+# La tienda se sirve como archivos estáticos y la carpeta functions/ se
+# convierte sola en la API. No hay paso de compilación: lo que está en el
+# repositorio es lo que se publica.
+#
+# Para trabajar en la computadora:   npm run dev
+# Para publicar:                     ver docs/PUBLICAR.md
+
+name = "lume-beauty"
+compatibility_date = "2026-01-01"
+compatibility_flags = ["nodejs_compat"]
+pages_build_output_dir = "."
+
+# Base de datos. El database_id lo da Cloudflare al crear la base y hay que
+# pegarlo acá. En la computadora no hace falta: wrangler usa una copia local.
+[[d1_databases]]
+binding = "DB"
+database_name = "lume-beauty"
+database_id = "PENDIENTE-PEGAR-EL-ID-QUE-DA-CLOUDFLARE"
+
+# Depósito de fotos. Si todavía no está creado, el panel avisa con un mensaje
+# claro en lugar de fallar de forma confusa.
+[[r2_buckets]]
+binding = "FOTOS"
+bucket_name = "lume-fotos"
