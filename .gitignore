@@ -15,3 +15,9 @@ node_modules/
 
 # Netlify (estado local del CLI)
 .netlify/
+
+# Base local de pruebas y dependencias
+db/*.db
+node_modules/
+.wrangler/
+.dev.vars
