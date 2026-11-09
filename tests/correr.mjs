@@ -245,6 +245,11 @@ console.log('PRUEBAS DEL PANEL — ' + new Date().toISOString().slice(0, 16).rep
   check('el visitante ve el mensaje que escribió Camila',
     cuerpoPublico.maintenance.title === 'Volvemos pronto');
   check('se le pide al buscador que no desindexe', publico.headers.get('Retry-After') === '3600');
+  // El mensaje invita a escribir por WhatsApp: si el enlace no viaja, la
+  // pantalla de mantenimiento deja al cliente sin forma de contactar.
+  check('el contacto de WhatsApp sí viaja, para que el mensaje no sea un callejón sin salida',
+    typeof (cuerpoPublico.maintenance.whatsapp || {}).url === 'string'
+    && cuerpoPublico.maintenance.whatsapp.url.includes('wa.me'));
 
   const comoCamila = await catalogoEP.onRequestGet({
     request: peticion(BASE_URL + '/api/catalog', { cookies }), env,

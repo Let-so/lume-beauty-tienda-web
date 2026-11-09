@@ -32,6 +32,24 @@ input::placeholder{color:#6f5650;letter-spacing:0.12em}
 </style>
 </helmet>
 <div style="min-height:100vh;background:#f3eae4;display:flex;flex-direction:column">
+
+  <sc-if value="{{ hayAviso }}">
+    <section data-screen-label="Aviso" style="flex:1;display:flex;flex-direction:column;align-items:center;justify-content:center;gap:18px;padding:40px clamp(22px,6vw,48px);text-align:center">
+      <span style="font-family:'Cormorant Garamond',serif;font-size:clamp(30px,6vw,42px);letter-spacing:0.22em;color:#4a231f">LUMÉ</span>
+      <span style="margin-top:-14px;font-size:10px;letter-spacing:0.42em;color:#8a6d65">BEAUTY</span>
+      <h1 style="margin:18px 0 0;max-width:18ch;font-family:'Cormorant Garamond',serif;font-weight:500;font-size:clamp(30px,5vw,54px);line-height:1.08;color:#4a231f;text-wrap:balance">{{ avisoTitulo }}</h1>
+      <p style="margin:0;max-width:46ch;font-size:14px;line-height:1.7;color:#6f5650">{{ avisoTexto }}</p>
+      <sc-if value="{{ avisoTieneWhatsapp }}">
+        <a href="{{ avisoWhatsappUrl }}" target="_blank" rel="noopener" style="margin-top:10px;padding:15px 34px;border-radius:999px;background:#a87a6e;color:#fff;font-size:11px;letter-spacing:0.2em">ESCRIBINOS POR WHATSAPP</a>
+      </sc-if>
+    </section>
+  </sc-if>
+
+  <sc-if value="{{ vistaPrevia }}">
+    <div style="padding:9px 16px;background:#4a231f;color:#f3eae4;font-size:10.5px;letter-spacing:0.16em;text-align:center">ESTÁS VIENDO LA TIENDA EN MANTENIMIENTO — LOS CLIENTES NO VEN ESTO</div>
+  </sc-if>
+
+  <sc-if value="{{ tiendaVisible }}" hint-placeholder-val="{{ true }}">
   <sc-if value="{{ hasAnnounce }}" hint-placeholder-val="{{ true }}">
     <dc-import name="AnnouncementBar" a="{{ announce }}" hint-size="100%,34px"></dc-import>
   </sc-if>
@@ -258,11 +276,12 @@ input::placeholder{color:#6f5650;letter-spacing:0.12em}
   <dc-import name="Footer" f="{{ footer }}" hint-size="100%,260px"></dc-import>
   <dc-import name="CartDrawer" cart="{{ cart }}" hint-size="0px,0px"></dc-import>
   <dc-import name="Toast" to="{{ toast }}" hint-size="0px,0px"></dc-import>
+  </sc-if>
 </div>
 </x-dc>
 <script type="text/x-dc" data-dc-script>
 class Component extends DCLogic {
-  state = { data: null, view: 'home', cat: 'all', brand: null, productId: null, query: '', cart: {}, favs: {}, cartOpen: false, menuOpen: false, searchOpen: false, qty: 1, announceIndex: 0, toast: null, helpTopic: null,
+  state = { data: null, aviso: null, view: 'home', cat: 'all', brand: null, productId: null, query: '', cart: {}, favs: {}, cartOpen: false, menuOpen: false, searchOpen: false, qty: 1, announceIndex: 0, toast: null, helpTopic: null,
     w: typeof window !== 'undefined' ? window.innerWidth : 1440 };
 
   componentDidMount() {
@@ -279,11 +298,49 @@ class Component extends DCLogic {
     };
     window.addEventListener('popstate', this._pop);
     try { const g = JSON.parse(localStorage.getItem('lume_store_v1') || '{}'); this.setState({ cart: g.cart || {}, favs: g.favs || {} }); } catch (e) {}
-    fetch('data/catalog.json?v=' + (window.__DC_BUILD || '')).then(r => r.json()).then(data => {
-      this.setState({ data });
+    this.cargarCatalogo();
+  }
+
+  // La tienda publicada lee la base a través de /api/catalog, que es lo que el
+  // panel modifica.
+  cargarCatalogo() {
+    const alLlegar = data => {
+      this.setState({ data, aviso: null });
       const n = (data.announcements || []).length;
       if (n > 1 && !this._ann) this._ann = setInterval(() => this.setState(x => ({ announceIndex: x.announceIndex + 1 })), 4600);
-    }).catch(err => console.error('No se pudo cargar data/catalog.json', err));
+    };
+    const fallo = () => this.setState({
+      data: null,
+      aviso: {
+        title: 'No pudimos cargar la tienda',
+        message: 'Hubo un problema al traer el catálogo. Volvé a intentarlo en un momento.',
+      },
+    });
+    // El archivo del repositorio es el respaldo para cuando no hay servidor:
+    // una copia estática, o el archivo abierto a mano. Solo se usa si la API
+    // directamente no existe. Si existe y falla, no caemos acá: un catálogo
+    // viejo mostraría precios que ya no son los que puso Camila, y es peor
+    // vender a un precio equivocado que avisar que la tienda no carga.
+    const respaldo = () => fetch('data/catalog.json?v=' + (window.__DC_BUILD || ''))
+      .then(r => { if (!r.ok) throw new Error('no hay respaldo'); return r.json(); })
+      .then(alLlegar)
+      .catch(() => fallo());
+
+    fetch('/api/catalog', { headers: { Accept: 'application/json' } }).then(r => {
+      if (r.status === 404) return respaldo();
+      if (r.status === 503) {
+        return r.json().then(x => {
+          const m = (x || {}).maintenance;
+          if (m && m.active) { this.setState({ data: null, aviso: m }); return; }
+          return fallo();
+        }, () => fallo());
+      }
+      if (!r.ok) return fallo();
+      return r.json().then(d => {
+        if (!d || !Array.isArray(d.products)) return fallo();
+        alLlegar(d);
+      }, () => fallo());
+    }).catch(() => respaldo());
   }
   componentWillUnmount() {
     window.removeEventListener('resize', this._r);
@@ -644,6 +701,13 @@ class Component extends DCLogic {
     });
 
     return Object.assign({
+      hayAviso: !!s.aviso,
+      tiendaVisible: !s.aviso,
+      avisoTitulo: (s.aviso || {}).title || '',
+      avisoTexto: (s.aviso || {}).message || '',
+      avisoTieneWhatsapp: !!((s.aviso || {}).whatsapp || {}).url,
+      avisoWhatsappUrl: ((s.aviso || {}).whatsapp || {}).url || '',
+      vistaPrevia: !!((s.data || {}).maintenance || {}).preview,
       isHome: s.view === 'home', isCatalog: s.view === 'catalog', isProduct: s.view === 'product' && !!pd,
       isBrands: s.view === 'brands', isFavs: s.view === 'favs', isHelp: s.view === 'help',
       isProductoPerdido: s.view === 'product' && !!s.productId && !!s.data && !pd,

@@ -105,6 +105,22 @@ Cloudflare devuelve una dirección `https://lume-beauty.pages.dev`.
 Si hay un dominio propio, se conecta desde el panel de Cloudflare, en
 **Workers & Pages → lume-beauty → Custom domains**. HTTPS se configura solo.
 
+### De dónde saca el catálogo la vitrina
+
+La tienda pide `/api/catalog`, que lee la base. Eso es lo que hace que los
+cambios del panel se vean al instante, sin publicar de nuevo.
+
+`data/catalog.json` sigue en el repositorio como respaldo, pero **solo se usa
+cuando la API no existe** — una copia estática del sitio, o el archivo abierto
+a mano. Si la API existe y falla, la tienda muestra un aviso de que no pudo
+cargar, y no cae al archivo: un catálogo viejo mostraría precios que ya no son
+los que puso Camila, y es peor vender a un precio equivocado que avisar que la
+tienda no carga.
+
+Consecuencia práctica: `data/catalog.json` queda congelado en el estado que
+tenía al migrar. No hay que mantenerlo al día ni editarlo a mano. La base es
+la fuente de verdad.
+
 ### Mientras tanto, la tienda vieja sigue en pie
 
 El sitio de Render no se toca hasta que la versión nueva esté probada en su
