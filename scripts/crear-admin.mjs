@@ -14,7 +14,7 @@ import path from 'node:path';
 import readline from 'node:readline';
 import { fileURLToPath } from 'node:url';
 
-import { hashearPassword, revisarPassword, sha256, tokenAleatorio } from '../functions/_lib/auth.js';
+import { hashearPassword, revisarPassword, sha256, codigoDeRecuperacion } from '../functions/_lib/auth.js';
 import { derivarEnCliente } from '../admin/clave.js';
 
 const RAIZ = path.resolve(path.dirname(fileURLToPath(import.meta.url)), '..');
@@ -56,9 +56,7 @@ if (!desdeEntorno) {
 // Se deriva igual que lo haría el navegador, si no la contraseña no coincidiría.
 const h = await hashearPassword(await derivarEnCliente(email, clave));
 
-// Código de recuperación: cuatro grupos de cuatro, fácil de copiar a mano.
-const crudo = tokenAleatorio(16).replace(/[^A-Za-z0-9]/g, '').toUpperCase().slice(0, 16);
-const codigo = crudo.match(/.{1,4}/g).join('-');
+const codigo = codigoDeRecuperacion();
 const codigoHash = await sha256(codigo);
 
 const ahora = new Date().toISOString();

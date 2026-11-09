@@ -14,7 +14,7 @@ ella solo usa el panel, y eso está explicado en [USAR-EL-PANEL.md](USAR-EL-PANE
 | Cuenta de Cloudflare | licenciaturaiatp@gmail.com |
 | Proyecto Pages | `lume-beauty` |
 | Base D1 | `lume-beauty` — id `f60c52b8-9b51-4cab-808a-a0c2e88f6f12` |
-| Depósito de fotos (R2) | **sin habilitar** — ver sección 3 |
+| Fotos de productos | KV `lume-fotos` — id `7ba834bfc81d4dfda10e443a364d2097` |
 | Tienda vieja en Render | sigue en pie, sin tocar |
 
 El dominio propio todavía **no** apunta acá. Hasta que apunte, la dirección
@@ -86,46 +86,43 @@ rm db/admin.sql          # contiene el resumen de una contraseña real
 
 ---
 
-## 3. Las fotos (R2) — **pendiente**
+## 3. Las fotos
 
-Hoy R2 **no está habilitado** en la cuenta. Wrangler lo dice así:
+Las fotos que sube Camila van a **Workers KV**, no a R2.
 
+R2 es el lugar más apropiado para archivos, pero hay que habilitarlo a mano
+desde el panel de Cloudflare y puede pedir un medio de pago. Eso convierte una
+tarea de Camila en un trámite de otra persona, que es justo lo que este panel
+existe para evitar. KV viene encendido con el plan gratuito: no hay que
+activar nada.
+
+Para el catálogo alcanza de sobra: 1 GB de espacio, valores de hasta 25 MB
+— el panel corta en 6 MB por foto — y las lecturas se cachean en el borde con
+`immutable`, así que una foto muy vista casi no consume cuota.
+
+```bash
+npx wrangler kv namespace create lume-fotos     # ya hecho
 ```
-Please enable R2 through the Cloudflare Dashboard. [code: 10042]
-```
 
-No es un problema de permisos: R2 hay que activarlo a mano una vez, desde el
-panel web, y eso solo lo puede hacer el dueño de la cuenta.
-
-**Qué significa mientras tanto.** Todo el panel funciona salvo *subir una foto
-nueva*. En concreto, Camila puede cambiar precios, stock, textos, categorías,
-ocultar y mostrar productos, y usar el modo mantenimiento. Lo que **no** puede
-es dar de alta un producto nuevo con su foto, porque publicar exige al menos
-una imagen. Puede dejarlo guardado como borrador y completarlo después.
-
-**Para habilitarlo:**
-
-1. Panel de Cloudflare → **R2 Object Storage** → activar.
-   **Mirar si pide un medio de pago antes de aceptar nada.** La capa gratuita
-   es de 10 GB y sin cargo por descarga, de sobra para un catálogo de fotos,
-   pero si exige tarjeta, conviene decidirlo a conciencia y no por inercia.
-2. Crear el depósito:
-   ```bash
-   npx wrangler r2 bucket create lume-fotos
-   ```
-3. Descomentar las tres líneas de `[[r2_buckets]]` en `wrangler.toml` y
-   publicar de nuevo con `npx wrangler pages deploy`.
-
-Si pide tarjeta y no se quiere dar, hay dos caminos, en este orden:
-
-1. **Seguir con las fotos en el repositorio**, como hasta ahora. Camila no las
-   puede cargar sola, pero todo lo demás del panel funciona igual. El panel
-   avisa con un mensaje claro cuando R2 no está conectado.
-2. Usar otro servicio de imágenes con capa gratuita y cambiar el endpoint
-   `functions/api/admin/fotos.js`, que está aislado justamente para eso.
+**Si algún día conviene pasar a R2** — muchas fotos, o muy pesadas — se
+habilita R2 en el panel, se crea el depósito y se descomentan las tres líneas
+de `[[r2_buckets]]` en `wrangler.toml`. `functions/_lib/fotos.js` lo empieza a
+usar solo, y las fotos viejas siguen saliendo de KV porque busca en los dos
+lados. No hay que migrar nada ni romper ningún enlace.
 
 **No usar la base de datos para guardar fotos.** D1 está pensado para datos
 chicos: las imágenes la vuelven lenta y pesada de copiar.
+
+### Lo que todavía no hace
+
+Borrar un producto **no borra su foto**. Queda ocupando lugar sin que nadie la
+use. Con 1 GB y fotos de 60 KB hacen falta unas 16.000 fotos huérfanas para
+que importe, así que no corre apuro, pero conviene saberlo. Para ver qué hay
+guardado:
+
+```bash
+npx wrangler kv key list --namespace-id 7ba834bfc81d4dfda10e443a364d2097 --remote
+```
 
 ---
 
@@ -248,7 +245,9 @@ saber cuáles son:
 | Pedidos a la API | 100.000 por día | Muy lejos del límite |
 | Escrituras en la base | 100.000 por día | Decenas por día |
 | Lecturas en la base | 5.000.000 por día | Muy lejos del límite |
-| Fotos en R2 | 10 GB | Unos pocos MB |
+| Fotos guardadas (KV) | 1 GB | Unos pocos MB |
+| Fotos subidas (KV) | 1.000 por día | Unas pocas por semana |
+| Fotos vistas (KV) | 100.000 por día | Mucho menos: se cachean en el borde |
 
 Si se superan, Cloudflare devuelve errores hasta la medianoche UTC; no cobra sin
 aviso. Se ve en **Workers & Pages → lume-beauty → Metrics**.

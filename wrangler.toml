@@ -19,13 +19,17 @@ binding = "DB"
 database_name = "lume-beauty"
 database_id = "f60c52b8-9b51-4cab-808a-a0c2e88f6f12"
 
-# Depósito de fotos. Está comentado porque R2 todavía no está habilitado en
-# esta cuenta: con el binding puesto, el despliegue falla entero. Sin él, todo
-# el panel funciona y la única diferencia es que subir una foto nueva avisa
-# que el depósito no está conectado.
-#
-# Para habilitarlo: panel de Cloudflare -> R2 Object Storage -> activar, crear
-# el depósito "lume-fotos", descomentar estas tres líneas y publicar de nuevo.
+# Las fotos de los productos. KV viene encendido con el plan gratuito: no hay
+# que habilitar nada ni dar una tarjeta, al revés que R2.
+[[kv_namespaces]]
+binding = "FOTOS_KV"
+id = "7ba834bfc81d4dfda10e443a364d2097"
+
+# R2 es el lugar más apropiado para archivos y conviene si algún día hay
+# muchas fotos o muy pesadas, pero hay que habilitarlo a mano desde el panel
+# de Cloudflare. Si se habilita, se crea el depósito, se descomentan estas
+# tres líneas y el código lo empieza a usar solo. Las fotos viejas siguen
+# saliendo de KV: se busca en los dos lados.
 # [[r2_buckets]]
 # binding = "FOTOS"
 # bucket_name = "lume-fotos"

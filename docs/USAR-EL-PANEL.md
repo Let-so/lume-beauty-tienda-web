@@ -56,11 +56,9 @@ Tocá **Agregar producto** y completá:
 - **Nombre:** como lo va a ver el cliente.
 - **Marca** y **contenido:** lo que dice el envase.
 - **Fotos:** tocá el recuadro «+ Subir» y elegilas del celular. La primera es
-  la que se ve en el catálogo.
-  **Ojo: subir fotos todavía no está conectado.** Si lo intentás, el panel te
-  lo va a decir con todas las letras en vez de fallar raro. Mientras tanto
-  guardá el producto como borrador y avisá para que se complete. Todo lo demás
-  — precios, stock, textos, mostrar y ocultar — funciona normalmente.
+  la que se ve en el catálogo. Podés subir varias y arrastrarlas para
+  cambiarles el orden. Cada foto puede pesar hasta 6 MB, que es más de lo que
+  pesa una foto de celular.
 - **Precio:** solo el número. Si todavía no lo sabés, **dejalo vacío** y la
   tienda va a decir «Consultar precio». Nunca inventes un precio para llenar
   el casillero.
@@ -70,8 +68,7 @@ Tocá **Agregar producto** y completá:
 Tocá **Guardar**.
 
 Para publicar un producto hace falta al menos una foto. Como borrador podés
-guardarlo sin nada y completarlo después. Los productos que ya están en la
-tienda tienen su foto y se editan sin problema.
+guardarlo sin nada y completarlo después.
 
 ---
 
@@ -138,8 +135,6 @@ tiempo. Si dudás, en vez de borrarlo pasalo a borrador.
 
 Para que no busques algo que no existe:
 
-- **Subir fotos nuevas:** falta conectar el depósito de imágenes. Es lo
-  primero de la lista.
 - **Pedidos y pagos:** las ventas se siguen cerrando por WhatsApp, como ahora.
 - **Clientes, campañas, estadísticas y redes sociales:** todavía no.
 - **Cambiar colores y banners de la tienda:** todavía no.

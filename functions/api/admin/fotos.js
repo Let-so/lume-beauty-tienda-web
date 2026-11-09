@@ -1,15 +1,11 @@
 // Subida de fotos desde el celular o la computadora.
 //
-// Las fotos van a R2, el almacenamiento de archivos de Cloudflare. Si R2
-// todavía no está conectado, este endpoint lo dice con todas las letras en
-// lugar de fallar de una forma confusa o de guardar la foto en un lugar que
-// no corresponde.
-//
-// No se usa la base de datos para guardar fotos: está pensada para datos
-// chicos, y meterle imágenes la vuelve lenta y cara de copiar.
+// Dónde terminan guardadas lo decide _lib/fotos.js. Acá solo se comprueba
+// que lo que sube sea de verdad una imagen y que no sea desmedida.
 
 import { ok, error, json } from '../../_lib/http.js';
 import { registrar } from '../../_lib/auth.js';
+import { hayDondeGuardar, porQueNoSePuede, guardarFoto } from '../../_lib/fotos.js';
 
 const MAX_BYTES = 6 * 1024 * 1024;        // 6 MB: una foto de celular entra de sobra
 
@@ -35,12 +31,8 @@ function formatoReal(bytes) {
 }
 
 export async function onRequestPost({ request, env, data }) {
-  if (!env.FOTOS) {
-    return json({
-      ok: false,
-      error: 'El almacenamiento de fotos todavía no está conectado.',
-      comoResolverlo: 'Hay que crear el depósito R2 en Cloudflare y conectarlo con el nombre FOTOS. Está explicado en docs/PUBLICAR.md.',
-    }, 503);
+  if (!hayDondeGuardar(env)) {
+    return json({ ok: false, ...porQueNoSePuede() }, 503);
   }
 
   let form;
@@ -65,8 +57,8 @@ export async function onRequestPost({ request, env, data }) {
 
   const extension = TIPOS[real];
   const nombre = `productos/${crypto.randomUUID()}.${extension}`;
-  await env.FOTOS.put(nombre, bytes, { httpMetadata: { contentType: real } });
+  const url = await guardarFoto(env, nombre, bytes, real);
   await registrar(env.DB, data.usuario.id, 'foto_subida', 'imagen', nombre, { bytes: archivo.size });
 
-  return ok({ url: `/fotos/${nombre}`, mensaje: 'Foto subida.' });
+  return ok({ url, mensaje: 'Foto subida.' });
 }
