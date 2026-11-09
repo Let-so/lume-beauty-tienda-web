@@ -51,3 +51,23 @@ export async function derivarEnCliente(email, password) {
     material, 256);
   return aBase64(bits);
 }
+
+/**
+ * Reglas de la contraseña.
+ *
+ * Vive acá y no en el servidor porque acá es el único lugar donde la
+ * contraseña existe: lo que llega al servidor ya es su derivación, y de esa
+ * no se puede saber ni cuánto medía la original. El servidor importa esta
+ * misma función, así la regla es una sola.
+ */
+export function revisarPassword(password) {
+  if (typeof password !== 'string' || password.length < 10) {
+    return 'La contraseña tiene que tener al menos 10 caracteres. Una frase que recuerdes es mejor que algo corto y complicado.';
+  }
+  if (password.length > 200) return 'La contraseña es demasiado larga.';
+  const comunes = ['contrasena1', 'contraseña1', '1234567890', 'password123', 'qwertyuiop'];
+  if (comunes.includes(password.toLowerCase())) {
+    return 'Esa contraseña es demasiado fácil de adivinar. Probá con otra.';
+  }
+  return null;
+}

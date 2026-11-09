@@ -124,13 +124,22 @@
   details.guia{border:1px solid var(--borde);border-radius:11px;padding:13px 15px;margin-bottom:10px;background:var(--tarjeta)}
   details.guia summary{cursor:pointer;font-size:14.5px}
   details.guia ol{margin:11px 0 0;padding-left:19px;font-size:13.5px;color:var(--suave);line-height:1.7}
+
+  .codigo{border:1.5px solid var(--marca);border-radius:12px;padding:17px;text-align:center;
+        background:#f7efe9;margin:13px 0}
+  .codigo > b{display:block;font-family:ui-monospace,'SFMono-Regular',Menlo,Consolas,monospace;
+        font-size:clamp(19px,5.4vw,25px);letter-spacing:.14em;color:var(--marca);
+        user-select:all;word-break:break-all}
+  .codigo p{margin:9px 0 0;font-size:12.5px;color:var(--suave);line-height:1.6}
+  .enlace{background:none;border:0;padding:0;color:var(--marca);font-size:13px;
+        text-decoration:underline;cursor:pointer}
 </style>
 </head>
 <body>
 <div id="app"><div class="centro">Cargando…</div></div>
 
 <script type="module">
-import { derivarEnCliente } from './clave.js';
+import { derivarEnCliente, revisarPassword } from './clave.js';
 
 // ───────────────────────── hablar con el servidor ─────────────────────────
 
@@ -179,6 +188,11 @@ const estado = {
   mensaje: null,
   filtro: { q: '', estado: '' },
   dialogo: null,
+  recuperando: false,
+  cuenta: null,
+  // El código de recuperación se muestra una sola vez: en la base queda solo
+  // su resumen, así que si se pierde esta pantalla, se pierde el código.
+  codigoNuevo: null,
 };
 
 function avisar(texto, tipo = 'ok') {
@@ -210,12 +224,14 @@ const ESTADO_CHIP = {
 // ───────────────────────────── cargar datos ─────────────────────────────
 
 async function cargarTodo() {
-  const [prods, datos, mant] = await Promise.all([
+  const [prods, datos, mant, cuenta] = await Promise.all([
     api('/api/admin/productos?' + new URLSearchParams(
       Object.entries(estado.filtro).filter(([, v]) => v))),
     api('/api/admin/catalogo-datos'),
     api('/api/admin/mantenimiento'),
+    api('/api/admin/cuenta'),
   ]);
+  if (cuenta.ok) estado.cuenta = cuenta;
   if (prods.ok) { estado.productos = prods.productos; estado.resumen = prods.resumen; }
   if (datos.ok) {
     estado.categorias = datos.categorias;
@@ -248,10 +264,110 @@ function pantallaEntrar() {
         <button class="btn" style="width:100%" type="submit">ENTRAR</button>
       </form>
       <p class="ayudita" style="margin-top:15px;text-align:center">
-        Si no recordás tu contraseña, usá el código de recuperación que guardaste
-        cuando creamos tu cuenta.</p>
+        <button type="button" class="enlace" data-accion="ir-recuperar">No me acuerdo mi contraseña</button></p>
     </div>
   </div></div>`;
+}
+
+function pantallaRecuperar() {
+  return `<div class="entrar"><div class="caja">
+    <div style="text-align:center;margin-bottom:26px">
+      <div class="logo" style="font-size:31px">LUMÉ<small>BEAUTY</small></div>
+      <p class="ayudita" style="margin-top:9px">Recuperar el acceso</p>
+    </div>
+    <div class="tarjeta">
+      <div id="msg"></div>
+      ${estado.codigoNuevo ? recuadroCodigo() : `
+      <p class="ayudita" style="margin-bottom:15px">
+        Escribí el código de recuperación que anotaste cuando creamos tu cuenta.
+        Son cuatro grupos de cuatro letras y números.</p>
+      <form id="formRecuperar">
+        <div class="campo">
+          <label for="r-email">Tu correo</label>
+          <input id="r-email" type="email" autocomplete="username" required autofocus>
+        </div>
+        <div class="campo">
+          <label for="r-codigo">Código de recuperación</label>
+          <input id="r-codigo" required placeholder="ABCD-EFGH-JKMN-PQRS"
+                 autocapitalize="characters" spellcheck="false">
+        </div>
+        <div class="campo">
+          <label for="r-nueva">Contraseña nueva</label>
+          <input id="r-nueva" type="password" autocomplete="new-password" required>
+          <small class="ayudita">Al menos 10 caracteres. Una frase que recuerdes es mejor que algo corto y complicado.</small>
+        </div>
+        <div class="campo">
+          <label for="r-repetir">Escribila otra vez</label>
+          <input id="r-repetir" type="password" autocomplete="new-password" required>
+        </div>
+        <button class="btn" style="width:100%" type="submit">CAMBIAR MI CONTRASEÑA</button>
+      </form>`}
+      <p class="ayudita" style="margin-top:15px;text-align:center">
+        <button type="button" class="enlace" data-accion="ir-entrar">Volver a la pantalla de entrada</button></p>
+    </div>
+  </div></div>`;
+}
+
+function recuadroCodigo() {
+  return `<div class="codigo">
+    <small class="ayudita" style="letter-spacing:.14em">TU CÓDIGO DE RECUPERACIÓN NUEVO</small>
+    <b>${esc(estado.codigoNuevo)}</b>
+    <p>Anotalo en un papel y guardalo. <b>No se puede volver a ver</b>:
+       en el sistema queda guardado de una forma que no permite leerlo.</p>
+    <button class="btn linea chico" data-accion="copiar-codigo" style="margin-top:4px">COPIAR</button>
+    <button class="btn chico" data-accion="ya-lo-anote" style="margin-top:4px">YA LO ANOTÉ</button>
+  </div>`;
+}
+
+function pantallaCuenta() {
+  const c = estado.cuenta || {};
+  return `
+  <div class="titulo"><h1>Mi cuenta</h1></div>
+
+  <div class="tarjeta">
+    <h2 style="font-size:20px">${esc(estado.usuario.name || '')}</h2>
+    <p class="ayudita">${esc(estado.usuario.email || '')}</p>
+  </div>
+
+  <div class="tarjeta" style="margin-top:17px">
+    <h2 style="font-size:20px;margin-bottom:4px">Cambiar mi contraseña</h2>
+    <p class="ayudita" style="margin-bottom:14px">
+      Si entraste en el teléfono de otra persona o te prestaron una computadora,
+      cambiala. Al cambiarla, esas sesiones se cierran solas.</p>
+    <form id="formClave">
+      <div class="campo">
+        <label for="c-actual">Tu contraseña de ahora</label>
+        <input id="c-actual" type="password" autocomplete="current-password" required>
+      </div>
+      <div class="campo">
+        <label for="c-nueva">La nueva</label>
+        <input id="c-nueva" type="password" autocomplete="new-password" required>
+        <small class="ayudita">Al menos 10 caracteres.</small>
+      </div>
+      <div class="campo">
+        <label for="c-repetir">Escribila otra vez</label>
+        <input id="c-repetir" type="password" autocomplete="new-password" required>
+      </div>
+      <button class="btn" type="submit">GUARDAR LA CONTRASEÑA NUEVA</button>
+    </form>
+  </div>
+
+  <div class="tarjeta" style="margin-top:17px">
+    <h2 style="font-size:20px;margin-bottom:4px">Mi código de recuperación</h2>
+    <p class="ayudita" style="margin-bottom:12px">
+      Es lo único que te deja volver a entrar si olvidás la contraseña.
+      ${c.tieneCodigo
+        ? 'Tenés uno sin usar. Si no sabés dónde lo anotaste, pedí uno nuevo: el anterior deja de servir.'
+        : '<b>No tenés ninguno sin usar.</b> Pedí uno ahora y guardalo, o si olvidás la contraseña no vas a poder entrar sola.'}</p>
+    ${estado.codigoNuevo ? recuadroCodigo() : `
+    <form id="formCodigo">
+      <div class="campo">
+        <label for="k-actual">Tu contraseña, para confirmar que sos vos</label>
+        <input id="k-actual" type="password" autocomplete="current-password" required>
+      </div>
+      <button class="btn ${c.tieneCodigo ? 'linea' : ''}" type="submit">DAME UN CÓDIGO NUEVO</button>
+    </form>`}
+  </div>`;
 }
 
 function pantallaInicio() {
@@ -516,20 +632,25 @@ function pintar() {
   const app = document.getElementById('app');
 
   if (!estado.usuario) {
-    app.innerHTML = pantallaEntrar();
+    app.innerHTML = estado.recuperando ? pantallaRecuperar() : pantallaEntrar();
     if (estado.mensaje) {
       document.getElementById('msg').innerHTML =
         `<div class="aviso ${estado.mensaje.tipo === 'ok' ? 'ok' : 'err'}">${esc(estado.mensaje.texto)}</div>`;
     }
-    document.getElementById('formEntrar').addEventListener('submit', alEntrar);
+    const entrar = document.getElementById('formEntrar');
+    if (entrar) entrar.addEventListener('submit', alEntrar);
+    const recuperar = document.getElementById('formRecuperar');
+    if (recuperar) recuperar.addEventListener('submit', alRecuperar);
+    conectar();
     return;
   }
 
   const pantallas = {
     inicio: pantallaInicio, productos: pantallaProductos,
-    editor: pantallaEditor, ayuda: pantallaAyuda,
+    editor: pantallaEditor, ayuda: pantallaAyuda, cuenta: pantallaCuenta,
   };
-  const menu = [['inicio', 'Inicio'], ['productos', 'Productos'], ['ayuda', 'Ayuda']];
+  const menu = [['inicio', 'Inicio'], ['productos', 'Productos'],
+                ['cuenta', 'Mi cuenta'], ['ayuda', 'Ayuda']];
 
   app.innerHTML = `
     <header class="barra">
@@ -545,6 +666,11 @@ function pintar() {
       ${(pantallas[estado.pantalla] || pantallaInicio)()}
     </main>
     ${estado.dialogo ? dibujarDialogo() : ''}`;
+
+  const formClave = document.getElementById('formClave');
+  if (formClave) formClave.addEventListener('submit', alCambiarClave);
+  const formCodigo = document.getElementById('formCodigo');
+  if (formCodigo) formCodigo.addEventListener('submit', alPedirCodigo);
 
   conectar();
 }
@@ -573,6 +699,7 @@ async function alEntrar(e) {
   const boton = e.target.querySelector('button');
   boton.disabled = true;
   boton.textContent = 'ENTRANDO…';
+  const volver = recordarCampos(['email', 'clave']);
   const email = document.getElementById('email').value.trim();
   // El estirado de la contrasena ocurre aca, en el navegador. Tarda alrededor
   // de medio segundo y por eso el boton avisa que esta trabajando.
@@ -580,15 +707,125 @@ async function alEntrar(e) {
   try {
     clave = await derivarEnCliente(email, document.getElementById('clave').value);
   } catch {
-    avisar('Tu navegador no pudo preparar la contrasena. Probá con otro navegador o actualizá este.', 'err');
+    avisar('Tu navegador no pudo preparar la contraseña. Probá con otro navegador o actualizá este.', 'err');
+    volver();
     return;
   }
   const r = await api('/api/admin/sesion', { method: 'POST', body: { email, password: clave } });
-  if (!r.ok) { avisar(r.error, 'err'); return; }
+  if (!r.ok) { avisar(r.error, 'err'); volver(); return; }
   estado.usuario = r.usuario;
   estado.mensaje = null;
   estado.pantalla = 'inicio';
   await cargarTodo();
+}
+
+// Mostrar un aviso vuelve a dibujar la pantalla, y eso borra lo que estaba
+// escrito. En un formulario de contraseñas, equivocarse en una letra
+// obligaría a escribir los tres campos de nuevo. Esto los devuelve a su lugar.
+function recordarCampos(ids) {
+  const valores = {};
+  for (const id of ids) {
+    const e = document.getElementById(id);
+    if (e) valores[id] = e.value;
+  }
+  return () => {
+    for (const id of ids) {
+      const e = document.getElementById(id);
+      if (e) e.value = valores[id];
+    }
+  };
+}
+
+// Devuelve la clave derivada, o null si la contraseña no pasa la regla o el
+// navegador no puede derivarla. Avisa el motivo en los dos casos.
+async function prepararClave(email, password, repetida) {
+  if (repetida !== undefined && password !== repetida) {
+    avisar('Las dos contraseñas no coinciden. Volvé a escribirlas.', 'err');
+    return null;
+  }
+  const problema = revisarPassword(password);
+  if (problema) { avisar(problema, 'err'); return null; }
+  try {
+    return await derivarEnCliente(email, password);
+  } catch {
+    avisar('Tu navegador no pudo preparar la contraseña. Probá con otro navegador o actualizá este.', 'err');
+    return null;
+  }
+}
+
+async function alRecuperar(e) {
+  e.preventDefault();
+  const boton = e.target.querySelector('button[type=submit]');
+  const volver = recordarCampos(['r-email', 'r-codigo', 'r-nueva', 'r-repetir']);
+  const email = document.getElementById('r-email').value.trim();
+  const codigo = document.getElementById('r-codigo').value.trim().toUpperCase();
+  const clave = await prepararClave(email,
+    document.getElementById('r-nueva').value,
+    document.getElementById('r-repetir').value);
+  if (!clave) { volver(); return; }
+
+  boton.disabled = true;
+  boton.textContent = 'CAMBIANDO…';
+  const r = await api('/api/admin/recuperar', {
+    method: 'POST', body: { email, codigo, password: clave },
+  });
+  if (!r.ok) { avisar(r.error, 'err'); volver(); return; }
+
+  // Entra directo: el servidor ya dejó la sesión abierta. Pero primero se le
+  // muestra el código nuevo, porque no hay segunda oportunidad de verlo.
+  estado.usuario = r.usuario;
+  estado.codigoNuevo = r.codigoNuevo;
+  estado.pantalla = 'cuenta';
+  estado.recuperando = false;
+  await cargarTodo();
+  avisar(r.mensaje);
+}
+
+async function alCambiarClave(e) {
+  e.preventDefault();
+  const boton = e.target.querySelector('button[type=submit]');
+  const volver = recordarCampos(['c-actual', 'c-nueva', 'c-repetir']);
+  const email = estado.usuario.email;
+  const actual = await (async () => {
+    try { return await derivarEnCliente(email, document.getElementById('c-actual').value); }
+    catch { return null; }
+  })();
+  if (!actual) { avisar('Tu navegador no pudo preparar la contraseña.', 'err'); volver(); return; }
+
+  const nueva = await prepararClave(email,
+    document.getElementById('c-nueva').value,
+    document.getElementById('c-repetir').value);
+  if (!nueva) { volver(); return; }
+
+  boton.disabled = true;
+  boton.textContent = 'GUARDANDO…';
+  const r = await api('/api/admin/cuenta', {
+    method: 'POST', body: { accion: 'cambiar-clave', actual, nueva },
+  });
+  if (!r.ok) { avisar(r.error, 'err'); volver(); return; }
+  await cargarTodo();
+  avisar(r.mensaje);
+}
+
+async function alPedirCodigo(e) {
+  e.preventDefault();
+  const boton = e.target.querySelector('button[type=submit]');
+  const volver = recordarCampos(['k-actual']);
+  let actual;
+  try {
+    actual = await derivarEnCliente(estado.usuario.email, document.getElementById('k-actual').value);
+  } catch {
+    avisar('Tu navegador no pudo preparar la contraseña.', 'err');
+    volver();
+    return;
+  }
+  boton.disabled = true;
+  boton.textContent = 'GENERANDO…';
+  const r = await api('/api/admin/cuenta', { method: 'POST', body: { accion: 'nuevo-codigo', actual } });
+  if (!r.ok) { avisar(r.error, 'err'); volver(); return; }
+  estado.codigoNuevo = r.codigo;
+  await cargarTodo();
+  avisar(r.mensaje);
 }
 
 function productoVacio() {
@@ -774,6 +1011,39 @@ function conectar() {
         avisar(r.mensaje);
         break;
       }
+      case 'ir-recuperar':
+        estado.recuperando = true;
+        estado.mensaje = null;
+        pintar();
+        break;
+
+      case 'ir-entrar':
+        estado.recuperando = false;
+        estado.codigoNuevo = null;
+        estado.mensaje = null;
+        pintar();
+        break;
+
+      case 'copiar-codigo': {
+        // Solo cuando lo pide: nunca se toca el portapapeles por nuestra cuenta.
+        try {
+          await navigator.clipboard.writeText(estado.codigoNuevo);
+          avisar('Código copiado. Igual anotalo en un papel: el portapapeles se borra.');
+        } catch {
+          avisar('Tu navegador no deja copiar automáticamente. Seleccioná el código y copialo a mano.', 'err');
+        }
+        break;
+      }
+
+      case 'ya-lo-anote': {
+        if (!(await preguntar('¿Lo anotaste?',
+          'El código no se puede volver a ver. Si lo perdés vas a tener que pedir otro, y para eso hace falta tu contraseña.',
+          { si: 'Sí, lo anoté', no: 'Todavía no' }))) return;
+        estado.codigoNuevo = null;
+        pintar();
+        break;
+      }
+
       case 'salir': {
         if (!(await preguntar('¿Cerrar sesión?', 'Vas a tener que escribir tu contraseña para volver a entrar.',
           { si: 'Cerrar sesión', no: 'Quedarme' }))) return;

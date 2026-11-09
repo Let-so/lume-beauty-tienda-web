@@ -15,8 +15,10 @@ import * as mantenimientoEP from '../functions/api/admin/mantenimiento.js';
 import * as productosEP from '../functions/api/admin/productos.js';
 import * as productoEP from '../functions/api/admin/productos/[id].js';
 import * as catalogoEP from '../functions/api/catalog.js';
+import * as cuentaEP from '../functions/api/admin/cuenta.js';
+import * as recuperarEP from '../functions/api/admin/recuperar.js';
 import { construirCatalogo } from '../functions/_lib/catalogo.js';
-import { hashearPassword, revisarPassword } from '../functions/_lib/auth.js';
+import { hashearPassword, revisarPassword, sha256, codigoDeRecuperacion } from '../functions/_lib/auth.js';
 import { derivarEnCliente } from '../admin/clave.js';
 import { validarProducto, hacerSlug } from '../functions/_lib/producto.js';
 
@@ -520,6 +522,106 @@ console.log('PRUEBAS DEL PANEL — ' + new Date().toISOString().slice(0, 16).rep
     a1 === await derivarEnCliente('una@lume.test', 'la misma contrasena'));
   check('lo que viaja por la red no es la contraseña',
     !a1.includes('contrasena') && a1.length === 44);
+}
+
+// ───────── 14. Camila administra su propia cuenta ─────────
+{
+  seccion('14. Camila administra su propia cuenta');
+  const { env, d1 } = await preparar();
+  const { como } = await entrar(env, 'camila@lume.test', CLAVE);
+  const derivada = c => derivarEnCliente('camila@lume.test', c);
+
+  const sinCodigo = await (await como(cuentaEP, '/api/admin/cuenta')).json();
+  check('al principio no hay código de recuperación', sinCodigo.tieneCodigo === false);
+
+  const mal = await como(cuentaEP, '/api/admin/cuenta', {
+    method: 'POST', body: { accion: 'nuevo-codigo', actual: await derivada('no es mi contrasena') },
+  });
+  check('sin la contraseña actual no se puede pedir un código', mal.status === 401);
+
+  const pedido = await (await como(cuentaEP, '/api/admin/cuenta', {
+    method: 'POST', body: { accion: 'nuevo-codigo', actual: await derivada(CLAVE) },
+  })).json();
+  check('con la contraseña sí', pedido.ok === true);
+  check('el código son cuatro grupos de cuatro',
+    /^[A-Z0-9]{4}(-[A-Z0-9]{4}){3}$/.test(pedido.codigo || ''));
+  // Si el código se copia a mano, un 0 y una O son el mismo garabato.
+  check('el código no trae caracteres que se confunden al copiarlo',
+    !/[ILOU01]/.test(pedido.codigo));
+
+  const guardado = d1.db.prepare('SELECT recovery_hash FROM admin_user WHERE id = 1').get();
+  check('en la base queda el resumen, no el código',
+    guardado.recovery_hash !== pedido.codigo && guardado.recovery_hash === await sha256(pedido.codigo));
+
+  const ahoraSi = await (await como(cuentaEP, '/api/admin/cuenta')).json();
+  check('el panel sabe que ya hay un código sin usar', ahoraSi.tieneCodigo === true);
+
+  const NUEVA = 'otra frase igual de larga';
+  const cambioMal = await como(cuentaEP, '/api/admin/cuenta', {
+    method: 'POST',
+    body: { accion: 'cambiar-clave', actual: await derivada('cualquier cosa'), nueva: await derivada(NUEVA) },
+  });
+  check('no se cambia la contraseña sin saber la de ahora', cambioMal.status === 401);
+
+  const cambio = await como(cuentaEP, '/api/admin/cuenta', {
+    method: 'POST',
+    body: { accion: 'cambiar-clave', actual: await derivada(CLAVE), nueva: await derivada(NUEVA) },
+  });
+  check('con la de ahora sí se cambia', cambio.status === 200);
+
+  const vieja = await entrar(env, 'camila@lume.test', CLAVE);
+  check('la contraseña vieja deja de servir', vieja.respuesta.status === 401);
+  const nuevaSesion = await entrar(env, 'camila@lume.test', NUEVA);
+  check('la nueva sirve', nuevaSesion.respuesta.status === 200);
+}
+
+// ───────── 15. Recuperar el acceso sin ayuda de nadie ─────────
+{
+  seccion('15. Recuperar el acceso sin ayuda de nadie');
+  const { env, d1 } = await preparar();
+  const codigo = codigoDeRecuperacion();
+  d1.db.prepare('UPDATE admin_user SET recovery_hash = ? WHERE id = 1').run(await sha256(codigo));
+
+  const NUEVA = 'la frase que me voy a acordar';
+  const pedir = cuerpo => llamarAdmin(recuperarEP, '/api/admin/recuperar', env, {
+    method: 'POST', body: cuerpo, headers: { Origin: BASE_URL },
+  });
+
+  const codigoMal = await pedir({
+    email: 'camila@lume.test', codigo: 'AAAA-BBBB-CCCC-DDDD',
+    password: await derivarEnCliente('camila@lume.test', NUEVA),
+  });
+  check('un código inventado no sirve', codigoMal.status === 401);
+
+  const r = await pedir({
+    email: 'camila@lume.test', codigo,
+    password: await derivarEnCliente('camila@lume.test', NUEVA),
+  });
+  const cuerpo = await r.json();
+  check('con el código correcto se cambia la contraseña', r.status === 200);
+  check('y queda la sesión abierta, sin tener que entrar de nuevo',
+    cookiesDe(r).lume_sesion !== undefined);
+
+  // Si recuperar gastara el único código, la próxima vez que olvide la
+  // contraseña quedaría encerrada afuera y necesitaría a un técnico.
+  check('se entrega un código nuevo en el acto',
+    /^[A-Z0-9]{4}(-[A-Z0-9]{4}){3}$/.test(cuerpo.codigoNuevo || ''));
+  check('y es distinto del que acaba de usar', cuerpo.codigoNuevo !== codigo);
+
+  const reintento = await pedir({
+    email: 'camila@lume.test', codigo,
+    password: await derivarEnCliente('camila@lume.test', 'una tercera frase larga'),
+  });
+  check('el código usado ya no sirve una segunda vez', reintento.status === 401);
+
+  const conElNuevo = await pedir({
+    email: 'camila@lume.test', codigo: cuerpo.codigoNuevo,
+    password: await derivarEnCliente('camila@lume.test', 'una cuarta frase bien larga'),
+  });
+  check('el código nuevo sí sirve', conElNuevo.status === 200);
+
+  const entra = await entrar(env, 'camila@lume.test', 'una cuarta frase bien larga');
+  check('y se puede entrar con esa contraseña', entra.respuesta.status === 200);
 }
 
 // ══════════════════════════════════════════════════════════════════════

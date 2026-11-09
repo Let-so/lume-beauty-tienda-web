@@ -91,20 +91,26 @@ export function pareceClaveDerivada(valor) {
   return typeof valor === 'string' && /^[A-Za-z0-9+/]{43}=$/.test(valor);
 }
 
-/**
- * Reglas de la contraseña. Se usa en el navegador y al crear la cuenta, nunca
- * en el servidor: ahí ya no se ve la contraseña, solo su derivación.
- */
-export function revisarPassword(password) {
-  if (typeof password !== 'string' || password.length < 10) {
-    return 'La contraseña tiene que tener al menos 10 caracteres. Una frase que recuerdes es mejor que algo corto y complicado.';
+// La regla de la contraseña vive del lado del navegador, que es el único que
+// la ve. Se reexporta para que quien ya la importaba de acá siga igual.
+export { revisarPassword } from '../../admin/clave.js';
+
+// Sin I, L, O, U, 0 ni 1: son los caracteres que se confunden cuando alguien
+// copia el código a mano en un papel, que es exactamente lo que le pedimos
+// a Camila que haga.
+const ALFABETO_CODIGO = 'ABCDEFGHJKMNPQRSTVWXYZ23456789';
+
+/** Código de recuperación: cuatro grupos de cuatro. */
+export function codigoDeRecuperacion() {
+  const limite = 256 - (256 % ALFABETO_CODIGO.length);  // descarta el sesgo del resto
+  let s = '';
+  while (s.length < 16) {
+    for (const b of crypto.getRandomValues(new Uint8Array(16))) {
+      if (s.length === 16) break;
+      if (b < limite) s += ALFABETO_CODIGO[b % ALFABETO_CODIGO.length];
+    }
   }
-  if (password.length > 200) return 'La contraseña es demasiado larga.';
-  const comunes = ['contrasena1', 'contraseña1', '1234567890', 'password123', 'qwertyuiop'];
-  if (comunes.includes(password.toLowerCase())) {
-    return 'Esa contraseña es demasiado fácil de adivinar. Probá con otra.';
-  }
-  return null;
+  return s.match(/.{4}/g).join('-');
 }
 
 // ─────────────────────────────── sesiones ───────────────────────────────

@@ -7,7 +7,7 @@
 
 import { ok, error, leerJSON, cookieSesion, cookieCSRF, igualSeguro } from '../../_lib/http.js';
 import {
-  sha256, hashearPassword, pareceClaveDerivada,
+  sha256, hashearPassword, pareceClaveDerivada, codigoDeRecuperacion,
   crearSesion, cerrarTodasLasSesiones, tokenAleatorio, registrar,
   intentosRecientes, anotarIntento, MAX_INTENTOS, VENTANA_MINUTOS, SEGUNDOS_SESION,
 } from '../../_lib/auth.js';
@@ -53,10 +53,16 @@ export async function onRequestPost({ request, env }) {
   }
 
   const h = await hashearPassword(nueva);
+
+  // El código que acaba de usar queda quemado, así que se entrega otro en el
+  // acto. Si no, recuperar la contraseña una vez la dejaría sin red para la
+  // próxima, y tendría que pedirle a alguien con acceso al servidor que le
+  // genere uno — justo lo que este panel existe para evitar.
+  const codigoNuevo = codigoDeRecuperacion();
   await env.DB.prepare(
     `UPDATE admin_user SET password_hash=?, password_salt=?, password_iterations=?,
-            recovery_used_at=? WHERE id=?`
-  ).bind(h.hash, h.salt, h.iterations, new Date().toISOString(), usuario.id).run();
+            recovery_hash=?, recovery_used_at=NULL WHERE id=?`
+  ).bind(h.hash, h.salt, h.iterations, await sha256(codigoNuevo), usuario.id).run();
 
   // Cualquier sesión abierta queda invalidada: si alguien había entrado, sale.
   await cerrarTodasLasSesiones(env.DB, usuario.id);
@@ -66,7 +72,8 @@ export async function onRequestPost({ request, env }) {
   const csrf = tokenAleatorio(24);
   const r = ok({
     usuario: { id: usuario.id, email: usuario.email, name: usuario.name, role: usuario.role },
-    mensaje: 'Contraseña cambiada. Ese código de recuperación ya no sirve: pedí uno nuevo para la próxima vez.',
+    codigoNuevo,
+    mensaje: 'Tu contraseña cambió. El código que usaste ya no sirve: este es el nuevo.',
   });
   r.headers.append('Set-Cookie', cookieSesion(token, request, SEGUNDOS_SESION));
   r.headers.append('Set-Cookie', cookieCSRF(csrf, request));
