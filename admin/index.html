@@ -1,0 +1,845 @@
+<!doctype html>
+<html lang="es">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover">
+<meta name="robots" content="noindex, nofollow">
+<title>Mi tienda · LUMÉ BEAUTY</title>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Cormorant+Garamond:wght@400;500&family=Jost:wght@300;400;500&display=swap" rel="stylesheet">
+<style>
+  :root{
+    --papel:#faf5f1; --tarjeta:#fff; --borde:#e6d8ce; --tinta:#3f2a26;
+    --suave:#8a6d65; --marca:#b38d83; --marca-fuerte:#8f6a61; --oscuro:#5c3129;
+    --bien:#2f6b4f; --mal:#9d3b3b; --aviso:#9a6b1f;
+    --sombra:0 1px 2px rgba(92,49,41,.06), 0 8px 24px rgba(92,49,41,.07);
+  }
+  *{box-sizing:border-box}
+  body{margin:0;background:var(--papel);color:var(--tinta);
+       font-family:'Jost',system-ui,sans-serif;font-size:15px;line-height:1.5;
+       -webkit-text-size-adjust:100%}
+  h1,h2,h3{font-family:'Cormorant Garamond',serif;font-weight:500;margin:0}
+  button{font:inherit;cursor:pointer}
+  input,select,textarea{font:inherit;color:inherit;width:100%;padding:11px 13px;
+       border:1px solid var(--borde);border-radius:9px;background:var(--tarjeta)}
+  input:focus,select:focus,textarea:focus{outline:2px solid var(--marca);outline-offset:1px;border-color:transparent}
+  textarea{min-height:92px;resize:vertical}
+  label{display:block;font-size:12.5px;letter-spacing:.04em;color:var(--suave);margin:0 0 5px}
+  .ayudita{font-size:12px;color:var(--suave);margin:5px 0 0;line-height:1.45}
+  .campo{margin-bottom:17px}
+  .fila{display:grid;gap:14px}
+  @media(min-width:620px){.fila.dos{grid-template-columns:1fr 1fr}}
+
+  .btn{display:inline-flex;align-items:center;justify-content:center;gap:7px;
+       padding:11px 19px;border:0;border-radius:999px;background:var(--marca);
+       color:#fff;letter-spacing:.06em;font-size:13.5px;transition:background .2s}
+  .btn:hover{background:var(--marca-fuerte)}
+  .btn:disabled{opacity:.5;cursor:not-allowed}
+  .btn.linea{background:transparent;color:var(--tinta);border:1px solid var(--borde)}
+  .btn.linea:hover{background:#f0e6df}
+  .btn.peligro{background:var(--mal)}
+  .btn.peligro:hover{background:#852f2f}
+  .btn.chico{padding:7px 13px;font-size:12px}
+
+  header.barra{position:sticky;top:0;z-index:30;background:rgba(250,245,241,.95);
+       backdrop-filter:blur(8px);border-bottom:1px solid var(--borde);
+       padding:11px 16px;display:flex;align-items:center;gap:12px;flex-wrap:wrap}
+  .logo{font-family:'Cormorant Garamond',serif;font-size:21px;letter-spacing:.14em;color:var(--oscuro)}
+  .logo small{display:block;font-family:'Jost';font-size:8px;letter-spacing:.3em;color:var(--suave)}
+  nav.menu{display:flex;gap:3px;overflow-x:auto;flex:1;scrollbar-width:none}
+  nav.menu::-webkit-scrollbar{display:none}
+  nav.menu button{background:none;border:0;padding:8px 13px;border-radius:999px;
+       color:var(--suave);white-space:nowrap;font-size:13px}
+  nav.menu button[aria-current="true"]{background:var(--oscuro);color:#fff}
+
+  main{max-width:1060px;margin:0 auto;padding:22px 16px 90px}
+  .tarjeta{background:var(--tarjeta);border:1px solid var(--borde);border-radius:14px;
+       padding:19px;box-shadow:var(--sombra);margin-bottom:17px}
+  .titulo{display:flex;justify-content:space-between;align-items:center;gap:12px;
+       flex-wrap:wrap;margin-bottom:17px}
+  .titulo h1{font-size:30px}
+
+  .numeros{display:grid;grid-template-columns:repeat(auto-fit,minmax(132px,1fr));gap:11px}
+  .numero{background:var(--tarjeta);border:1px solid var(--borde);border-radius:12px;padding:15px}
+  .numero b{display:block;font-family:'Cormorant Garamond',serif;font-size:31px;line-height:1.1}
+  .numero span{font-size:11.5px;letter-spacing:.07em;color:var(--suave)}
+  .numero.atencion b{color:var(--aviso)}
+
+  .lista{display:grid;gap:11px}
+  .prod{display:grid;grid-template-columns:62px 1fr;gap:13px;align-items:center;
+       background:var(--tarjeta);border:1px solid var(--borde);border-radius:12px;
+       padding:11px;text-align:left;width:100%;border-width:1px}
+  .prod:hover{border-color:var(--marca)}
+  .prod img{width:62px;height:62px;object-fit:contain;background:#f1e7e0;border-radius:8px}
+  .prod .nom{font-size:14.5px;line-height:1.3}
+  .prod .meta{font-size:12px;color:var(--suave);margin-top:3px}
+
+  .chip{display:inline-block;padding:3px 9px;border-radius:999px;font-size:10.5px;
+        letter-spacing:.08em;border:1px solid var(--borde);background:#f7f0ea}
+  .chip.verde{color:var(--bien);border-color:#bcd9c9;background:#eef7f2}
+  .chip.gris{color:var(--suave)}
+  .chip.rojo{color:var(--mal);border-color:#e4c2c2;background:#fbf0f0}
+  .chip.ambar{color:var(--aviso);border-color:#e6d2a8;background:#fdf6e7}
+
+  .aviso{padding:13px 15px;border-radius:11px;font-size:13.5px;margin-bottom:15px;line-height:1.5}
+  .aviso.ok{background:#eef7f2;color:var(--bien);border:1px solid #bcd9c9}
+  .aviso.err{background:#fbf0f0;color:var(--mal);border:1px solid #e4c2c2}
+  .aviso.info{background:#fdf6e7;color:var(--aviso);border:1px solid #e6d2a8}
+
+  .fondo{position:fixed;inset:0;background:rgba(63,42,38,.45);display:flex;
+       align-items:center;justify-content:center;padding:16px;z-index:50}
+  .dialogo{background:var(--tarjeta);border-radius:16px;padding:23px;max-width:430px;width:100%}
+  .dialogo h3{font-size:22px;margin-bottom:9px}
+  .dialogo p{font-size:14px;color:var(--suave);margin:0 0 19px;line-height:1.55}
+  .dialogo .acciones{display:flex;gap:9px;justify-content:flex-end;flex-wrap:wrap}
+
+  .entrar{min-height:100svh;display:flex;align-items:center;justify-content:center;padding:20px}
+  .entrar .caja{width:100%;max-width:380px}
+
+  .fotos{display:flex;gap:9px;flex-wrap:wrap}
+  .foto{position:relative;width:88px;height:88px;border:1px solid var(--borde);
+        border-radius:10px;overflow:hidden;background:#f1e7e0}
+  .foto img{width:100%;height:100%;object-fit:contain}
+  .foto .quitar{position:absolute;top:3px;right:3px;width:22px;height:22px;border:0;
+        border-radius:50%;background:rgba(63,42,38,.78);color:#fff;font-size:13px;line-height:1;padding:0}
+  .foto .principal{position:absolute;bottom:0;left:0;right:0;background:rgba(92,49,41,.85);
+        color:#fff;font-size:9px;text-align:center;letter-spacing:.08em;padding:2px}
+  .soltar{border:1.5px dashed var(--borde);border-radius:10px;padding:17px;text-align:center;
+        color:var(--suave);font-size:13px;cursor:pointer;width:88px;height:88px;
+        display:flex;align-items:center;justify-content:center;background:var(--tarjeta)}
+  .soltar.encima{border-color:var(--marca);background:#f7efe9}
+
+  .renglon{display:flex;gap:8px;margin-bottom:8px;align-items:flex-start}
+  .renglon input,.renglon textarea{flex:1}
+  .renglon button{flex:0 0 auto}
+
+  .pie{position:fixed;left:0;right:0;bottom:0;background:rgba(250,245,241,.97);
+       backdrop-filter:blur(8px);border-top:1px solid var(--borde);padding:11px 16px;
+       display:flex;gap:9px;justify-content:flex-end;z-index:25;
+       padding-bottom:calc(11px + env(safe-area-inset-bottom))}
+  .cargando{opacity:.55;pointer-events:none}
+  .oculto{display:none !important}
+  .centro{text-align:center;color:var(--suave);padding:34px 14px;font-size:14px}
+  details.guia{border:1px solid var(--borde);border-radius:11px;padding:13px 15px;margin-bottom:10px;background:var(--tarjeta)}
+  details.guia summary{cursor:pointer;font-size:14.5px}
+  details.guia ol{margin:11px 0 0;padding-left:19px;font-size:13.5px;color:var(--suave);line-height:1.7}
+</style>
+</head>
+<body>
+<div id="app"><div class="centro">Cargando…</div></div>
+
+<script type="module">
+import { derivarEnCliente } from './clave.js';
+
+// ───────────────────────── hablar con el servidor ─────────────────────────
+
+function testigoCSRF() {
+  const m = document.cookie.match(/(?:^|;\s*)lume_csrf=([^;]+)/);
+  return m ? decodeURIComponent(m[1]) : '';
+}
+
+async function api(ruta, opciones = {}) {
+  const cfg = { credentials: 'same-origin', headers: {}, ...opciones };
+  if (cfg.body !== undefined && !(cfg.body instanceof FormData)) {
+    cfg.headers['Content-Type'] = 'application/json';
+    cfg.body = JSON.stringify(cfg.body);
+  }
+  if (cfg.method && cfg.method !== 'GET') cfg.headers['X-CSRF-Token'] = testigoCSRF();
+  let r;
+  try {
+    r = await fetch(ruta, cfg);
+  } catch {
+    return { ok: false, error: 'No se pudo conectar. Revisá tu conexión a internet y probá de nuevo.' };
+  }
+  let cuerpo = {};
+  try { cuerpo = await r.json(); } catch { /* respuesta sin JSON */ }
+  if (r.status === 401 && estado.usuario) {
+    estado.usuario = null;
+    pintar();
+    return { ok: false, error: 'Se cerró tu sesión. Volvé a entrar.' };
+  }
+  if (!r.ok && !cuerpo.error) cuerpo.error = 'Algo salió mal. Probá de nuevo en un momento.';
+  return { ...cuerpo, _status: r.status };
+}
+
+// ─────────────────────────────── estado ───────────────────────────────
+
+const estado = {
+  usuario: null,
+  pantalla: 'inicio',
+  productos: [],
+  resumen: {},
+  categorias: [],
+  marcas: [],
+  etiquetas: [],
+  mantenimiento: { active: false, title: '', message: '' },
+  editando: null,
+  sucio: false,
+  mensaje: null,
+  filtro: { q: '', estado: '' },
+  dialogo: null,
+};
+
+function avisar(texto, tipo = 'ok') {
+  estado.mensaje = { texto, tipo };
+  pintar();
+  if (tipo === 'ok') setTimeout(() => {
+    if (estado.mensaje && estado.mensaje.texto === texto) { estado.mensaje = null; pintar(); }
+  }, 4500);
+}
+
+const esc = s => String(s ?? '').replace(/[&<>"']/g, c =>
+  ({ '&': '&amp;', '<': '&lt;', '>': '&gt;', '"': '&quot;', "'": '&#39;' }[c]));
+
+// Las rutas del catálogo son relativas a la raíz del sitio. Desde /admin/ hay
+// que anteponerles la barra, si no el navegador las busca dentro de /admin/ y
+// las fotos no aparecen.
+const urlFoto = u => !u ? '' : (/^(https?:|\/|data:)/.test(u) ? u : '/' + u);
+
+const pesos = n => n === null || n === undefined
+  ? 'A confirmar'
+  : '$ ' + Number(n).toLocaleString('es-AR');
+
+const ESTADO_CHIP = {
+  published: '<span class="chip verde">Publicado</span>',
+  draft: '<span class="chip gris">Borrador</span>',
+  out_of_stock: '<span class="chip rojo">Sin stock</span>',
+};
+
+// ───────────────────────────── cargar datos ─────────────────────────────
+
+async function cargarTodo() {
+  const [prods, datos, mant] = await Promise.all([
+    api('/api/admin/productos?' + new URLSearchParams(
+      Object.entries(estado.filtro).filter(([, v]) => v))),
+    api('/api/admin/catalogo-datos'),
+    api('/api/admin/mantenimiento'),
+  ]);
+  if (prods.ok) { estado.productos = prods.productos; estado.resumen = prods.resumen; }
+  if (datos.ok) {
+    estado.categorias = datos.categorias;
+    estado.marcas = datos.marcas;
+    estado.etiquetas = datos.etiquetas;
+  }
+  if (mant.ok) estado.mantenimiento = mant.mantenimiento;
+  pintar();
+}
+
+// ───────────────────────────── las pantallas ─────────────────────────────
+
+function pantallaEntrar() {
+  return `<div class="entrar"><div class="caja">
+    <div style="text-align:center;margin-bottom:26px">
+      <div class="logo" style="font-size:31px">LUMÉ<small>BEAUTY</small></div>
+      <p class="ayudita" style="margin-top:9px">Panel de administración de la tienda</p>
+    </div>
+    <div class="tarjeta">
+      <div id="msg"></div>
+      <form id="formEntrar">
+        <div class="campo">
+          <label for="email">Tu correo</label>
+          <input id="email" type="email" autocomplete="username" required autofocus>
+        </div>
+        <div class="campo">
+          <label for="clave">Tu contraseña</label>
+          <input id="clave" type="password" autocomplete="current-password" required>
+        </div>
+        <button class="btn" style="width:100%" type="submit">ENTRAR</button>
+      </form>
+      <p class="ayudita" style="margin-top:15px;text-align:center">
+        Si no recordás tu contraseña, usá el código de recuperación que guardaste
+        cuando creamos tu cuenta.</p>
+    </div>
+  </div></div>`;
+}
+
+function pantallaInicio() {
+  const r = estado.resumen;
+  const m = estado.mantenimiento;
+  return `
+  <div class="titulo"><h1>Hola, ${esc((estado.usuario.name || '').split(' ')[0])}</h1></div>
+
+  <div class="tarjeta" style="border-color:${m.active ? 'var(--aviso)' : 'var(--borde)'}">
+    <div style="display:flex;justify-content:space-between;gap:14px;align-items:center;flex-wrap:wrap">
+      <div>
+        <h2 style="font-size:20px">${m.active ? 'La tienda está oculta' : 'La tienda está abierta'}</h2>
+        <p class="ayudita">${m.active
+          ? 'Los visitantes ven la pantalla de mantenimiento. Vos podés seguir trabajando con total normalidad.'
+          : 'Los clientes ven el catálogo con todos los productos publicados.'}</p>
+      </div>
+      <button class="btn ${m.active ? '' : 'linea'}" data-accion="${m.active ? 'publicar' : 'mantener'}">
+        ${m.active ? 'VOLVER A PUBLICAR LA TIENDA' : 'PONER TIENDA EN MANTENIMIENTO'}
+      </button>
+    </div>
+  </div>
+
+  <div class="numeros">
+    <div class="numero"><b>${r.total ?? 0}</b><span>PRODUCTOS</span></div>
+    <div class="numero"><b>${r.publicados ?? 0}</b><span>PUBLICADOS</span></div>
+    <div class="numero"><b>${r.borradores ?? 0}</b><span>BORRADORES</span></div>
+    <div class="numero ${r.sinStock ? 'atencion' : ''}"><b>${r.sinStock ?? 0}</b><span>SIN STOCK</span></div>
+    <div class="numero ${r.stockBajo ? 'atencion' : ''}"><b>${r.stockBajo ?? 0}</b><span>POCO STOCK</span></div>
+    <div class="numero ${r.sinPrecio ? 'atencion' : ''}"><b>${r.sinPrecio ?? 0}</b><span>SIN PRECIO</span></div>
+  </div>
+
+  <div class="tarjeta" style="margin-top:17px">
+    <h2 style="font-size:20px;margin-bottom:11px">¿Qué querés hacer?</h2>
+    <div style="display:flex;gap:9px;flex-wrap:wrap">
+      <button class="btn" data-accion="nuevo">AGREGAR UN PRODUCTO</button>
+      <button class="btn linea" data-ir="productos">VER MIS PRODUCTOS</button>
+      <button class="btn linea" data-ir="ayuda">CÓMO SE USA</button>
+    </div>
+  </div>`;
+}
+
+function pantallaProductos() {
+  const lista = estado.productos.length
+    ? estado.productos.map(p => `
+      <button class="prod" data-editar="${esc(p.id)}">
+        <img src="${esc(urlFoto(p.image))}" alt="" loading="lazy"
+             onerror="this.style.visibility='hidden'">
+        <span>
+          <span class="nom">${esc(p.name)}</span>
+          <span class="meta">${esc(p.brandLabel || 'Sin marca')}${p.size ? ' · ' + esc(p.size) : ''} · ${pesos(p.price)}</span>
+          <span class="meta" style="margin-top:6px;display:block">
+            ${ESTADO_CHIP[p.status] || ''}
+            ${p.stock !== null ? `<span class="chip ${p.stockBajo ? 'ambar' : ''}">${p.stock} en stock</span>` : ''}
+            ${p.price === null ? '<span class="chip ambar">Falta el precio</span>' : ''}
+            ${p.featured ? '<span class="chip">Destacado</span>' : ''}
+          </span>
+        </span>
+      </button>`).join('')
+    : `<div class="centro">No hay productos que coincidan con lo que buscaste.</div>`;
+
+  return `
+  <div class="titulo">
+    <h1>Mis productos</h1>
+    <button class="btn" data-accion="nuevo">AGREGAR PRODUCTO</button>
+  </div>
+  <div class="tarjeta">
+    <div class="fila dos">
+      <div><label for="buscar">Buscar por nombre o marca</label>
+        <input id="buscar" value="${esc(estado.filtro.q)}" placeholder="Por ejemplo: medicube"></div>
+      <div><label for="filtroEstado">Mostrar</label>
+        <select id="filtroEstado">
+          <option value="">Todos</option>
+          <option value="published"${estado.filtro.estado === 'published' ? ' selected' : ''}>Solo publicados</option>
+          <option value="draft"${estado.filtro.estado === 'draft' ? ' selected' : ''}>Solo borradores</option>
+          <option value="out_of_stock"${estado.filtro.estado === 'out_of_stock' ? ' selected' : ''}>Solo sin stock</option>
+        </select></div>
+    </div>
+  </div>
+  <div class="lista">${lista}</div>`;
+}
+
+function filasTexto(nombre, lista, marcador) {
+  const filas = (lista.length ? lista : ['']).map((t, i) => `
+    <div class="renglon">
+      <textarea data-lista="${nombre}" data-i="${i}" placeholder="${esc(marcador)}"
+                style="min-height:62px">${esc(t)}</textarea>
+      <button type="button" class="btn linea chico" data-quitar-lista="${nombre}" data-i="${i}">Quitar</button>
+    </div>`).join('');
+  return `${filas}<button type="button" class="btn linea chico" data-sumar-lista="${nombre}">+ Agregar párrafo</button>`;
+}
+
+function pantallaEditor() {
+  const p = estado.editando;
+  const esNuevo = !p._existe;
+  const fotos = p.images.map((u, i) => `
+    <div class="foto">
+      <img src="${esc(urlFoto(u))}" alt="">
+      <button type="button" class="quitar" data-quitar-foto="${i}" title="Quitar esta foto">×</button>
+      ${i === 0 ? '<span class="principal">PRINCIPAL</span>' : ''}
+    </div>`).join('');
+
+  return `
+  <div class="titulo">
+    <h1>${esNuevo ? 'Producto nuevo' : esc(p.name)}</h1>
+    ${esNuevo ? '' : `<button class="btn peligro chico" data-accion="borrar">BORRAR PRODUCTO</button>`}
+  </div>
+
+  <div class="tarjeta">
+    <h2 style="font-size:19px;margin-bottom:15px">Lo básico</h2>
+    <div class="campo">
+      <label for="f-name">Nombre del producto</label>
+      <input id="f-name" data-campo="name" value="${esc(p.name)}">
+      <p class="ayudita">Como lo va a ver el cliente. Por ejemplo: Deep Vita C Capsule Cream.</p>
+    </div>
+    <div class="fila dos">
+      <div class="campo"><label for="f-brand">Marca</label>
+        <select id="f-brand" data-campo="brand">
+          <option value="">Sin marca</option>
+          ${estado.marcas.map(m => `<option value="${esc(m.id)}"${p.brand === m.id ? ' selected' : ''}>${esc(m.name)}</option>`).join('')}
+        </select></div>
+      <div class="campo"><label for="f-size">Contenido</label>
+        <input id="f-size" data-campo="size" value="${esc(p.size)}" placeholder="55 g">
+        <p class="ayudita">Lo que dice el envase.</p></div>
+    </div>
+    <div class="fila dos">
+      <div class="campo"><label for="f-price">Precio en pesos</label>
+        <input id="f-price" data-campo="price" inputmode="numeric"
+               value="${p.price ?? ''}" placeholder="Dejalo vacío si falta confirmarlo">
+        <p class="ayudita">Solo el número, sin puntos ni signo. Si lo dejás vacío, en la tienda dice «Consultar precio».</p></div>
+      <div class="campo"><label for="f-compare">Precio anterior (opcional)</label>
+        <input id="f-compare" data-campo="compareAtPrice" inputmode="numeric"
+               value="${p.compareAtPrice ?? ''}" placeholder="Solo si es una oferta">
+        <p class="ayudita">Tiene que ser mayor que el precio actual.</p></div>
+    </div>
+  </div>
+
+  <div class="tarjeta">
+    <h2 style="font-size:19px;margin-bottom:6px">Fotos</h2>
+    <p class="ayudita" style="margin-bottom:13px">La primera es la que se ve en el catálogo. Podés arrastrarlas acá o elegirlas desde el celular.</p>
+    <div class="fotos">
+      ${fotos}
+      <div class="soltar" id="soltar" tabindex="0" role="button">+ Subir</div>
+    </div>
+    <input type="file" id="archivo" accept="image/*" multiple class="oculto">
+    <div id="subiendo"></div>
+  </div>
+
+  <div class="tarjeta">
+    <h2 style="font-size:19px;margin-bottom:15px">Estado y stock</h2>
+    <div class="fila dos">
+      <div class="campo"><label for="f-status">¿Se ve en la tienda?</label>
+        <select id="f-status" data-campo="status">
+          <option value="published"${p.status === 'published' ? ' selected' : ''}>Sí, publicado</option>
+          <option value="draft"${p.status === 'draft' ? ' selected' : ''}>No, es un borrador</option>
+          <option value="out_of_stock"${p.status === 'out_of_stock' ? ' selected' : ''}>Sin stock por ahora</option>
+        </select>
+        <p class="ayudita">Un borrador lo ves solo vos. Para publicar hace falta al menos una foto.</p></div>
+      <div class="campo"><label for="f-stock">Unidades en stock</label>
+        <input id="f-stock" data-campo="stock" inputmode="numeric" value="${p.stock ?? ''}"
+               placeholder="Vacío si no llevás la cuenta">
+        <p class="ayudita">Si ponés 0, el producto pasa solo a «sin stock».</p></div>
+    </div>
+    <div class="campo">
+      <label>Categorías</label>
+      <div style="display:flex;gap:7px;flex-wrap:wrap">
+        ${estado.categorias.map(c => `
+          <label style="display:flex;align-items:center;gap:6px;padding:7px 12px;border:1px solid var(--borde);
+                        border-radius:999px;background:var(--tarjeta);cursor:pointer;font-size:13px;color:var(--tinta)">
+            <input type="checkbox" data-categoria="${esc(c.id)}" style="width:auto;padding:0"
+                   ${p.categories.includes(c.id) ? 'checked' : ''}>${esc(c.label)}</label>`).join('')}
+      </div>
+    </div>
+    <div class="campo">
+      <label style="display:flex;align-items:center;gap:8px;cursor:pointer;color:var(--tinta);font-size:14px">
+        <input type="checkbox" data-campo="featured" style="width:auto;padding:0" ${p.featured ? 'checked' : ''}>
+        Mostrarlo entre los destacados de la portada</label>
+    </div>
+  </div>
+
+  <div class="tarjeta">
+    <h2 style="font-size:19px;margin-bottom:6px">Descripción</h2>
+    <p class="ayudita" style="margin-bottom:13px">Un párrafo por renglón. Contá qué es y para qué sirve.</p>
+    ${filasTexto('description', p.description, 'Por ejemplo: Crema facial con vitamina C en cápsulas.')}
+
+    <h2 style="font-size:19px;margin:22px 0 6px">Cómo se usa</h2>
+    <p class="ayudita" style="margin-bottom:13px">Opcional.</p>
+    ${filasTexto('howTo', p.howTo, 'Por ejemplo: Aplicar sobre el rostro limpio.')}
+
+    <h2 style="font-size:19px;margin:22px 0 6px">Especificaciones</h2>
+    <p class="ayudita" style="margin-bottom:13px">Datos sueltos del envase: contenido, ingredientes destacados.</p>
+    <div id="specs">
+      ${(p.specs.length ? p.specs : [{ label: '', value: '' }]).map((s, i) => `
+        <div class="renglon">
+          <input data-spec="label" data-i="${i}" value="${esc(s.label)}" placeholder="Contenido" style="max-width:34%">
+          <input data-spec="value" data-i="${i}" value="${esc(s.value)}" placeholder="55 g / 1.94 oz.">
+          <button type="button" class="btn linea chico" data-quitar-spec="${i}">Quitar</button>
+        </div>`).join('')}
+    </div>
+    <button type="button" class="btn linea chico" data-sumar-spec>+ Agregar dato</button>
+
+    <div class="campo" style="margin-top:22px">
+      <label for="f-warning">Advertencia de seguridad (opcional)</label>
+      <input id="f-warning" data-campo="warning" value="${esc(p.warning)}"
+             placeholder="Por ejemplo: No usar durante el embarazo.">
+      <p class="ayudita">Si la ponés, se muestra destacada en la ficha del producto.</p>
+    </div>
+  </div>
+
+  <div class="pie">
+    <button class="btn linea" data-accion="volver">${estado.sucio ? 'Descartar' : 'Volver'}</button>
+    <button class="btn" data-accion="guardar">GUARDAR</button>
+  </div>`;
+}
+
+function pantallaAyuda() {
+  const guia = (titulo, pasos) =>
+    `<details class="guia"><summary>${titulo}</summary><ol>${pasos.map(p => `<li>${p}</li>`).join('')}</ol></details>`;
+  return `
+  <div class="titulo"><h1>Cómo se usa</h1></div>
+  ${guia('Cargar un producto nuevo', [
+    'Tocá «Agregar producto».',
+    'Escribí el nombre y elegí la marca.',
+    'Subí al menos una foto: la primera es la que se ve en el catálogo.',
+    'Poné el precio. Si todavía no lo sabés, dejalo vacío y la tienda va a decir «Consultar precio».',
+    'Elegí las categorías que le correspondan.',
+    'Si ya querés que se vea, dejalo en «Sí, publicado». Si no, elegí «Es un borrador».',
+    'Tocá «Guardar».',
+  ])}
+  ${guia('Renovar todo el catálogo de una vez', [
+    'En Inicio, tocá «Poner tienda en mantenimiento».',
+    'Los clientes van a ver una pantalla de mantenimiento, pero vos seguís trabajando igual.',
+    'Cargá, cambiá o borrá todo lo que necesites, con tranquilidad.',
+    'Cuando termines, tocá «Volver a publicar la tienda» y confirmá.',
+    'Los clientes vuelven a ver la tienda, ya con todo actualizado.',
+  ])}
+  ${guia('Cambiar un precio', [
+    'Entrá a «Mis productos» y tocá el producto.',
+    'Cambiá el número en «Precio en pesos».',
+    'Tocá «Guardar». Queda anotado cuál era el precio anterior, por si te arrepentís.',
+  ])}
+  ${guia('Esconder un producto sin borrarlo', [
+    'Entrá al producto.',
+    'En «¿Se ve en la tienda?», elegí «No, es un borrador» o «Sin stock por ahora».',
+    'Tocá «Guardar». Deja de verse, pero no se pierde nada.',
+  ])}
+  ${guia('Si borrás algo sin querer', [
+    'Antes de borrar siempre aparece una confirmación.',
+    'Aun así, el sistema guarda una copia completa de lo borrado.',
+    'Avisale a quien te hizo la tienda y se puede recuperar.',
+  ])}
+  <div class="tarjeta">
+    <h2 style="font-size:19px;margin-bottom:9px">Una tranquilidad</h2>
+    <p class="ayudita">Nada de lo que hagas acá puede romper la tienda. Los borradores no se
+    publican solos, los cambios se guardan cuando apretás «Guardar», y todo lo que borrás
+    queda registrado. Probá con confianza.</p>
+  </div>`;
+}
+
+// ───────────────────────────── dibujar ─────────────────────────────
+
+function pintar() {
+  const app = document.getElementById('app');
+
+  if (!estado.usuario) {
+    app.innerHTML = pantallaEntrar();
+    if (estado.mensaje) {
+      document.getElementById('msg').innerHTML =
+        `<div class="aviso ${estado.mensaje.tipo === 'ok' ? 'ok' : 'err'}">${esc(estado.mensaje.texto)}</div>`;
+    }
+    document.getElementById('formEntrar').addEventListener('submit', alEntrar);
+    return;
+  }
+
+  const pantallas = {
+    inicio: pantallaInicio, productos: pantallaProductos,
+    editor: pantallaEditor, ayuda: pantallaAyuda,
+  };
+  const menu = [['inicio', 'Inicio'], ['productos', 'Productos'], ['ayuda', 'Ayuda']];
+
+  app.innerHTML = `
+    <header class="barra">
+      <div class="logo">LUMÉ<small>BEAUTY</small></div>
+      <nav class="menu">${menu.map(([k, t]) =>
+        `<button data-ir="${k}" aria-current="${estado.pantalla === k || (k === 'productos' && estado.pantalla === 'editor')}">${t}</button>`).join('')}</nav>
+      <button class="btn linea chico" data-accion="salir">Salir</button>
+    </header>
+    <main>
+      ${estado.mantenimiento.active && estado.pantalla !== 'inicio'
+        ? '<div class="aviso info">La tienda está oculta para los visitantes. Acordate de volver a publicarla cuando termines.</div>' : ''}
+      ${estado.mensaje ? `<div class="aviso ${estado.mensaje.tipo === 'ok' ? 'ok' : estado.mensaje.tipo === 'err' ? 'err' : 'info'}">${esc(estado.mensaje.texto)}</div>` : ''}
+      ${(pantallas[estado.pantalla] || pantallaInicio)()}
+    </main>
+    ${estado.dialogo ? dibujarDialogo() : ''}`;
+
+  conectar();
+}
+
+function dibujarDialogo() {
+  const d = estado.dialogo;
+  return `<div class="fondo"><div class="dialogo" role="dialog" aria-modal="true">
+    <h3>${esc(d.titulo)}</h3><p>${esc(d.texto)}</p>
+    <div class="acciones">
+      <button class="btn linea" data-dialogo="no">${esc(d.no || 'Cancelar')}</button>
+      <button class="btn ${d.peligro ? 'peligro' : ''}" data-dialogo="si">${esc(d.si || 'Confirmar')}</button>
+    </div></div></div>`;
+}
+
+function preguntar(titulo, texto, { si, no, peligro } = {}) {
+  return new Promise(resolver => {
+    estado.dialogo = { titulo, texto, si, no, peligro, resolver };
+    pintar();
+  });
+}
+
+// ───────────────────────────── acciones ─────────────────────────────
+
+async function alEntrar(e) {
+  e.preventDefault();
+  const boton = e.target.querySelector('button');
+  boton.disabled = true;
+  boton.textContent = 'ENTRANDO…';
+  const email = document.getElementById('email').value.trim();
+  // El estirado de la contrasena ocurre aca, en el navegador. Tarda alrededor
+  // de medio segundo y por eso el boton avisa que esta trabajando.
+  let clave;
+  try {
+    clave = await derivarEnCliente(email, document.getElementById('clave').value);
+  } catch {
+    avisar('Tu navegador no pudo preparar la contrasena. Probá con otro navegador o actualizá este.', 'err');
+    return;
+  }
+  const r = await api('/api/admin/sesion', { method: 'POST', body: { email, password: clave } });
+  if (!r.ok) { avisar(r.error, 'err'); return; }
+  estado.usuario = r.usuario;
+  estado.mensaje = null;
+  estado.pantalla = 'inicio';
+  await cargarTodo();
+}
+
+function productoVacio() {
+  return {
+    _existe: false, id: '', name: '', brand: '', title: '', subtitle: '', size: '',
+    price: null, compareAtPrice: null, stock: null, status: 'draft', featured: false,
+    tag: '', warning: '', imagePadding: '6%', categories: [], images: [],
+    description: [''], howTo: [], specs: [], tags: [],
+  };
+}
+
+function leerFormulario() {
+  const p = estado.editando;
+  for (const el of document.querySelectorAll('[data-campo]')) {
+    const k = el.dataset.campo;
+    if (el.type === 'checkbox') p[k] = el.checked;
+    else if (k === 'price' || k === 'compareAtPrice' || k === 'stock') {
+      p[k] = el.value.trim() === '' ? null : el.value.trim();
+    } else p[k] = el.value;
+  }
+  p.categories = [...document.querySelectorAll('[data-categoria]')]
+    .filter(c => c.checked).map(c => c.dataset.categoria);
+  for (const nombre of ['description', 'howTo']) {
+    p[nombre] = [...document.querySelectorAll(`[data-lista="${nombre}"]`)]
+      .map(t => t.value.trim()).filter(Boolean);
+  }
+  const etiquetas = [...document.querySelectorAll('[data-spec="label"]')].map(i => i.value.trim());
+  const valores = [...document.querySelectorAll('[data-spec="value"]')].map(i => i.value.trim());
+  p.specs = etiquetas.map((l, i) => ({ label: l, value: valores[i] || '' }))
+                     .filter(s => s.label && s.value);
+  return p;
+}
+
+async function guardar() {
+  const p = leerFormulario();
+  const nuevo = !p._existe;
+  const r = await api(nuevo ? '/api/admin/productos' : `/api/admin/productos/${encodeURIComponent(p.id)}`,
+                      { method: nuevo ? 'POST' : 'PUT', body: p });
+  if (!r.ok) { avisar(r.error, 'err'); return; }
+  estado.sucio = false;
+  estado.editando = null;
+  estado.pantalla = 'productos';
+  await cargarTodo();
+  avisar(r.mensaje || 'Cambios guardados.');
+}
+
+async function subirFotos(archivos) {
+  const caja = document.getElementById('subiendo');
+  for (const archivo of archivos) {
+    caja.innerHTML = `<p class="ayudita">Subiendo ${esc(archivo.name)}…</p>`;
+    const form = new FormData();
+    form.append('foto', archivo);
+    const r = await api('/api/admin/fotos', { method: 'POST', body: form });
+    if (!r.ok) {
+      caja.innerHTML = `<div class="aviso err">${esc(r.error)}${
+        r.comoResolverlo ? '<br><small>' + esc(r.comoResolverlo) + '</small>' : ''}</div>`;
+      return;
+    }
+    leerFormulario().images.push(r.url);
+  }
+  caja.innerHTML = '';
+  estado.sucio = true;
+  pintar();
+}
+
+function conectar() {
+  const app = document.getElementById('app');
+
+  app.onclick = async e => {
+    const b = e.target.closest('button');
+    if (!b) return;
+
+    if (b.dataset.dialogo) {
+      const d = estado.dialogo;
+      estado.dialogo = null;
+      pintar();
+      d.resolver(b.dataset.dialogo === 'si');
+      return;
+    }
+    if (b.dataset.ir) {
+      if (estado.sucio && !(await preguntar('Tenés cambios sin guardar',
+        'Si salís ahora se pierden los cambios que hiciste en este producto.',
+        { si: 'Salir igual', no: 'Seguir editando', peligro: true }))) return;
+      estado.sucio = false;
+      estado.editando = null;
+      estado.pantalla = b.dataset.ir;
+      estado.mensaje = null;
+      pintar();
+      return;
+    }
+    if (b.dataset.editar) {
+      const r = await api('/api/admin/productos/' + encodeURIComponent(b.dataset.editar));
+      if (!r.ok) { avisar(r.error, 'err'); return; }
+      estado.editando = { ...r.producto, _existe: true };
+      estado.pantalla = 'editor';
+      estado.sucio = false;
+      pintar();
+      return;
+    }
+    if (b.dataset.quitarFoto !== undefined) {
+      leerFormulario().images.splice(Number(b.dataset.quitarFoto), 1);
+      estado.sucio = true;
+      pintar();
+      return;
+    }
+    if (b.dataset.sumarLista) {
+      const p = leerFormulario();
+      p[b.dataset.sumarLista] = [...p[b.dataset.sumarLista], ''];
+      pintar();
+      return;
+    }
+    if (b.dataset.quitarLista) {
+      const p = leerFormulario();
+      p[b.dataset.quitarLista].splice(Number(b.dataset.i), 1);
+      estado.sucio = true;
+      pintar();
+      return;
+    }
+    if (b.hasAttribute('data-sumar-spec')) {
+      leerFormulario().specs.push({ label: '', value: '' });
+      pintar();
+      return;
+    }
+    if (b.dataset.quitarSpec !== undefined) {
+      leerFormulario().specs.splice(Number(b.dataset.quitarSpec), 1);
+      estado.sucio = true;
+      pintar();
+      return;
+    }
+
+    switch (b.dataset.accion) {
+      case 'nuevo':
+        estado.editando = productoVacio();
+        estado.pantalla = 'editor';
+        estado.sucio = false;
+        pintar();
+        break;
+      case 'guardar':
+        await guardar();
+        break;
+      case 'volver':
+        if (estado.sucio && !(await preguntar('Tenés cambios sin guardar',
+          'Si volvés ahora se pierden los cambios que hiciste.',
+          { si: 'Descartar', no: 'Seguir editando', peligro: true }))) return;
+        estado.sucio = false;
+        estado.editando = null;
+        estado.pantalla = 'productos';
+        pintar();
+        break;
+      case 'borrar': {
+        const p = estado.editando;
+        if (!(await preguntar(`¿Borrar «${p.name}»?`,
+          'El producto va a desaparecer de la tienda. Queda una copia guardada por si fue un error, pero no vas a poder recuperarlo vos sola.',
+          { si: 'Sí, borrar', no: 'No, dejarlo', peligro: true }))) return;
+        const r = await api('/api/admin/productos/' + encodeURIComponent(p.id), { method: 'DELETE' });
+        if (!r.ok) { avisar(r.error, 'err'); return; }
+        estado.editando = null;
+        estado.sucio = false;
+        estado.pantalla = 'productos';
+        await cargarTodo();
+        avisar(r.mensaje);
+        break;
+      }
+      case 'mantener': {
+        if (!(await preguntar('¿Ocultar la tienda?',
+          'Los visitantes van a ver una pantalla de mantenimiento y no van a poder ver los productos ni los precios. Vos seguís trabajando normalmente.',
+          { si: 'Sí, ocultar', no: 'Cancelar' }))) return;
+        const r = await api('/api/admin/mantenimiento', { method: 'POST', body: { active: true } });
+        if (!r.ok) { avisar(r.error, 'err'); return; }
+        estado.mantenimiento = r.mantenimiento;
+        pintar();
+        avisar(r.mensaje);
+        break;
+      }
+      case 'publicar': {
+        if (!(await preguntar('¿Volver a publicar la tienda?',
+          'Los clientes van a ver el catálogo con todos los cambios que guardaste. Los borradores siguen ocultos.',
+          { si: 'Sí, publicar', no: 'Todavía no' }))) return;
+        const r = await api('/api/admin/mantenimiento', { method: 'POST', body: { active: false } });
+        if (!r.ok) { avisar(r.error, 'err'); return; }
+        estado.mantenimiento = r.mantenimiento;
+        pintar();
+        avisar(r.mensaje);
+        break;
+      }
+      case 'salir': {
+        if (!(await preguntar('¿Cerrar sesión?', 'Vas a tener que escribir tu contraseña para volver a entrar.',
+          { si: 'Cerrar sesión', no: 'Quedarme' }))) return;
+        await api('/api/admin/sesion', { method: 'DELETE' });
+        estado.usuario = null;
+        estado.sucio = false;
+        pintar();
+        break;
+      }
+    }
+  };
+
+  // Marcar que hay cambios sin guardar.
+  app.oninput = e => {
+    if (estado.pantalla === 'editor' && e.target.closest('main')) estado.sucio = true;
+  };
+
+  const buscar = document.getElementById('buscar');
+  if (buscar) {
+    let temporizador;
+    buscar.oninput = () => {
+      clearTimeout(temporizador);
+      temporizador = setTimeout(() => {
+        estado.filtro.q = buscar.value.trim();
+        cargarTodo().then(() => {
+          const campo = document.getElementById('buscar');
+          if (campo) { campo.focus(); campo.setSelectionRange(campo.value.length, campo.value.length); }
+        });
+      }, 350);
+    };
+  }
+  const filtroEstado = document.getElementById('filtroEstado');
+  if (filtroEstado) {
+    filtroEstado.onchange = () => { estado.filtro.estado = filtroEstado.value; cargarTodo(); };
+  }
+
+  const soltar = document.getElementById('soltar');
+  const archivo = document.getElementById('archivo');
+  if (soltar && archivo) {
+    soltar.onclick = () => archivo.click();
+    soltar.onkeydown = e => { if (e.key === 'Enter' || e.key === ' ') { e.preventDefault(); archivo.click(); } };
+    archivo.onchange = () => subirFotos([...archivo.files]);
+    soltar.ondragover = e => { e.preventDefault(); soltar.classList.add('encima'); };
+    soltar.ondragleave = () => soltar.classList.remove('encima');
+    soltar.ondrop = e => {
+      e.preventDefault();
+      soltar.classList.remove('encima');
+      subirFotos([...e.dataTransfer.files].filter(f => f.type.startsWith('image/')));
+    };
+  }
+}
+
+// Última red: si cierra la pestaña con cambios sin guardar, el navegador avisa.
+window.addEventListener('beforeunload', e => {
+  if (estado.sucio) { e.preventDefault(); e.returnValue = ''; }
+});
+
+// ───────────────────────────── arranque ─────────────────────────────
+
+const quienSoy = await api('/api/admin/sesion');
+if (quienSoy.autenticada) {
+  estado.usuario = quienSoy.usuario;
+  await cargarTodo();
+} else {
+  pintar();
+}
+</script>
+</body>
+</html>

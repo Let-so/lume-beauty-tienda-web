@@ -1,0 +1,18 @@
+# Lo que NO se publica. Todo esto es trabajo interno: si se subiera, quedaría
+# accesible desde internet.
+node_modules
+db
+scripts
+tests
+docs
+functions
+uploads
+_ds
+.wrangler
+package.json
+package-lock.json
+wrangler.toml
+.gitignore
+.assetsignore
+*.md
+*.db
