@@ -9,16 +9,43 @@ paso a paso. Si estás con el celular en la mano, usá esa.
 
 ## Entrar
 
-1. Abrí **tudominio.com/admin** en el celular o en la computadora.
+1. Abrí **lume-beauty.pages.dev/admin** en el celular o en la computadora.
+   Guardalo en los favoritos para no tener que escribirlo cada vez.
 2. Escribí tu correo y tu contraseña.
 3. Listo.
 
 La sesión queda abierta un mes. Si usás una computadora prestada, tocá
 **Salir** cuando termines.
 
-**Si no recordás la contraseña**, usá el código de recuperación que te dieron
-cuando crearon tu cuenta. Son cuatro grupos de cuatro letras y números, algo
-como `BII8-WWKB-4NDE-E0VV`. Se usa una sola vez: después te dan uno nuevo.
+---
+
+## Si no recordás la contraseña
+
+En la pantalla de entrada tocá **No me acuerdo mi contraseña** y usá tu
+código de recuperación: cuatro grupos de cuatro letras y números, algo como
+`HZXV-96YN-6T9F-4NQC`. Elegís una contraseña nueva y entrás en el acto.
+
+El código sirve una sola vez, pero **en cuanto lo usás te dan uno nuevo en la
+misma pantalla**. Anotalo ahí mismo, porque después no se puede volver a ver.
+
+Los códigos no tienen la letra I, la L, la O, la U, ni el 0 ni el 1, así que
+no hay forma de confundirse al copiarlos a mano.
+
+---
+
+## Cambiar tu contraseña o pedir un código nuevo
+
+Todo esto está en **Mi cuenta**, en el menú de arriba.
+
+- **Cambiar mi contraseña.** Te pide la de ahora y la nueva dos veces. Al
+  cambiarla, si habías entrado en otro teléfono o computadora, ahí se cierra
+  la sesión sola. Usá esto si entraste en un aparato prestado.
+- **Mi código de recuperación.** Te dice si tenés uno sin usar. Si no sabés
+  dónde lo anotaste, pedí uno nuevo: el anterior deja de servir en ese momento.
+  Te va a pedir tu contraseña, para asegurarse de que sos vos.
+
+Guardá el código en un papel, no en el mismo teléfono con el que entrás al
+panel. Si se te pierde el teléfono, se te pierden las dos cosas juntas.
 
 ---
 
@@ -30,6 +57,10 @@ Tocá **Agregar producto** y completá:
 - **Marca** y **contenido:** lo que dice el envase.
 - **Fotos:** tocá el recuadro «+ Subir» y elegilas del celular. La primera es
   la que se ve en el catálogo.
+  **Ojo: subir fotos todavía no está conectado.** Si lo intentás, el panel te
+  lo va a decir con todas las letras en vez de fallar raro. Mientras tanto
+  guardá el producto como borrador y avisá para que se complete. Todo lo demás
+  — precios, stock, textos, mostrar y ocultar — funciona normalmente.
 - **Precio:** solo el número. Si todavía no lo sabés, **dejalo vacío** y la
   tienda va a decir «Consultar precio». Nunca inventes un precio para llenar
   el casillero.
@@ -39,7 +70,8 @@ Tocá **Agregar producto** y completá:
 Tocá **Guardar**.
 
 Para publicar un producto hace falta al menos una foto. Como borrador podés
-guardarlo sin nada y completarlo después.
+guardarlo sin nada y completarlo después. Los productos que ya están en la
+tienda tienen su foto y se editan sin problema.
 
 ---
 
@@ -106,6 +138,8 @@ tiempo. Si dudás, en vez de borrarlo pasalo a borrador.
 
 Para que no busques algo que no existe:
 
+- **Subir fotos nuevas:** falta conectar el depósito de imágenes. Es lo
+  primero de la lista.
 - **Pedidos y pagos:** las ventas se siguen cerrando por WhatsApp, como ahora.
 - **Clientes, campañas, estadísticas y redes sociales:** todavía no.
 - **Cambiar colores y banners de la tienda:** todavía no.

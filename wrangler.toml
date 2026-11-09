@@ -17,10 +17,15 @@ pages_build_output_dir = "."
 [[d1_databases]]
 binding = "DB"
 database_name = "lume-beauty"
-database_id = "PENDIENTE-PEGAR-EL-ID-QUE-DA-CLOUDFLARE"
+database_id = "f60c52b8-9b51-4cab-808a-a0c2e88f6f12"
 
-# Depósito de fotos. Si todavía no está creado, el panel avisa con un mensaje
-# claro en lugar de fallar de forma confusa.
-[[r2_buckets]]
-binding = "FOTOS"
-bucket_name = "lume-fotos"
+# Depósito de fotos. Está comentado porque R2 todavía no está habilitado en
+# esta cuenta: con el binding puesto, el despliegue falla entero. Sin él, todo
+# el panel funciona y la única diferencia es que subir una foto nueva avisa
+# que el depósito no está conectado.
+#
+# Para habilitarlo: panel de Cloudflare -> R2 Object Storage -> activar, crear
+# el depósito "lume-fotos", descomentar estas tres líneas y publicar de nuevo.
+# [[r2_buckets]]
+# binding = "FOTOS"
+# bucket_name = "lume-fotos"

@@ -5,6 +5,26 @@ ella solo usa el panel, y eso está explicado en [USAR-EL-PANEL.md](USAR-EL-PANE
 
 ---
 
+## Dónde está todo, hoy
+
+| Qué | Dónde |
+|---|---|
+| Tienda | <https://lume-beauty.pages.dev> |
+| Panel | <https://lume-beauty.pages.dev/admin> |
+| Cuenta de Cloudflare | licenciaturaiatp@gmail.com |
+| Proyecto Pages | `lume-beauty` |
+| Base D1 | `lume-beauty` — id `f60c52b8-9b51-4cab-808a-a0c2e88f6f12` |
+| Depósito de fotos (R2) | **sin habilitar** — ver sección 3 |
+| Tienda vieja en Render | sigue en pie, sin tocar |
+
+El dominio propio todavía **no** apunta acá. Hasta que apunte, la dirección
+que usa Camila es la de `pages.dev`.
+
+Los pasos 1 y 2 de abajo ya están hechos. Quedan como referencia para rehacer
+todo desde cero, o para montar una copia de prueba.
+
+---
+
 ## Antes de empezar
 
 Hace falta una cuenta gratuita de Cloudflare. **No la puedo crear yo:** necesita
@@ -66,15 +86,35 @@ rm db/admin.sql          # contiene el resumen de una contraseña real
 
 ---
 
-## 3. Las fotos (R2)
+## 3. Las fotos (R2) — **pendiente**
 
-```bash
-npx wrangler r2 bucket create lume-fotos
+Hoy R2 **no está habilitado** en la cuenta. Wrangler lo dice así:
+
+```
+Please enable R2 through the Cloudflare Dashboard. [code: 10042]
 ```
 
-**Puede pedir un medio de pago aunque el uso quede dentro de la capa gratuita**
-(10 GB y sin cargo por descarga). No pude confirmarlo en la documentación, así
-que hay que verlo al crear el depósito.
+No es un problema de permisos: R2 hay que activarlo a mano una vez, desde el
+panel web, y eso solo lo puede hacer el dueño de la cuenta.
+
+**Qué significa mientras tanto.** Todo el panel funciona salvo *subir una foto
+nueva*. En concreto, Camila puede cambiar precios, stock, textos, categorías,
+ocultar y mostrar productos, y usar el modo mantenimiento. Lo que **no** puede
+es dar de alta un producto nuevo con su foto, porque publicar exige al menos
+una imagen. Puede dejarlo guardado como borrador y completarlo después.
+
+**Para habilitarlo:**
+
+1. Panel de Cloudflare → **R2 Object Storage** → activar.
+   **Mirar si pide un medio de pago antes de aceptar nada.** La capa gratuita
+   es de 10 GB y sin cargo por descarga, de sobra para un catálogo de fotos,
+   pero si exige tarjeta, conviene decidirlo a conciencia y no por inercia.
+2. Crear el depósito:
+   ```bash
+   npx wrangler r2 bucket create lume-fotos
+   ```
+3. Descomentar las tres líneas de `[[r2_buckets]]` en `wrangler.toml` y
+   publicar de nuevo con `npx wrangler pages deploy`.
 
 Si pide tarjeta y no se quiere dar, hay dos caminos, en este orden:
 
