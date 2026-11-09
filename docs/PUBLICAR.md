@@ -132,13 +132,18 @@ chicos: las imágenes la vuelven lenta y pesada de copiar.
 ## 4. Publicar
 
 ```bash
-node tests/correr.mjs                  # tienen que dar todas en verde
-npx wrangler pages deploy
+node tests/correr.mjs                                   # todas en verde
+npx wrangler pages deploy --project-name lume-beauty --branch main
 ```
 
-La primera vez pregunta el nombre del proyecto: poner `lume-beauty`.
+**`--branch main` no es opcional.** Sin eso, wrangler usa el nombre de la rama
+de git en la que estés, y cualquier nombre que no sea `main` publica una
+*vista previa* en una dirección aparte en lugar de actualizar la tienda. Es un
+error silencioso: el despliegue dice «Success» y la tienda sigue igual.
 
-Cloudflare devuelve una dirección `https://lume-beauty.pages.dev`.
+Cada despliegue imprime dos direcciones: una con un prefijo único, que es esa
+versión sola y queda guardada para siempre, y <https://lume-beauty.pages.dev>,
+que es la que ve la gente.
 
 ### Conectar el dominio
 
