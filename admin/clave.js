@@ -42,10 +42,33 @@ async function sal(email) {
   return new Uint8Array(await crypto.subtle.digest('SHA-256', enc.encode(base)));
 }
 
+/**
+ * Quita los espacios de los bordes antes de hacer cualquier cosa con la
+ * contraseña.
+ *
+ * POR QUÉ
+ *
+ * Una contraseña provisoria se pega, no se escribe: llega por mensaje y el
+ * dedo se lleva un espacio de más, o un salto de línea, o el espacio duro que
+ * mete un pegado desde un documento. El resultado era «El correo o la
+ * contraseña no son correctos», que es verdad y no sirve para nada: la
+ * contraseña estaba bien y lo que sobraba era invisible.
+ *
+ * Nadie elige a propósito una contraseña que empiece o termine con un espacio,
+ * así que recortarlo no le quita ninguna posibilidad real a nadie. Lo
+ * importante es que se recorte SIEMPRE y en el mismo lugar — al crear la
+ * cuenta, al entrar, al recuperarla y al cambiarla — porque si un lado recorta
+ * y el otro no, la contraseña guardada deja de coincidir con la que se
+ * escribe.
+ */
+export function normalizarPassword(password) {
+  return String(password == null ? '' : password).trim();
+}
+
 /** Convierte la contraseña en la clave que viaja al servidor. */
 export async function derivarEnCliente(email, password) {
   const material = await crypto.subtle.importKey(
-    'raw', enc.encode(password), 'PBKDF2', false, ['deriveBits']);
+    'raw', enc.encode(normalizarPassword(password)), 'PBKDF2', false, ['deriveBits']);
   const bits = await crypto.subtle.deriveBits(
     { name: 'PBKDF2', salt: await sal(email), iterations: ITERACIONES_CLIENTE, hash: 'SHA-256' },
     material, 256);
@@ -61,7 +84,9 @@ export async function derivarEnCliente(email, password) {
  * misma función, así la regla es una sola.
  */
 export function revisarPassword(password) {
-  if (typeof password !== 'string' || password.length < 10) {
+  if (typeof password !== 'string') return 'Escribí una contraseña.';
+  password = normalizarPassword(password);
+  if (password.length < 10) {
     return 'La contraseña tiene que tener al menos 10 caracteres. Una frase que recuerdes es mejor que algo corto y complicado.';
   }
   if (password.length > 200) return 'La contraseña es demasiado larga.';

@@ -139,7 +139,7 @@
 <div id="app"><div class="centro">Cargando…</div></div>
 
 <script type="module">
-import { derivarEnCliente, revisarPassword } from './clave.js';
+import { derivarEnCliente, normalizarPassword, revisarPassword } from './clave.js';
 
 // ───────────────────────── hablar con el servidor ─────────────────────────
 
@@ -712,7 +712,17 @@ async function alEntrar(e) {
     return;
   }
   const r = await api('/api/admin/sesion', { method: 'POST', body: { email, password: clave } });
-  if (!r.ok) { avisar(r.error, 'err'); volver(); return; }
+  if (!r.ok) {
+    // «No son correctos» es honesto pero deja a la persona sin nada que
+    // probar. Cuando la contrasena no entro, conviene recordarle las dos
+    // cosas que mas se pegan mal, y que hay una salida ahi abajo.
+    const pista = r._status === 401
+      ? ' Fijate que al pegarla no se haya colado una comilla o un carácter de más, y que las mayúsculas sean las que son. Si no la tenés, usá «No me acuerdo mi contraseña» acá abajo.'
+      : '';
+    avisar(r.error + pista, 'err');
+    volver();
+    return;
+  }
   estado.usuario = r.usuario;
   estado.mensaje = null;
   estado.pantalla = 'inicio';
@@ -739,7 +749,9 @@ function recordarCampos(ids) {
 // Devuelve la clave derivada, o null si la contraseña no pasa la regla o el
 // navegador no puede derivarla. Avisa el motivo en los dos casos.
 async function prepararClave(email, password, repetida) {
-  if (repetida !== undefined && password !== repetida) {
+  // Se comparan ya recortadas: si no, un espacio invisible al final de una de
+  // las dos diria que no coinciden cuando para entrar van a ser la misma.
+  if (repetida !== undefined && normalizarPassword(password) !== normalizarPassword(repetida)) {
     avisar('Las dos contraseñas no coinciden. Volvé a escribirlas.', 'err');
     return null;
   }

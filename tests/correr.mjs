@@ -624,6 +624,41 @@ console.log('PRUEBAS DEL PANEL — ' + new Date().toISOString().slice(0, 16).rep
   check('y se puede entrar con esa contraseña', entra.respuesta.status === 200);
 }
 
+// ────── 16. la contraseña provisoria llega pegada, con basura ──────
+// Pasó de verdad el 9 de noviembre de 2026: la cuenta estaba bien, el panel
+// estaba bien, y el ingreso fallaba dos veces seguidas. Lo que sobraba era un
+// espacio invisible al final de lo que se pegó. El mensaje «El correo o la
+// contraseña no son correctos» era cierto y no servía para nada.
+{
+  seccion('16. Una contraseña pegada con espacios de más');
+  const { normalizarPassword } = await import('../admin/clave.js');
+  const env = (await preparar()).env;
+
+  const limpia = await derivarEnCliente('camila@lume.test', CLAVE);
+  check('un espacio al final no cambia la contraseña',
+    await derivarEnCliente('camila@lume.test', CLAVE + ' ') === limpia);
+  check('un espacio al principio tampoco',
+    await derivarEnCliente('camila@lume.test', ' ' + CLAVE) === limpia);
+  check('un salto de línea pegado de más tampoco',
+    await derivarEnCliente('camila@lume.test', CLAVE + '\n') === limpia);
+  check('ni el espacio duro que mete un pegado desde un documento',
+    await derivarEnCliente('camila@lume.test', '\u00a0' + CLAVE + '\u00a0') === limpia);
+
+  // Lo de adentro no se toca: si se tocara, dos contraseñas distintas pasarían
+  // a ser la misma y eso sí debilitaría la cuenta.
+  check('los espacios de adentro siguen contando',
+    await derivarEnCliente('camila@lume.test', 'mi perro rodolfo')
+      !== await derivarEnCliente('camila@lume.test', 'miperrorodolfo'));
+
+  const conEspacio = await entrar(env, 'camila@lume.test', CLAVE + '  ');
+  check('y se entra igual al panel', conEspacio.respuesta.status === 200);
+
+  check('una contraseña corta con espacios al final sigue siendo corta',
+    revisarPassword('corta     ') !== null);
+  check('una contraseña de puros espacios se rechaza', revisarPassword('            ') !== null);
+  check('normalizarPassword aguanta que no le pasen nada', normalizarPassword(undefined) === '');
+}
+
 // ══════════════════════════════════════════════════════════════════════
 console.log(`\n${bien} OK, ${fallos.length} fallas`);
 if (fallos.length) {

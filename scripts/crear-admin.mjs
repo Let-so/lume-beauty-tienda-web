@@ -15,7 +15,7 @@ import readline from 'node:readline';
 import { fileURLToPath } from 'node:url';
 
 import { hashearPassword, revisarPassword, sha256, codigoDeRecuperacion } from '../functions/_lib/auth.js';
-import { derivarEnCliente } from '../admin/clave.js';
+import { derivarEnCliente, normalizarPassword } from '../admin/clave.js';
 
 const RAIZ = path.resolve(path.dirname(fileURLToPath(import.meta.url)), '..');
 
@@ -50,7 +50,7 @@ if (problema) { console.error('\n' + problema + '\n'); process.exit(1); }
 
 if (!desdeEntorno) {
   const repetida = await preguntar('Escribila otra vez: ', true);
-  if (clave !== repetida) { console.error('\nLas dos contraseñas no coinciden.\n'); process.exit(1); }
+  if (normalizarPassword(clave) !== normalizarPassword(repetida)) { console.error('\nLas dos contraseñas no coinciden.\n'); process.exit(1); }
 }
 
 // Se deriva igual que lo haría el navegador, si no la contraseña no coincidiría.
