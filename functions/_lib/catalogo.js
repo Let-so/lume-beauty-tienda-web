@@ -6,6 +6,8 @@
 // algún día hay que cambiar la forma, se cambia acá y en la vitrina a la vez,
 // nunca por separado.
 
+import { enParrafos } from './producto.js';
+
 const AJUSTES = ['currency', 'homeBanners', 'instagram', 'announcements', 'benefits',
                  'guarantee', 'help', 'reviews', 'instagramPosts', 'whatsapp',
                  'specsNote', 'siteUrl'];
@@ -94,7 +96,11 @@ export async function construirCatalogo(db, { incluirNoPublicados = false } = {}
       brand: r.brand_id,
       brandLabel: r.brand_name,
       name: r.name,
-      title: r.title,
+      // La vitrina dibuja «title», pero el panel solo pide «Nombre del
+      // producto». Un producto cargado desde el panel llega con title vacio y
+      // salia como una tarjeta sin nombre: foto, precio y el renglon del medio
+      // en blanco. El nombre es el respaldo, y es el que la persona escribio.
+      title: r.title || r.name,
       subtitle: r.subtitle,
       size: r.size,
       categories: mCats.get(r.id) || [],
@@ -104,10 +110,13 @@ export async function construirCatalogo(db, { incluirNoPublicados = false } = {}
       featured: Boolean(r.featured),
     };
     if (r.badge) p.tag = r.badge;
-    p.description = mDesc.get(r.id) || [];
+    // Los que ya estaban guardados como un bloque pegado se parten al
+    // mostrarlos, sin tocar lo que hay en la base: lo que escribio Camila
+    // sigue intacto, y el cliente ve los renglones separados.
+    p.description = (mDesc.get(r.id) || []).flatMap(enParrafos);
     p.specs = mSpecs.get(r.id) || [];
-    const como = mComo.get(r.id);
-    if (como && como.length) p.howTo = como;
+    const como = (mComo.get(r.id) || []).flatMap(enParrafos);
+    if (como.length) p.howTo = como;
     if (r.warning) p.warning = r.warning;
     // Solo para el panel: la vitrina no necesita esto y no se le manda.
     if (incluirNoPublicados) {

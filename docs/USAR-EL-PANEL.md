@@ -70,6 +70,26 @@ Tocá **Guardar**.
 Para publicar un producto hace falta al menos una foto. Como borrador podés
 guardarlo sin nada y completarlo después.
 
+### ¿Dónde aparece después de guardarlo?
+
+**En la portada no, salvo que lo pidas.** La portada muestra solo la sección
+**PRODUCTOS DESTACADOS**, que es una selección corta. Un producto recién
+cargado entra sin esa marca.
+
+Igual está en la tienda desde el momento en que lo guardás publicado. Se ve en:
+
+- **SHOP → Ver todos los productos**
+- la **categoría** que le hayas puesto
+- la página de su **marca**
+
+Si querés que salga también en la portada, abrí el producto y marcá
+**«Mostrarlo entre los destacados de la portada»**.
+
+### La descripción
+
+Escribila o pegála como te quede cómodo: **cada renglón es un párrafo**. Si
+pegás un texto largo de una vez, se separa solo en la tienda.
+
 ---
 
 ## Cambiar precios

@@ -20,18 +20,35 @@ export function hacerSlug(texto) {
     .slice(0, 80);
 }
 
+/**
+ * Parte un texto en párrafos, uno por renglón.
+ *
+ * El panel dice «un párrafo por renglón» y ofrece un renglón por párrafo,
+ * pero nadie carga una descripción así: se pega el texto entero de una vez,
+ * con sus saltos de línea adentro. Eso llegaba como UN solo párrafo, y el
+ * navegador come los saltos de línea: una lista de beneficios terminaba
+ * siendo un ladrillo corrido.
+ *
+ * Partirlo acá hace que lo pegado y lo escrito renglón por renglón terminen
+ * igual, y que al volver a abrir el producto se vea en el panel lo mismo que
+ * ve el cliente.
+ */
+export function enParrafos(texto) {
+  return String(texto ?? '').split(/\r?\n/).map(x => x.trim()).filter(Boolean);
+}
+
 function listaDeTextos(v, nombre, errores, maxLargo = MAX_TEXTO) {
   if (v === undefined || v === null) return [];
   if (!Array.isArray(v)) {
     errores.push(`El campo ${nombre} no tiene el formato esperado.`);
     return [];
   }
-  if (v.length > MAX_LISTA) {
-    errores.push(`${nombre}: no se pueden cargar más de ${MAX_LISTA} elementos.`);
+  const parrafos = v.flatMap(enParrafos).map(x => x.slice(0, maxLargo));
+  if (parrafos.length > MAX_LISTA) {
+    errores.push(`${nombre}: no se pueden cargar más de ${MAX_LISTA} párrafos.`);
     return [];
   }
-  return v.map(x => String(x ?? '').trim()).filter(Boolean)
-          .map(x => x.slice(0, maxLargo));
+  return parrafos;
 }
 
 /** Convierte a entero de pesos. Devuelve undefined si el valor no sirve. */

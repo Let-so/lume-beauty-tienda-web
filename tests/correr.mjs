@@ -659,6 +659,58 @@ console.log('PRUEBAS DEL PANEL — ' + new Date().toISOString().slice(0, 16).rep
   check('normalizarPassword aguanta que no le pasen nada', normalizarPassword(undefined) === '');
 }
 
+// ─── 17. lo que Camila carga tiene que verse igual en la tienda ───
+// Pasó el 18 de noviembre de 2026: cargó dos productos, los vio en su panel y
+// no los vio en la tienda. Estaban: salían como tarjetas sin nombre, porque la
+// vitrina dibuja «title» y el panel solo pide «Nombre del producto».
+{
+  seccion('17. Un producto cargado desde el panel se ve entero');
+  const { env } = await preparar();
+  const { como } = await entrar(env, 'camila@lume.test', CLAVE);
+
+  const vitrina = async () => (await (await catalogoEP.onRequestGet({
+    request: peticion(BASE_URL + '/api/catalog'), env,
+  })).json()).products;
+
+  // Exactamente lo que manda el panel: nombre si, titulo nunca.
+  await como(productosEP, '/api/admin/productos', {
+    method: 'POST',
+    body: {
+      name: 'One Day Exosome Shot', brand: 'medicube', size: '30 ml', price: 46500,
+      categories: ['skincare-coreano'], images: ['assets/productos/prueba.webp'],
+      status: 'published',
+      // Una descripcion pegada de una vez, con los renglones adentro.
+      description: ['Que es:\nAyuda a eliminar celulas muertas.\nMejora la textura.'],
+      howTo: ['Uso nocturno.\nUsar cada 3 dias.'],
+    },
+  });
+
+  const enTienda = (await vitrina()).find(x => x.id === 'medicube-one-day-exosome-shot');
+  check('el producto llega a la tienda', Boolean(enTienda));
+  check('y la tarjeta muestra el nombre, no un hueco', enTienda && enTienda.title === 'One Day Exosome Shot');
+  check('la descripcion pegada se parte en parrafos', enTienda && enTienda.description.length === 3);
+  check('sin perder ni una linea',
+    enTienda && enTienda.description[2] === 'Mejora la textura.');
+  check('el modo de uso tambien', enTienda && enTienda.howTo.length === 2);
+
+  // Un producto que si tiene titulo propio conserva el suyo: la vitrina
+  // muestra «title» y «subtitle» en dos renglones, y eso no se toca.
+  const conTitulo = (await vitrina()).find(x => x.id === 'medicube-deep-vita-c');
+  check('un producto con titulo propio no se pisa', conTitulo.title === 'Deep Vita C Capsule Cream');
+
+  // Lo que ya estaba guardado como un bloque tiene que verse bien sin que
+  // nadie lo vuelva a guardar.
+  env.DB.db.prepare(
+    "UPDATE product_text SET body = 'Primero.\nSegundo.' WHERE product_id='medicube-one-day-exosome-shot' AND kind='description' AND sort_order=0"
+  ).run();
+  env.DB.db.prepare(
+    "DELETE FROM product_text WHERE product_id='medicube-one-day-exosome-shot' AND kind='description' AND sort_order>0"
+  ).run();
+  const yaGuardado = (await vitrina()).find(x => x.id === 'medicube-one-day-exosome-shot');
+  check('un texto viejo guardado en bloque tambien se parte al mostrarlo',
+    yaGuardado.description.length === 2 && yaGuardado.description[1] === 'Segundo.');
+}
+
 // ══════════════════════════════════════════════════════════════════════
 console.log(`\n${bien} OK, ${fallos.length} fallas`);
 if (fallos.length) {
