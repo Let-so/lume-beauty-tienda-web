@@ -169,12 +169,15 @@ input::placeholder{color:#6f5650;letter-spacing:0.12em}
             <button onClick="{{ pd.toggleFav }}" aria-pressed="{{ pd.isFav }}" style="margin-top:14px;height:48px;width:100%;display:flex;align-items:center;justify-content:center;gap:10px;border:1px solid #cdb8ac;border-radius:999px;background:transparent;color:#4a3530;font-size:10.5px;letter-spacing:0.2em" style-hover="background:#ece0d8">
               <svg width="16" height="16" viewBox="0 0 24 24" fill="{{ pd.heartFill }}" stroke="{{ pd.heartStroke }}" stroke-width="1.4"><path d="M12 20.3s-7.6-4.6-7.6-10.3A4.2 4.2 0 0 1 12 7.5a4.2 4.2 0 0 1 7.6 2.5c0 5.7-7.6 10.3-7.6 10.3z"></path></svg>{{ pd.favText }}
             </button>
+            <sc-if value="{{ pd.hasDescription }}" hint-placeholder-val="{{ true }}">
             <div style="margin-top:26px;padding-top:22px;border-top:1px solid #e3d4ca;display:flex;flex-direction:column;gap:10px">
               <span style="font-size:10px;letter-spacing:0.2em;color:#8a6d65">DESCRIPCIÓN</span>
               <sc-for list="{{ pd.description }}" as="par" hint-placeholder-count="2">
                 <p style="margin:0;font-size:13px;line-height:1.7;color:#6f5650">{{ par.text }}</p>
               </sc-for>
             </div>
+            </sc-if>
+            <sc-if value="{{ pd.hasSpecs }}" hint-placeholder-val="{{ true }}">
             <div style="margin-top:22px;padding-top:22px;border-top:1px solid #e3d4ca;display:flex;flex-direction:column;gap:13px">
               <span style="font-size:10px;letter-spacing:0.2em;color:#8a6d65">ESPECIFICACIONES</span>
               <sc-for list="{{ pd.specs }}" as="sp" hint-placeholder-count="3">
@@ -185,6 +188,7 @@ input::placeholder{color:#6f5650;letter-spacing:0.12em}
               </sc-for>
               <span style="font-size:9.5px;line-height:1.5;color:#ab938a">{{ specsNote }}</span>
             </div>
+            </sc-if>
             <sc-if value="{{ pd.hasHowTo }}">
               <div style="margin-top:22px;padding-top:22px;border-top:1px solid #e3d4ca;display:flex;flex-direction:column;gap:10px">
                 <span style="font-size:10px;letter-spacing:0.2em;color:#8a6d65">CÓMO USAR</span>
@@ -637,7 +641,9 @@ class Component extends DCLogic {
         crumbCat: catLabel(mainCat), goCat: go('catalog', { cat: mainCat, brand: null, query: '' }),
         priceLabel: pp.price != null ? this.money(pp.price, d.currency) : 'CONSULTAR PRECIO',
         catLinks: pp.categories.filter(c => c !== 'skincare').map(c => ({ label: catLabel(c), open: go('catalog', { cat: c, brand: null, query: '' }) })),
+        hasDescription: (pp.description || []).length > 0,
         description: (pp.description || []).map(t => ({ text: t })),
+        hasSpecs: (pp.specs || []).length > 0,
         specs: (pp.specs || []).map(x => ({ label: x.label, value: x.value })),
         hasHowTo: (pp.howTo || []).length > 0, howTo: (pp.howTo || []).map(t => ({ text: t })),
         hasWarning: !!pp.warning, warning: pp.warning || '',
